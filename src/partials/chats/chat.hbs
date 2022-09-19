@@ -1,0 +1,21 @@
+<div class='chats-item {{active}}'>
+  <div>
+    <span class='avatar'>
+      <img />{{initials}}
+    </span>
+  </div>
+  <div class='contact'>
+    <span class='contact-name'>{{name}}</span>
+    <br />
+    <span class='contact-msg'>{{text}}</span>
+  </div>
+  <div class='msg-info'>
+    <span class='msg-time'>{{time}}</span>
+    {{#if count_msg}}
+      <span class='msg-count'>
+        <img />{{count_msg}}
+      </span>
+    {{else}}
+    {{/if}}
+  </div>
+</div>
