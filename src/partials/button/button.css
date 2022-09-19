@@ -1,0 +1,25 @@
+.btn {
+  border-radius: 20px;
+  padding: 10px 20px;
+  font-size: 18px;
+  font-weight: bold;
+  border: none;
+  color: #0853bb;
+  background: #dfdfb299;
+}
+a {
+  color: inherit;
+}
+
+.btn-primary,
+.btn-primary a {
+  background-color: #0853bb;
+  color: white;
+}
+
+.btn-block {
+  width: 100%;
+}
+.btn a {
+  text-decoration: none;
+}
