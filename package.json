@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "parcel src/pages/auth/index.hbs --no-cache",
     "build": "parcel build src/pages/auth/index.hbs --no-cache && node ./server.js",
-    "start": "parcel ./src/pages/auth/index.hbs --no-cache && node ./server.js",
+    "start": "parcel build ./src/pages/auth/index.hbs --no-cache && node ./server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
