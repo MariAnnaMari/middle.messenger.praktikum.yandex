@@ -5,7 +5,7 @@
   min-width: 50px;
   min-height: 50px;
   background: #f5f5dd;
-  color: #0853bb;
+  color: var(--main-dark-color);
   display: flex;
   justify-content: center;
   align-items: center;

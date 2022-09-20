@@ -2,6 +2,12 @@
 @import '../partials/chats/chats.css';
 @import '../partials/avatar/avatar.css';
 
+:root {
+  --main-dark-color: #0853bb;
+  --main-light-color: #dfdfb299;
+  --main-middle-color: #d7d7d782;
+}
+
 html {
   /*background-color: #7fa0ca;*/
   background-blend-mode: overlay;
@@ -48,7 +54,7 @@ body {
 
 .container h3 {
   font-weight: bold;
-  color: #0853bb;
+  color: var(--main-dark-color);
   margin-bottom: 30px;
   margin-top: 0;
 }
