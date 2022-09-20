@@ -35,7 +35,7 @@
   height: 50px;
   min-width: 50px;
   min-height: 50px;
-  background: var(--main-light-color);
+  background: #dfdfb299;
   color: var(--main-dark-color);
   display: flex;
   justify-content: center;
@@ -62,7 +62,7 @@
   border-radius: 50%;
   width: 22px;
   height: 22px;
-  background: #0853bb;
+  background: var(--main-dark-color);
   color: white;
   display: flex;
   justify-content: center;
@@ -140,7 +140,7 @@
   width: 50%;
 }
 .msg-item.me {
-  background: #0853bb45;
+  background: var(--main-dark-color)45;
   border-top-left-radius: 30px;
   border-bottom-right-radius: 0;
   float: right;

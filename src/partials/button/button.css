@@ -5,7 +5,7 @@
   font-weight: bold;
   border: none;
   color: var(--main-dark-color);
-  background: var(--main-light-color);
+  background: #dfdfb299;
 }
 a {
   color: inherit;
