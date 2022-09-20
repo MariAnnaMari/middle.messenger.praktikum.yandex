@@ -5,7 +5,6 @@
 :root {
   --main-dark-color: #0853bb;
   --main-light-color: #dfdfb299;
-  --main-middle-color: #d7d7d782;
 }
 
 html {
@@ -64,7 +63,7 @@ body {
   box-sizing: border-box;
   width: 100%;
   border: none;
-  border-bottom: 1px solid #0853bb;
+  border-bottom: 1px solid var(--main-dark-color);
 }
 
 .container .form-item {
