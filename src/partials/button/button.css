@@ -4,8 +4,8 @@
   font-size: 18px;
   font-weight: bold;
   border: none;
-  color: #0853bb;
-  background: #dfdfb299;
+  color: var(--main-dark-color);
+  background: var(--main-light-color);
 }
 a {
   color: inherit;
@@ -13,7 +13,7 @@ a {
 
 .btn-primary,
 .btn-primary a {
-  background-color: #0853bb;
+  background-color: var(--main-dark-color);
   color: white;
 }
 
