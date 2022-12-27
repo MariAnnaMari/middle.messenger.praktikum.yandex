@@ -1,4 +1,6 @@
-import {renderDOM, registerComponent, Block} from './core';
+import { renderDOM, registerComponent, Block } from './core';
+import LoginPage from 'pages/login';
+import SignupPage from 'pages/signup';
 
 import './styles/app.css';
 
@@ -8,7 +10,6 @@ import Input from 'components/input';
 import ControlledInput from 'components/controlledInput';
 import ErrorComponent from 'components/error';
 import Layout from 'components/layout';
-import LoginPage from "./pages/login";
 
 registerComponent(Button);
 registerComponent(Link);
@@ -26,7 +27,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  const App = new LoginPage({ title: 'Sign in' });
+  const App = new SignupPage({ title: 'Sign uphg' });
 
   renderDOM(App);
 });

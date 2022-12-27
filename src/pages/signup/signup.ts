@@ -56,12 +56,51 @@ export class SignupPage extends Block<SignupProps> {
           {{{ControlledInput
               onInput=onInput
               onFocus=onFocus
+              name="email"
+              label="email"
+              placeholder="Email"
+              type="text"
+              validateRule="${ValidateRuleType.Email}"
+              setErrorValidation=setErrorValidation
+          }}}          
+          {{{ControlledInput
+              onInput=onInput
+              onFocus=onFocus
               name="login"
               label="login"
-              placeholder="login"
+              placeholder="Login"
               type="text"
-              value="${this.props.loginValue}"
               validateRule="${ValidateRuleType.Login}"
+              setErrorValidation=setErrorValidation
+          }}}          
+          {{{ControlledInput
+              onInput=onInput
+              onFocus=onFocus
+              name="first_name"
+              label="name"
+              placeholder="Name"
+              type="text"
+              validateRule="${ValidateRuleType.Name}"
+              setErrorValidation=setErrorValidation
+          }}}          
+          {{{ControlledInput
+              onInput=onInput
+              onFocus=onFocus
+              name="second_name"
+              label="Surname"
+              placeholder="Surname"
+              type="text"
+              validateRule="${ValidateRuleType.Name}"
+              setErrorValidation=setErrorValidation
+          }}}        
+          {{{ControlledInput
+              onInput=onInput
+              onFocus=onFocus
+              name="phone"
+              label="Phone"
+              placeholder="Phone"
+              type="text"
+              validateRule="${ValidateRuleType.Phone}"
               setErrorValidation=setErrorValidation
           }}}
           {{{ControlledInput
@@ -71,13 +110,12 @@ export class SignupPage extends Block<SignupProps> {
               label="Password"
               placeholder="Password"
               type="text"
-              value="${this.props.loginValue}"
               validateRule="${ValidateRuleType.Password}"
               setErrorValidation=setErrorValidation
           }}}
           <div class="form-btns">
-            {{{Button title="Sign in" type="btn-primary  btn-block" onClick=onSubmit}}}
-            {{{Button title="Sign up"  type="btn-block" onClick=onSubmit}}}
+            {{{Button title="Sign up" type="btn-primary  btn-block" onClick=onSubmit}}}
+            {{{Button title="Sign in"  type="btn-block" onClick=onSubmit}}}
           </div>
         </form>
       {{/FormLayout}}

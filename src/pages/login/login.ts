@@ -7,7 +7,7 @@ type LoginProps = {
   onInput?: () => void;
   onFocus?: () => void;
   onBlur?: () => void;
-  setErrorValidation?: (val?: boolean) => void;
+  setErrorValidation?: (val: boolean) => void;
   loginValue?: string;
   passwordValue?: string;
   title?: string;
@@ -16,11 +16,10 @@ type LoginProps = {
 export class LoginPage extends Block<LoginProps> {
   constructor(props: LoginProps) {
     super(props);
-    console.log('LoginPage',props)
     this.state = { validationError: false };
     this.setProps({
-      onSubmit: (e) => this.onSubmit(e),
-      setErrorValidation: (val) => {
+      onSubmit: (e: FormDataEvent) => this.onSubmit(e),
+      setErrorValidation: (val: boolean) => {
         this.setState({ validationError: val });
       },
       loginValue: '',
@@ -44,7 +43,7 @@ export class LoginPage extends Block<LoginProps> {
       });
       console.log('Success', formData);
     } else {
-      console.log('error Validation');
+      console.log('error validation');
     }
   }
 

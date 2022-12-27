@@ -1,15 +1,15 @@
 export enum ValidateRuleType {
   Login = 'login',
   Password = 'password',
-  // RepeatPassword = 'repeat-password',
-  // Email = 'email',
-  // Name = 'name',
-  // Required = 'required',
-  // Phone = 'phone',
+  Email = 'email',
+  Name = 'name',
+  Required = 'required',
+  Phone = 'phone',
 }
 
 type ValidateRule = {
   value: string;
+  secondValue?: string;
   type: ValidateRuleType;
 };
 
@@ -21,34 +21,34 @@ export function validateForm(rules: ValidateRule[]) {
       errorMsg.push('field can not be empty');
       break;
     }
-    // if (type === ValidateRuleType.Email) {
-    //   const pattern = /^[A-Z0-9._%+-]+@[A-Z0-9-]+.+.[A-Z]{2,4}$/i;
-    //   const isValid = pattern.test(value);
-    //   if (!isValid) {
-    //     errorMsg.push('невалидный email');
-    //     break;
-    //   }
-    // }
-    // if (type === ValidateRuleType.Phone) {
-    //   const pattern = /^[\d\+]\d${10,15}/;
-    //   const isValid = pattern.test(value);
-    //   if (!isValid) {
-    //     errorMsg.push(
-    //       'от 10 до 15 символов, состоит из цифр, может начинается с плюса'
-    //     );
-    //     break;
-    //   }
-    // }
-    // if (type === ValidateRuleType.Name) {
-    //   const pattern = /(?=.*[\D][а-яА-ЯёЁ])[\w-]$/g;
-    //   const isValid = pattern.test(value);
-    //   if (!isValid) {
-    //     errorMsg.push(
-    //       'латиница или кириллица, первая буква должна быть заглавной, без пробелов и без цифр, нет спецсимволов (допустим только дефис)'
-    //     );
-    //     break;
-    //   }
-    // }
+    if (type === ValidateRuleType.Email) {
+      const pattern = /^[A-Z0-9._%+-]+@[A-Z0-9-]+.+.[A-Z]{2,4}$/i;
+      const isValid = pattern.test(value);
+      if (!isValid) {
+        errorMsg.push('невалидный email');
+        break;
+      }
+    }
+    if (type === ValidateRuleType.Phone) {
+      const pattern = /^[\d|+][\d]{10,15}$/i;
+      const isValid = pattern.test(value);
+      if (!isValid) {
+        errorMsg.push(
+          'от 10 до 15 символов, состоит из цифр, может начинается с плюса'
+        );
+        break;
+      }
+    }
+    if (type === ValidateRuleType.Name) {
+      const pattern = /^[A-Z|А-Я|Ë][\D]/g;
+      const isValid = pattern.test(value);
+      if (!isValid) {
+        errorMsg.push(
+          'латиница или кириллица, первая буква должна быть заглавной, без пробелов и без цифр, нет спецсимволов (допустим только дефис)'
+        );
+        break;
+      }
+    }
     if (type === ValidateRuleType.Login) {
       const pattern = /(?=.*[\D])[\w-]{3,20}$/g;
       const isValid = pattern.test(value);

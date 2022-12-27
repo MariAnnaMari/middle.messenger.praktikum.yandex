@@ -15,7 +15,8 @@ body {
     'Segoe UI Symbol';
 }
 #root,
-body, #app {
+body,
+#app {
   margin: 0;
   width: 100%;
   height: 100%;
@@ -26,6 +27,7 @@ body, #app {
   justify-content: center;
   align-items: center;
   height: 100%;
+  overflow: auto;
 }
 
 .container {
