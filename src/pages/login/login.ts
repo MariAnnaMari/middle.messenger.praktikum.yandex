@@ -1,6 +1,7 @@
 import Block from 'core/Block';
 import { ValidateRuleType } from 'helpers/validateForm';
 import ControlledInput from 'components/controlledInput';
+import Layout from 'components/layout';
 
 type LoginProps = {
   onSubmit?: (e: FormDataEvent) => void;
@@ -47,10 +48,10 @@ export class LoginPage extends Block<LoginProps> {
     }
   }
 
-  render() {
+  render(): string {
     // language=hbs
     return `
-      {{#FormLayout title=title }}
+      {{#Layout title=title }}
         <form>
           {{{ControlledInput
               onInput=onInput
@@ -79,7 +80,7 @@ export class LoginPage extends Block<LoginProps> {
             {{{Button title="Sign up"  type="btn-block" onClick=onSubmit}}}
           </div>
         </form>
-      {{/FormLayout}}
+      {{/Layout}}
     `;
   }
 }

@@ -5,6 +5,7 @@ import './link.css';
 interface LinkProps {
   text: string;
   to: string;
+  icon?: string;
 }
 
 export class Link extends Block {
@@ -13,7 +14,7 @@ export class Link extends Block {
       // const router = new Router();
       // router.go(this.props.to);
 
-      console.log(13);
+      console.log("link");
 
       e.preventDefault();
     }
@@ -23,6 +24,11 @@ export class Link extends Block {
 
   render() {
     // language=hbs
-    return `<a href="{{to}}">{{text}}</a>`;
+    return `
+      <a href="{{to}}">
+        {{#if icon}}<i class='fa fa-{{icon}}' aria-hidden='true'></i>{{/if}}        
+      </a>
+    `;
+    // return `<a href="{{to}}">{{text}}</a>`;
   }
 }

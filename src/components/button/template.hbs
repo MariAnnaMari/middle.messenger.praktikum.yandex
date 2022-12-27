@@ -1,12 +1,74 @@
-<button class='btn {{type}}' type='submit'>
-  {{#if icon}}
-    <i class='fa {{icon}}' aria-hidden='true'></i>
-  {{/if}}
-  {{#if link}}
-    <a href={{link}}>
-      {{title}}
-    </a>
-  {{else}}
-    {{'title'}}
-  {{/if}}
-</button>
+<div class='chats'>
+  <div class='msg-header'>
+    <input
+      class='input-search'
+      id='search'
+      type='search'
+      placeholder='Search...'
+    />
+    <div class='profile-link'>
+      <span>Profile</span>
+      <span class='avatar'>
+        <img />NBG
+      </span>
+      <a href='../profile/editProfileForm.hbs'><i
+          class='fa fa-chevron-right'
+          aria-hidden='true'
+        ></i></a>
+    </div>
+  </div>
+  <div class='chats-item active'>
+    <div>
+      <span class='avatar'>
+        <img />NJ
+      </span>
+    </div>
+    <div class='contact'>
+      <span class='contact-name'>Имя</span>
+      <br />
+      <span class='contact-msg'>dffgfg</span>
+    </div>
+    <div class='msg-info'>
+      <span class='msg-time'>13:34</span>
+      <span class='msg-count'>
+        <img />4
+      </span>
+    </div>
+  </div>
+  <div class='chats-item'>
+    <div>
+      <span class='avatar'>
+        <img />GH
+      </span>
+    </div>
+    <div class='contact'>
+      <span class='contact-name'>Имя</span>
+      <br />
+      <span class='contact-msg'>rrrr</span>
+    </div>
+    <div class='msg-info'>
+      <span class='msg-time'>13:09</span>
+    </div>
+  </div>
+</div>
+<div class='msg-container'>
+  <div class='msg-header'>
+    <span>Мадам бугенвилия</span>
+    <i class='fa fa-ellipsis-v' aria-hidden='true'></i>
+  </div>
+  <div class='msg-list'>
+    <div class='msg-item'>
+      text
+    </div>
+    <div class='msg-item me'>
+      text
+    </div>
+  </div>
+  <div class='msg-input'>
+    <i class='fa fa-paperclip size-24' aria-hidden='true'></i>
+    <input id='search' type='search' placeholder='Type...' />
+    <button class='btn btn-primary send-btn' type='submit'>
+      <i class='fa fa-arrow-right' aria-hidden='true'></i>
+    </button>
+  </div>
+</div>

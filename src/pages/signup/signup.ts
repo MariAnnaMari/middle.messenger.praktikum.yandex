@@ -1,6 +1,7 @@
 import Block from 'core/Block';
 import { ValidateRuleType } from 'helpers/validateForm';
 import ControlledInput from 'components/controlledInput';
+import Layout from 'components/layout';
 
 type SignupProps = {
   onSubmit?: (e: FormDataEvent) => void;
@@ -16,7 +17,6 @@ type SignupProps = {
 export class SignupPage extends Block<SignupProps> {
   constructor(props: SignupProps) {
     super(props);
-    console.log();
     this.state = { validationError: false };
     this.setProps({
       onSubmit: (e) => this.onSubmit(e),
@@ -48,10 +48,10 @@ export class SignupPage extends Block<SignupProps> {
     }
   }
 
-  render() {
+  render(): string {
     // language=hbs
     return `
-      {{#FormLayout title=title }}
+      {{#Layout title=title }}
         <form>
           {{{ControlledInput
               onInput=onInput
@@ -118,7 +118,7 @@ export class SignupPage extends Block<SignupProps> {
             {{{Button title="Sign in"  type="btn-block" onClick=onSubmit}}}
           </div>
         </form>
-      {{/FormLayout}}
+      {{/Layout}}
     `;
   }
 }

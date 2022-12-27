@@ -10,6 +10,7 @@ interface InputProps {
   placeholder?: string;
   value?: string;
   name?: string;
+  className?: string;
 }
 
 export class Input extends Block {
@@ -27,7 +28,7 @@ export class Input extends Block {
   protected render(): string {
     // language=hbs
     return `
-        <input name="{{name}}" value="{{value}}" type={{type}} placeholder={{placeholder}} />
+        <input class="{{className}}" name="{{name}}" value="{{value}}" type={{type}} placeholder={{placeholder}} />
     `;
   }
 }

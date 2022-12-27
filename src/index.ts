@@ -1,6 +1,7 @@
 import { renderDOM, registerComponent, Block } from './core';
 import LoginPage from 'pages/login';
 import SignupPage from 'pages/signup';
+import ChatsPage from 'pages/chats';
 
 import './styles/app.css';
 
@@ -10,6 +11,8 @@ import Input from 'components/input';
 import ControlledInput from 'components/controlledInput';
 import ErrorComponent from 'components/error';
 import Layout from 'components/layout';
+import Avatar from 'components/avatar';
+import ChatItem from 'components/chatItem';
 
 registerComponent(Button);
 registerComponent(Link);
@@ -17,6 +20,8 @@ registerComponent(ErrorComponent);
 registerComponent(ControlledInput);
 registerComponent(Input);
 registerComponent(Layout);
+registerComponent(Avatar);
+registerComponent(ChatItem);
 
 document.addEventListener('DOMContentLoaded', () => {
   // DEV: Расскоментировать нужно страницу для отображения
@@ -27,7 +32,9 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  const App = new SignupPage({ title: 'Sign uphg' });
+  const App = new ChatsPage({ title: 'Sign up' });
+  // const App = new SignupPage({ title: 'Sign up' });
+  // const App = new LoginPage({ title: 'Sign in' });
 
   renderDOM(App);
 });
