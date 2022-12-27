@@ -1,0 +1,12 @@
+<button class='btn {{type}}' type='submit'>
+  {{#if icon}}
+    <i class='fa {{icon}}' aria-hidden='true'></i>
+  {{/if}}
+  {{#if link}}
+    <a href={{link}}>
+      {{title}}
+    </a>
+  {{else}}
+    {{'title'}}
+  {{/if}}
+</button>

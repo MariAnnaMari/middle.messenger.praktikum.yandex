@@ -3,22 +3,32 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
-    "dev": "parcel src/pages/auth/index.hbs --no-cache",
-    "build": "parcel build src/pages/auth/index.hbs --no-cache",
-    "start": "npm run build && node ./server.js",
+    "dev": "parcel src/pages_sprint1/auth/index.hbs --no-cache",
+    "build": "parcel build src/pages_sprint1/auth/index.hbs --no-cache",
+    "startOld": "npm run build && node ./server.js",
+    "start": "parcel src/index.html --no-source-maps --no-cache",
     "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "alias": {
+    "core": "./src/core",
+    "components": "./src/components",
+    "helpers": "./src/helpers",
+    "pages": "./src/pages"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "@anikin/parcel-transformer-handlebars": "1.0.9",
-    "parcel": "2.7.0",
-    "postcss-import": "15.0.0",
-    "prettier": "^2.7.1"
+    "parcel": "2.4.0",
+    "postcss": "8.4.20",
+    "postcss-import": "^15.1.0",
+    "postcss-nested": "6.0.0",
+    "typescript": "4.9.4"
   },
   "dependencies": {
-    "express": "^4.18.1"
+    "handlebars": "4.7.7",
+    "nanoid": "4.0.0",
+    "prettier": "2.8.1"
   },
   "engines": {
     "npm": "^17.6.0"
