@@ -6,12 +6,18 @@ import './chats.css';
 type ChatsPageProps = {
   title?: string;
   fullScreen?: boolean;
+  msgList: { text: string; isMe?: boolean }[];
 };
 
 export class ChatsPage extends Block<ChatsPageProps> {
   constructor({ fullScreen, ...props }: ChatsPageProps) {
     super(props);
     this.props.fullScreen = true;
+    this.props.msgList = [
+      { text: 'dsfdf' },
+      { text: 'dfdfgdfdfdg', isMe: true },
+      { text: 'xfdgd' },
+    ];
   }
 
   render(): string {
@@ -37,12 +43,15 @@ export class ChatsPage extends Block<ChatsPageProps> {
             <i class='fa fa-ellipsis-v' aria-hidden='true'></i>
           </div>
           <div class='msg-list'>
-            <div class='msg-item'>
-              text
-            </div>
-            <div class='msg-item me'>
-              text
-            </div>
+            ${this?.props?.msgList?.map(
+              (item: { text: string; isMe?: boolean }) => {
+                return `
+                    <div class='msg-item ${item?.isMe ? 'me' : ''}'>
+                        ${item.text}
+                    </div>
+                   `;
+              }
+            )}
           </div>
           <div class='msg-input'>
             <i class='fa fa-paperclip size-24' aria-hidden='true'></i>
