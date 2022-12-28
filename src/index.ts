@@ -2,6 +2,8 @@ import { renderDOM, registerComponent, Block } from './core';
 import LoginPage from 'pages/login';
 import SignupPage from 'pages/signup';
 import ChatsPage from 'pages/chats';
+import ProfilePage from 'pages/profile';
+import { chatting, chatList } from './data/mockData';
 
 import './styles/app.css';
 
@@ -13,6 +15,7 @@ import ErrorComponent from 'components/error';
 import Layout from 'components/layout';
 import Avatar from 'components/avatar';
 import ChatItem from 'components/chatItem';
+import Chatting from 'components/chatting';
 
 registerComponent(Button);
 registerComponent(Link);
@@ -22,6 +25,7 @@ registerComponent(Input);
 registerComponent(Layout);
 registerComponent(Avatar);
 registerComponent(ChatItem);
+registerComponent(Chatting);
 
 document.addEventListener('DOMContentLoaded', () => {
   // DEV: Расскоментировать нужно страницу для отображения
@@ -32,7 +36,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  const App = new ChatsPage({ title: 'Sign up' });
+  const App = new ChatsPage({ fullScreen: true });
   // const App = new SignupPage({ title: 'Sign up' });
   // const App = new LoginPage({ title: 'Sign in' });
 

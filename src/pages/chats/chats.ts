@@ -1,23 +1,43 @@
 import Block from 'core/Block';
 import Layout from 'components/layout';
 
+import { chatting, chatList } from '../../data/mockData';
+
 import './chats.css';
 
+type TMsg = { text: string; isMe?: boolean };
+type TChatting = {
+  user: {
+    shortName: string;
+    name: string;
+  };
+  msgList: TMsg[];
+};
+
+type TChatItem = {
+  id: number;
+  shortName: string;
+  name: string;
+  text: string;
+  badge?: number | string;
+  isBadge?: boolean;
+  isActive?: boolean;
+  date: string;
+  time: string;
+};
+
 type ChatsPageProps = {
-  title?: string;
   fullScreen?: boolean;
-  msgList: { text: string; isMe?: boolean }[];
+  chatList?: TChatItem[];
+  chatting?: TChatting;
 };
 
 export class ChatsPage extends Block<ChatsPageProps> {
   constructor({ fullScreen, ...props }: ChatsPageProps) {
     super(props);
     this.props.fullScreen = true;
-    this.props.msgList = [
-      { text: 'dsfdf' },
-      { text: 'dfdfgdfdfdg', isMe: true },
-      { text: 'xfdgd' },
-    ];
+    this.props.chatList = chatList;
+    this.props.chatting = chatting;
   }
 
   render(): string {
@@ -33,32 +53,13 @@ export class ChatsPage extends Block<ChatsPageProps> {
               {{{Link to="/" icon="chevron-right"}}}
             </div>
           </div>
-            {{{ChatItem shortName="GH" name="Greg" isActive="true" text="dsfdf" time="13:34" badge="4"}}}
-            {{{ChatItem shortName="LL" name="Lola" text="dsfdfgdfgdf" time="13:54"}}}
+          ${this?.props?.chatList?.map((item: TChatItem) => {
+            return `                   
+                {{{ChatItem  isActive="${item.isActive}" shortName="${item.shortName}" name="${item.name}" text="${item.text}" time="${item.time}" isBadge="${item.isBadge}" badge="${item?.badge}"}}}
+                `;
+          })}
         </div>
-        <div class='msg-container'>
-          <div class='msg-header'>
-            {{{Avatar name="МБ"}}}
-            <span>Мадам бугенвилияdfdf</span>
-            <i class='fa fa-ellipsis-v' aria-hidden='true'></i>
-          </div>
-          <div class='msg-list'>
-            ${this?.props?.msgList?.map(
-              (item: { text: string; isMe?: boolean }) => {
-                return `
-                    <div class='msg-item ${item?.isMe ? 'me' : ''}'>
-                        ${item.text}
-                    </div>
-                   `;
-              }
-            )}
-          </div>
-          <div class='msg-input'>
-            <i class='fa fa-paperclip size-24' aria-hidden='true'></i>
-            {{{Input type='search' placeholder='Type...'}}}
-            {{{Button type="btn-primary send-btn" icon="fa-arrow-right"}}}
-          </div>
-        </div>
+        {{{Chatting chatting=chatting}}}
       {{/Layout}}
     `;
   }

@@ -5,7 +5,8 @@ interface ChatItemProps {
   name: string;
   text: string;
   time: string;
-  badge?: string;
+  badge?: number;
+  isBadge?: boolean;
   isActive?: boolean;
 }
 
@@ -28,12 +29,12 @@ export class ChatItem extends Block {
         </div>
         <div class='msg-info'>
           <span class='msg-time'>{{time}}</span>
-          {{#if badge}}
-            <span class='msg-count'>
-              <img />{{badge}}
-            </span>
-          {{/if}}
-          
+            {{#if isBange}}
+              <span class='msg-count'>
+                <img />{{badge}}
+              </span>
+            {{/if}}
+                      
         </div>
       </div>
     `;

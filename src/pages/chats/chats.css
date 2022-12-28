@@ -149,8 +149,8 @@
 .send-btn {
   min-width: 30px;
   height: 30px;
-  font-size: 12px;
-  border-radius: 50%;
+  font-size: 12px !important;
+  border-radius: 50% !important;
   margin: 0;
-  padding: 0;
+  padding: 0 !important;
 }

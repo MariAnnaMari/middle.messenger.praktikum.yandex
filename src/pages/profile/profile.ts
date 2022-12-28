@@ -3,7 +3,7 @@ import { ValidateRuleType } from 'helpers/validateForm';
 import ControlledInput from 'components/controlledInput';
 import Layout from 'components/layout';
 
-type LoginProps = {
+type ProfileProps = {
   onSubmit?: (e: FormDataEvent) => void;
   onInput?: () => void;
   onFocus?: () => void;
@@ -14,8 +14,8 @@ type LoginProps = {
   title?: string;
 };
 
-export class LoginPage extends Block<LoginProps> {
-  constructor(props: LoginProps) {
+export class ProfilePage extends Block<ProfileProps> {
+  constructor(props: ProfileProps) {
     super(props);
     this.state = { validationError: false };
     this.setProps({
@@ -37,7 +37,7 @@ export class LoginPage extends Block<LoginProps> {
       item.dispatchEvent(event);
     });
     const isInvalidForm = this.state.validationError;
-    const formData: any = {};
+    const formData = {};
     if (!isInvalidForm) {
       inputList.forEach((item: Node) => {
         formData[`${item.name}`] = item.value;
