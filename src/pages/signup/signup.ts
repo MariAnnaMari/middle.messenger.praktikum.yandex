@@ -4,6 +4,7 @@ import ControlledInput from 'components/controlledInput';
 import Layout from 'components/layout';
 
 type SignupProps = {
+  onSignIn?: (e: MouseEvent) => void;
   onSubmit?: (e: FormDataEvent) => void;
   onInput?: () => void;
   onFocus?: () => void;
@@ -19,7 +20,8 @@ export class SignupPage extends Block<SignupProps> {
     super(props);
     this.state = { validationError: false };
     this.setProps({
-      onSubmit: (e) => this.onSubmit(e),
+      onSignIn: (e: MouseEvent) => this.onSignIn(e),
+      onSubmit: (e: FormDataEvent) => this.onSubmit(e),
       setErrorValidation: (val) => {
         this.setState({ validationError: val });
       },
@@ -27,6 +29,11 @@ export class SignupPage extends Block<SignupProps> {
       passwordValue: '',
     });
   }
+
+  onSignIn = (e: MouseEvent) => {
+    e.preventDefault();
+    location.href = '/';
+  };
 
   onSubmit(e: FormDataEvent) {
     e.preventDefault();
@@ -116,7 +123,7 @@ export class SignupPage extends Block<SignupProps> {
           }}}
           <div class="form-btns">
             {{{Button title="Sign up" type="btn-primary  btn-block" onClick=onSubmit}}}
-            {{{Button title="Sign in"  type="btn-block" onClick=onSubmit}}}
+            {{{Button title="Sign in"  type="btn-block" onClick=onSignIn}}}
           </div>
         </form>
       {{/Layout}}

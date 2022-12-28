@@ -50,7 +50,7 @@ export class ChatsPage extends Block<ChatsPageProps> {
             <div class='profile-link'>
               {{{Avatar name="РГ"}}}
               <span>Profile</span> 
-              {{{Link to="/" icon="chevron-right"}}}
+              {{{Link to="/profile" icon="chevron-right"}}}
             </div>
           </div>
           ${this?.props?.chatList?.map((item: TChatItem) => {

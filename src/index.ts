@@ -35,11 +35,16 @@ document.addEventListener('DOMContentLoaded', () => {
   //     return `<div>MyComponent</div>`;
   //   }
   // }
+  const pathName = location.pathname;
+  console.log(pathName);
+  if (pathName === '/profile') {
+    renderDOM(new ProfilePage({ title: 'Profile' }));
+  } else if (pathName === '/chats') {
+    renderDOM(new ChatsPage({ fullScreen: true }));
+  } else if (pathName === '/signup') {
+    renderDOM(new SignupPage({ title: 'Sign up' }));
+  } else {
+    renderDOM(new LoginPage({ title: 'Sign in' }));
+  }
 
-  // const App = new ProfilePage({ title: 'Profile' });
-  // const App = new ChatsPage({ fullScreen: true });
-  // const App = new SignupPage({ title: 'Sign up' });
-  const App = new LoginPage({ title: 'Sign in' });
-
-  renderDOM(App);
 });
