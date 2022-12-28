@@ -31,15 +31,16 @@ export class LoginPage extends Block<LoginProps> {
   onSubmit(e: FormDataEvent) {
     e.preventDefault();
     this.setState({ validationError: false });
-    let event = new Event('blur');
-    const inputList = this._element?.querySelectorAll('input') as NodeList;
-    inputList.forEach((item: Node) => {
+    const event = new Event('blur');
+    const inputList = this._element?.querySelectorAll(
+      'input'
+    ) as NodeListOf<HTMLInputElement>;
+    inputList.forEach((item: HTMLInputElement) => {
       item.dispatchEvent(event);
     });
-    const isInvalidForm = this.state.validationError;
     const formData: any = {};
-    if (!isInvalidForm) {
-      inputList.forEach((item: Node) => {
+    if (!this.state.validationError) {
+      inputList.forEach((item: HTMLInputElement) => {
         formData[`${item.name}`] = item.value;
       });
       console.log('Success', formData);

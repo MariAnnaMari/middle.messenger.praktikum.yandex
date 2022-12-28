@@ -26,17 +26,18 @@ export class Chatting extends Block {
   }
 
   onClick() {
-    const inputMessageRef: any = this.refs.inputMessageRef;
-    const message: string = inputMessageRef._element.value;
+    const { inputMessageRef }: any = this.refs;
+    const message: string = inputMessageRef?._element?.value;
     if (!this.state.isSendBtnDisable) {
       console.log('message', message);
     } else {
       console.log('message is empty');
     }
   }
+
   onInput() {
-    const inputMessageRef: any = this.refs.inputMessageRef;
-    const message: string = inputMessageRef._element.value;
+    const { inputMessageRef }: any = this.refs;
+    const message: string = inputMessageRef?._element?.value;
     if (message.length !== 0) {
       this.setState({ isSendBtnDisable: false });
     } else {
@@ -54,13 +55,13 @@ export class Chatting extends Block {
           <i class='fa fa-ellipsis-v' aria-hidden='true'></i>
         </div>
         <div class='msg-list'>
-          ${this?.props?.chatting?.msgList?.map((item: TMsg) => {
-            return `
-                    <div class='msg-item ${item?.isMe ? 'me' : ''}'>
+          ${this?.props?.chatting?.msgList?.map(
+            (item: TMsg) => `
+                    <div class='msg-item ${item?.isMe === true ? 'me' : ''}'>
                         ${item.text}
                     </div>
-                   `;
-          })}
+                   `
+          )}
         </div>
         <div class='msg-input'>
           <i class='fa fa-paperclip size-24' aria-hidden='true'></i>

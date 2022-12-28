@@ -1,4 +1,4 @@
-import { renderDOM, registerComponent, Block } from './core';
+import { renderDOM, registerComponent } from './core';
 import LoginPage from 'pages/login';
 import SignupPage from 'pages/signup';
 import ChatsPage from 'pages/chats';
@@ -30,16 +30,16 @@ registerComponent(Chatting);
 document.addEventListener('DOMContentLoaded', () => {
   // DEV: Расскоментировать нужно страницу для отображения
 
-  class MyComponent extends Block {
-    render(): string {
-      return `<div>MyComponent</div>`;
-    }
-  }
+  // class MyComponent extends Block {
+  //   render(): string {
+  //     return `<div>MyComponent</div>`;
+  //   }
+  // }
 
-  const App = new ProfilePage({ title: 'Profile' });
+  // const App = new ProfilePage({ title: 'Profile' });
   // const App = new ChatsPage({ fullScreen: true });
   // const App = new SignupPage({ title: 'Sign up' });
-  // const App = new LoginPage({ title: 'Sign in' });
+  const App = new LoginPage({ title: 'Sign in' });
 
   renderDOM(App);
 });

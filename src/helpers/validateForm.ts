@@ -14,10 +14,10 @@ type ValidateRule = {
 };
 
 export function validateForm(rules: ValidateRule[]) {
-  let errorMsg = [];
+  const errorMsg = [];
   for (let i = 0; i < rules.length; i++) {
     const { type, value } = rules[i];
-    if (!value || value.length === 0) {
+    if ((value === "") || value.length === 0) {
       errorMsg.push('field can not be empty');
       break;
     }

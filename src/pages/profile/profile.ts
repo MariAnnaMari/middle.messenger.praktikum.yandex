@@ -31,20 +31,22 @@ export class ProfilePage extends Block<ProfileProps> {
   onSubmit(e: FormDataEvent) {
     e.preventDefault();
     this.setState({ validationError: false });
-    let event = new Event('blur');
-    const inputList = this._element?.querySelectorAll('input') as NodeList;
-    inputList.forEach((item: Node) => {
+    const event = new Event('blur');
+    const inputList = this._element?.querySelectorAll(
+      'input'
+    ) as NodeListOf<HTMLInputElement>;
+    inputList.forEach((item: HTMLInputElement) => {
       item.dispatchEvent(event);
     });
     const isInvalidForm = this.state.validationError;
-    const formData = {};
+    const formData: any = {};
     if (!isInvalidForm) {
-      inputList.forEach((item: Node) => {
+      inputList.forEach((item: HTMLInputElement) => {
         formData[`${item.name}`] = item.value;
       });
       console.log('Success', formData);
     } else {
-      console.log('error validation');
+      console.log('error Validation');
     }
   }
 

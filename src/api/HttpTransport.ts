@@ -13,13 +13,13 @@ interface HttpTransportOptions<P = any> {
 }
 
 function queryStringify(data: any): string {
-  let queryString = Object.keys(data)
+  const queryString: string = Object.keys(data)
     .map((key) => key + '=' + data[key])
     .join('&');
   return queryString;
 }
 
-export default class HttpTransport<Props extends any> {
+export default class HttpTransport<Props> {
   public get(url: string, options: HttpTransportOptions = {}): Promise<any> {
     return this.request(
       url,
@@ -54,7 +54,7 @@ export default class HttpTransport<Props extends any> {
   public request(
     url: string,
     options: HttpTransportOptions,
-    timeout: number = 5000
+    timeout?: number
   ): Promise<any> {
     const { method, data } = options;
     return new Promise((resolve, reject) => {
@@ -63,7 +63,9 @@ export default class HttpTransport<Props extends any> {
       if (method === METHODS.GET) {
         xhr.open(method, url + '?' + queryStringify(data));
       } else {
-        xhr.open(method, url);
+        if (typeof method === 'string') {
+          xhr.open(method, url);
+        }
       }
 
       xhr.onload = function () {
@@ -76,7 +78,10 @@ export default class HttpTransport<Props extends any> {
         reject();
       };
 
-      xhr.timeout = timeout;
+      if (timeout != null) {
+        xhr.timeout = timeout;
+      }
+
       xhr.ontimeout = reject;
       if (method === METHODS.GET || !data) {
         xhr.send();

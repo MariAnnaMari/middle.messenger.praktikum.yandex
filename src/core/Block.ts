@@ -8,7 +8,7 @@ interface BlockMeta<P = any> {
 
 type Events = Values<typeof Block.EVENTS>;
 
-export default class Block<P extends object = {}> {
+export default class Block<P extends object = any> {
   static EVENTS = {
     INIT: 'init',
     FLOW_CDM: 'flow:component-did-mount',
@@ -71,6 +71,7 @@ export default class Block<P extends object = {}> {
     this.componentDidMount(props);
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
   componentDidMount(props: P) {}
 
   _componentDidUpdate(oldProps: P, newProps: P) {
@@ -139,6 +140,7 @@ export default class Block<P extends object = {}> {
   _makePropsProxy(props: any): any {
     // Можно и так передать this
     // Такой способ больше не применяется с приходом ES6+
+    // eslint-disable-next-line @typescript-eslint/no-this-alias
     const self = this;
 
     return new Proxy(props as unknown as object, {

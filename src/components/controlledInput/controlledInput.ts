@@ -21,15 +21,17 @@ export class ControlledInput extends Block {
       ...props,
       onBlur: (e: FocusEvent) => {
         const inputEl = e.target as HTMLInputElement;
-        const error = validateForm([
-          {
-            type: validateRule,
-            value: inputEl.value,
-          },
-        ]);
-        this.refs.errorRef.setProps({ text: error });
-        if (error.length) {
-          props.setErrorValidation(true);
+        if (validateRule !== undefined) {
+          const error = validateForm([
+            {
+              type: validateRule,
+              value: inputEl.value,
+            },
+          ]);
+          this.refs.errorRef.setProps({ text: error });
+          if (error.length !== 0) {
+            this.props.setErrorValidation(true);
+          }
         }
       },
     });
