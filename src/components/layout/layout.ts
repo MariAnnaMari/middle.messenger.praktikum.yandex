@@ -17,7 +17,7 @@ export class Layout extends Block<LayoutProps> {
           </div>
         {{else}}
             <div class="form-container">
-              <h3 class="text-center">{{title}}</h3>
+              <h3 class="text-center" ><i class="fa fa-long-arrow-left" aria-hidden="true" onclick="history.back()"></i><span class="title">{{title}}</span></h3>
               <div data-layout=1></div>
             </div>
         {{/if}}

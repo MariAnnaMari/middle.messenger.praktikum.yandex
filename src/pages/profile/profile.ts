@@ -53,31 +53,63 @@ export class ProfilePage extends Block<ProfileProps> {
     return `
       {{#Layout title=title }}
         <form>
+          <div class="photo-editing-field">
+            {{{Avatar name="ME"}}}
+            <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+          </div>
           {{{ControlledInput
               onInput=onInput
               onFocus=onFocus
               name="login"
               label="login"
-              placeholder="login"
+              placeholder="Login"
               type="text"
-              value="${this.props.loginValue}"
               validateRule="${ValidateRuleType.Login}"
               setErrorValidation=setErrorValidation
           }}}
           {{{ControlledInput
               onInput=onInput
               onFocus=onFocus
-              name="password"
-              label="Password"
-              placeholder="Password"
+              name="first_name"
+              label="name"
+              placeholder="Name"
               type="text"
-              value="${this.props.loginValue}"
-              validateRule="${ValidateRuleType.Password}"
+              validateRule="${ValidateRuleType.Name}"
+              setErrorValidation=setErrorValidation
+          }}}
+          {{{ControlledInput
+              onInput=onInput
+              onFocus=onFocus
+              name="second_name"
+              label="Surname"
+              placeholder="Surname"
+              type="text"
+              validateRule="${ValidateRuleType.Name}"
+              setErrorValidation=setErrorValidation
+          }}}
+          {{{ControlledInput
+              onInput=onInput
+              onFocus=onFocus
+              name="phone"
+              label="Phone"
+              placeholder="Phone"
+              type="text"
+              validateRule="${ValidateRuleType.Phone}"
+              setErrorValidation=setErrorValidation
+          }}}
+          {{{ControlledInput
+              onInput=onInput
+              onFocus=onFocus
+              name="email"
+              label="email"
+              placeholder="Email"
+              type="text"
+              validateRule="${ValidateRuleType.Email}"
               setErrorValidation=setErrorValidation
           }}}
           <div class="form-btns">
-            {{{Button title="Sign in" type="btn-primary  btn-block" onClick=onSubmit}}}
-            {{{Button title="Sign up"  type="btn-block" onClick=onSubmit}}}
+            {{{Button title="Edit" type="btn-primary  btn-block" onClick=onSubmit}}}
+            {{{Button title="Edit password"  type="btn-block" onClick=onSubmit}}}
           </div>
         </form>
       {{/Layout}}

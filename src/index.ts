@@ -36,7 +36,8 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  const App = new ChatsPage({ fullScreen: true });
+  const App = new ProfilePage({ title: 'Profile' });
+  // const App = new ChatsPage({ fullScreen: true });
   // const App = new SignupPage({ title: 'Sign up' });
   // const App = new LoginPage({ title: 'Sign in' });
 
