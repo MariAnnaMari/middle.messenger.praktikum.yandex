@@ -53,11 +53,11 @@ export class ChatsPage extends Block<ChatsPageProps> {
               {{{Link to="/profile" icon="chevron-right"}}}
             </div>
           </div>
-          ${this?.props?.chatList?.map((item: TChatItem) => {
-            return `                   
-                {{{ChatItem  isActive="${item.isActive}" shortName="${item.shortName}" name="${item.name}" text="${item.text}" time="${item.time}" isBadge="${item.isBadge}" badge="${item?.badge}"}}}
-                `;
-          })}
+            {{#each chatList}}
+                {{#with this}}
+                     {{{ChatItem isActive=isActive shortName=shortName name=name text=text time=time badge=badge isBadge=isBadge }}}
+                {{/with}}
+            {{/each}}         
         </div>
         {{{Chatting chatting=chatting}}}
       {{/Layout}}

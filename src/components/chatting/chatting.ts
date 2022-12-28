@@ -55,13 +55,13 @@ export class Chatting extends Block {
           <i class='fa fa-ellipsis-v' aria-hidden='true'></i>
         </div>
         <div class='msg-list'>
-          ${this?.props?.chatting?.msgList?.map(
-            (item: TMsg) => `
-                    <div class='msg-item ${item?.isMe === true ? 'me' : ''}'>
-                        ${item.text}
+            {{#each chatting.msgList}}
+                {{#with this}}
+                    <div class='msg-item {{#if isMe}}me{{/if}}'>
+                        {{text}}
                     </div>
-                   `
-          )}
+                {{/with}}
+            {{/each}}
         </div>
         <div class='msg-input'>
           <i class='fa fa-paperclip size-24' aria-hidden='true'></i>

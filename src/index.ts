@@ -3,7 +3,6 @@ import LoginPage from 'pages/login';
 import SignupPage from 'pages/signup';
 import ChatsPage from 'pages/chats';
 import ProfilePage from 'pages/profile';
-import { chatting, chatList } from './data/mockData';
 
 import './styles/app.css';
 
@@ -28,15 +27,8 @@ registerComponent(ChatItem);
 registerComponent(Chatting);
 
 document.addEventListener('DOMContentLoaded', () => {
-  // DEV: Расскоментировать нужно страницу для отображения
 
-  // class MyComponent extends Block {
-  //   render(): string {
-  //     return `<div>MyComponent</div>`;
-  //   }
-  // }
   const pathName = location.pathname;
-  console.log(pathName);
   if (pathName === '/profile') {
     renderDOM(new ProfilePage({ title: 'Profile' }));
   } else if (pathName === '/chats') {

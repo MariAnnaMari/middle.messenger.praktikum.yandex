@@ -29,7 +29,7 @@ export class ChatItem extends Block {
         </div>
         <div class='msg-info'>
           <span class='msg-time'>{{time}}</span>
-            {{#if isBange}}
+            {{#if isBadge}}
               <span class='msg-count'>
                 <img />{{badge}}
               </span>
