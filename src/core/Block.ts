@@ -29,7 +29,7 @@ export default class Block<P extends PropsType> {
     const eventBus = new EventBus<Events>();
 
     this.props = this._makePropsProxy(props || ({} as P));
-    // this.state = this._makeStateProxy(this.state);
+    this.state = this._makeStateProxy(this.state);
 
     this.eventBus = () => eventBus;
 
