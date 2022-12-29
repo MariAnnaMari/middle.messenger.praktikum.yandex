@@ -9,15 +9,14 @@ interface AvatarProps {
 
 export class Avatar extends Block<AvatarProps> {
   static componentName = 'Avatar';
-  constructor(props: AvatarProps) {
-    super({ ...props });
-  }
 
   render() {
     // language=hbs
     return `
       <span class='avatar'>
-        <img alt="avatar" {{#if src}} src={{src}} {{/if}} />{{name}}
+          {{#if src}} <img alt="avatar" src={{src}} />
+          {{/if}}
+          {{name}}
       </span>
     `;
   }

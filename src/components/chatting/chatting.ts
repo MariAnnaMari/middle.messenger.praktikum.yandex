@@ -1,4 +1,5 @@
 import Block from 'core/Block';
+import { InputProps } from 'components/input/input';
 
 type TMsg = { text: string; isMe?: boolean };
 
@@ -27,9 +28,12 @@ export class Chatting extends Block<ChattingProps> {
     });
   }
 
+  getMessage(): Nullable<string> {
+    return this.refs.inputMessageRef.inputElement.value;
+  }
+
   onClick() {
-    const { inputMessageRef }: any = this.refs;
-    const message: string = inputMessageRef?._element?.value;
+    const message: Nullable<string> = this.getMessage();
     if (!this.state.isSendBtnDisable) {
       console.log('message', message);
     } else {
@@ -38,9 +42,8 @@ export class Chatting extends Block<ChattingProps> {
   }
 
   onInput() {
-    const { inputMessageRef }: any = this.refs;
-    const message: string = inputMessageRef?._element?.value;
-    if (message.length !== 0) {
+    const message: Nullable<string> = this.getMessage();
+    if (message && message.length !== 0) {
       this.setState({ isSendBtnDisable: false });
     } else {
       this.setState({ isSendBtnDisable: true });

@@ -19,7 +19,7 @@ export default class Block<P extends object = any> {
   public id = nanoid(6);
   private readonly _meta: BlockMeta;
 
-  protected _element: Nullable<HTMLElement> = null;
+  protected _element: Nullable<HTMLElement | HTMLInputElement> = null;
   protected readonly props: P;
   protected children: { [id: string]: Block } = {};
 
@@ -103,7 +103,11 @@ export default class Block<P extends object = any> {
   };
 
   get element() {
-    return this._element;
+    return this._element as HTMLElement;
+  }
+
+  get inputElement() {
+    return this._element as HTMLInputElement;
   }
 
   _render() {

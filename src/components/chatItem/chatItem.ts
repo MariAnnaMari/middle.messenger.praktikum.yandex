@@ -12,9 +12,6 @@ interface ChatItemProps {
 
 export class ChatItem extends Block<ChatItemProps> {
   static componentName = 'ChatItem';
-  constructor(props: ChatItemProps) {
-    super({ ...props });
-  }
 
   render() {
     // language=hbs
@@ -32,7 +29,7 @@ export class ChatItem extends Block<ChatItemProps> {
           <span class='msg-time'>{{time}}</span>
             {{#if isBadge}}
               <span class='msg-count'>
-                <img alt="badge" />{{badge}}
+                <div />{{badge}}
               </span>
             {{/if}}
                       

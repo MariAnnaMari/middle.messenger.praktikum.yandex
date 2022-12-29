@@ -46,7 +46,7 @@ export class SignupPage extends Block<SignupProps> {
     inputList.forEach((item: HTMLInputElement) => {
       item.dispatchEvent(event);
     });
-    const formData: any = {};
+    const formData: { [key: string]: string } = {};
     if (!this.state.validationError) {
       inputList.forEach((item: HTMLInputElement) => {
         formData[`${item.name}`] = item.value;

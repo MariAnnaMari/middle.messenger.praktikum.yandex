@@ -2,7 +2,7 @@ import Block from 'core/Block';
 
 import './input.css';
 
-interface InputProps {
+export interface InputProps {
   onInput?: () => void;
   onFocus?: () => void;
   onBlur?: () => void;

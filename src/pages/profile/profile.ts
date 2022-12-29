@@ -40,7 +40,7 @@ export class ProfilePage extends Block<ProfileProps> {
       item.dispatchEvent(event);
     });
     const isInvalidForm = this.state.validationError;
-    const formData: any = {};
+    const formData: { [key: string]: string } = {};
     if (!isInvalidForm) {
       inputList.forEach((item: HTMLInputElement) => {
         formData[`${item.name}`] = item.value;
