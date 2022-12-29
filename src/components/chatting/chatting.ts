@@ -15,12 +15,13 @@ interface ChattingProps {
   onInput?: () => void;
 }
 
-export class Chatting extends Block {
+export class Chatting extends Block<ChattingProps> {
   static componentName = 'Chatting';
   constructor(props: ChattingProps) {
     super(props);
     this.state = { isSendBtnDisable: true };
     this.setProps({
+      ...this.props,
       onInput: () => this.onInput(),
       onClick: () => this.onClick(),
     });

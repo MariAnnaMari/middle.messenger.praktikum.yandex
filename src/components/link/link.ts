@@ -6,12 +6,13 @@ interface LinkProps {
   text: string;
   to: string;
   icon?: string;
+  events?: { click?: () => void };
 }
 
-export class Link extends Block {
+export class Link extends Block<LinkProps> {
   static componentName = 'Link';
   constructor(props: LinkProps) {
-    const onClick = (e: MouseEvent) => {
+    const onClick = () => {
       location.href = this.props.to;
     };
 

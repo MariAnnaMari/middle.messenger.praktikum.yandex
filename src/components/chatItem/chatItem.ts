@@ -10,7 +10,7 @@ interface ChatItemProps {
   isActive?: boolean;
 }
 
-export class ChatItem extends Block {
+export class ChatItem extends Block<ChatItemProps> {
   static componentName = 'ChatItem';
   constructor(props: ChatItemProps) {
     super({ ...props });

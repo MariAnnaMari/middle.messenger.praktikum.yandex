@@ -7,10 +7,11 @@ interface ButtonProps {
   link?: string;
   icon?: string;
   type?: string;
-  onClick: () => void;
+  onClick?: () => void;
+  events?: { click?: () => void };
 }
 
-export class Button extends Block {
+export class Button extends Block<ButtonProps> {
   static componentName = 'Button';
   constructor({ title, link, icon, type, onClick }: ButtonProps) {
     super({ title, link, icon, type, events: { click: onClick } });
