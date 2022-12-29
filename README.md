@@ -6,7 +6,7 @@
 - Выполнить `npm run build`
 
 ### Demo
-https://magical-narwhal-ee494f.netlify.app/
+https://dynamic-druid-85f155.netlify.app/
 
 ### UI
 https://www.figma.com/file/jF5fFFzgGOxQeB4CmKWTiE/Chat_external_link?node-id=1%3A612
