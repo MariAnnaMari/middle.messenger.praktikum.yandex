@@ -1,0 +1,11 @@
+{{!< main}}
+
+<form class="auth container">
+  <h3 class="text-center">Sign in</h3>
+    {{> formItem/input name="login" placeholder="Login" type="text" }}
+    {{> formItem/input name="password" placeholder="Password" required="true" type="password" }}
+  <div class="form-btns">
+      {{> button/button title="Sign in" type="btn-primary btn-block"  link="../chats/index.hbs"}}
+      {{> button/button title="Sign up" type="btn-block" link="../signup/index.hbs"}}
+  </div>
+</form>
