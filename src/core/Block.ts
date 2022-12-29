@@ -249,3 +249,4 @@ export default class Block<P extends PropsType> {
     this.getContent().style.display = 'none';
   }
 }
+
