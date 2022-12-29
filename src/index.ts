@@ -27,7 +27,6 @@ registerComponent(ChatItem);
 registerComponent(Chatting);
 
 document.addEventListener('DOMContentLoaded', () => {
-
   const pathName = location.pathname;
   if (pathName === '/profile') {
     renderDOM(new ProfilePage({ title: 'Profile' }));
@@ -38,5 +37,4 @@ document.addEventListener('DOMContentLoaded', () => {
   } else {
     renderDOM(new LoginPage({ title: 'Sign in' }));
   }
-
 });

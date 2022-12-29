@@ -21,7 +21,7 @@ export class LoginPage extends Block<LoginProps> {
     super(props);
     this.state = { validationError: false };
     this.setProps({
-      onSignUp: (e:MouseEvent) => this.onSignUp(e),
+      onSignUp: (e: MouseEvent) => this.onSignUp(e),
       onSubmit: (e: FormDataEvent) => this.onSubmit(e),
       setErrorValidation: (val: boolean) => {
         this.setState({ validationError: val });
@@ -31,7 +31,7 @@ export class LoginPage extends Block<LoginProps> {
     });
   }
 
-  onSignUp = (e:MouseEvent) => {
+  onSignUp = (e: MouseEvent) => {
     e.preventDefault();
     location.href = '/signup';
   };
@@ -52,7 +52,7 @@ export class LoginPage extends Block<LoginProps> {
         formData[`${item.name}`] = item.value;
       });
       console.log('Success', formData);
-      location.href='/chats'
+      location.href = '/chats';
     } else {
       console.log('error validation');
     }

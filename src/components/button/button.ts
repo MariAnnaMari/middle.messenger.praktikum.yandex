@@ -16,7 +16,6 @@ export class Button extends Block {
     super({ title, link, icon, type, events: { click: onClick } });
   }
   protected render(): string {
-
     // language=hbs
     return `
       <button class='btn {{type}}' type='submit'>
