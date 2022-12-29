@@ -17,7 +17,7 @@ export class Avatar extends Block {
     // language=hbs
     return `
       <span class='avatar'>
-        <img {{#if src}} src={{src}} {{/if}} />{{name}}
+        <img alt="avatar" {{#if src}} src={{src}} {{/if}} />{{name}}
       </span>
     `;
   }
