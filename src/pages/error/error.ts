@@ -1,5 +1,4 @@
 import Block from 'core/Block';
-import { ValidateRuleType } from 'helpers/validateForm';
 
 type ErrorProps = {
   status?: number;

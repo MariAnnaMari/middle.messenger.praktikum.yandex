@@ -1,7 +1,5 @@
 import Block from 'core/Block';
 import { ValidateRuleType } from 'helpers/validateForm';
-import ControlledInput from 'components/controlledInput';
-import Layout from 'components/layout';
 
 type ProfileProps = {
   onSubmit?: (e: FormDataEvent) => void;

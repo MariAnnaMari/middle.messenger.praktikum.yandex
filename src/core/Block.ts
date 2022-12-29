@@ -28,10 +28,6 @@ export default class Block<P extends PropsType> {
   public constructor(props?: P | PropsType) {
     const eventBus = new EventBus<Events>();
 
-    if (props) {
-      this.getStateFromProps(props);
-    }
-
     this.props = this._makePropsProxy(props || ({} as P));
     // this.state = this._makeStateProxy(this.state);
 
@@ -53,10 +49,6 @@ export default class Block<P extends PropsType> {
     this._element = this._createDocumentElement('div');
   }
 
-  protected getStateFromProps(props: P | PropsType): void {
-    this.state = {};
-  }
-
   init() {
     this._createResources();
     this.eventBus().emit(Block.EVENTS.FLOW_RENDER, this.props);
@@ -66,7 +58,6 @@ export default class Block<P extends PropsType> {
     this.componentDidMount(props);
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
   componentDidMount(props: P) {}
 
   _componentDidUpdate(oldProps: P, newProps: P) {

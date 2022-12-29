@@ -1,5 +1,4 @@
 import Block from 'core/Block';
-import { InputProps } from 'components/input/input';
 
 type TMsg = { text: string; isMe?: boolean };
 
