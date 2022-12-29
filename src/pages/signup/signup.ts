@@ -16,6 +16,7 @@ type SignupProps = {
 };
 
 export class SignupPage extends Block<SignupProps> {
+  static componentName = 'SignupPage';
   constructor(props: SignupProps) {
     super(props);
     this.state = { validationError: false };

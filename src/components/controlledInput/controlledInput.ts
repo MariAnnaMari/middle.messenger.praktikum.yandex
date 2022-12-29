@@ -16,6 +16,7 @@ interface ControlledInputProps {
 }
 
 export class ControlledInput extends Block {
+  static componentName = 'ControlledInput';
   constructor({ validateRule, ...props }: ControlledInputProps) {
     super({
       ...props,

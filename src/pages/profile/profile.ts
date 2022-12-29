@@ -15,6 +15,7 @@ type ProfileProps = {
 };
 
 export class ProfilePage extends Block<ProfileProps> {
+  static componentName = 'ProfilePage';
   constructor(props: ProfileProps) {
     super(props);
     this.state = { validationError: false };

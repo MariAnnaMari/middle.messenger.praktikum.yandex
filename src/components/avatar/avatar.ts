@@ -8,6 +8,7 @@ interface AvatarProps {
 }
 
 export class Avatar extends Block {
+  static componentName = 'Avatar';
   constructor(props: AvatarProps) {
     super({ ...props });
   }

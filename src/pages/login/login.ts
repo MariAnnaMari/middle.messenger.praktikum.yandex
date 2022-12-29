@@ -16,6 +16,7 @@ type LoginProps = {
 };
 
 export class LoginPage extends Block<LoginProps> {
+  static componentName = 'LoginPage';
   constructor(props: LoginProps) {
     super(props);
     this.state = { validationError: false };

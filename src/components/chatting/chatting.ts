@@ -16,6 +16,7 @@ interface ChattingProps {
 }
 
 export class Chatting extends Block {
+  static componentName = 'Chatting';
   constructor(props: ChattingProps) {
     super(props);
     this.state = { isSendBtnDisable: true };

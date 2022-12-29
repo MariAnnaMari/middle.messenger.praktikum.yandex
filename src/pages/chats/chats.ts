@@ -33,6 +33,7 @@ type ChatsPageProps = {
 };
 
 export class ChatsPage extends Block<ChatsPageProps> {
+  static componentName = 'ChatsPage';
   constructor({ fullScreen, ...props }: ChatsPageProps) {
     super(props);
     this.props.fullScreen = true;
