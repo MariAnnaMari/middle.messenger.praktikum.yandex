@@ -47,7 +47,7 @@ export class LoginPage extends Block<LoginProps> {
       item.dispatchEvent(event);
     });
     const formData: { [key: string]: string } = {};
-    if (!this.state.validationError) {
+    if (!this.state?.validationError) {
       inputList.forEach((item: HTMLInputElement) => {
         formData[`${item.name}`] = item.value;
       });

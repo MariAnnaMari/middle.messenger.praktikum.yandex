@@ -34,7 +34,7 @@ export class Chatting extends Block<ChattingProps> {
 
   onClick() {
     const message: Nullable<string> = this.getMessage();
-    if (!this.state.isSendBtnDisable) {
+    if (!this.state?.isSendBtnDisable) {
       console.log('message', message);
     } else {
       console.log('message is empty');
