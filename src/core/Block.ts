@@ -2,13 +2,11 @@ import EventBus from './EventBus';
 import { nanoid } from 'nanoid';
 import Handlebars from 'handlebars';
 
-interface BlockMeta<P = any> {
-  props: P;
-}
-
 type Events = Values<typeof Block.EVENTS>;
+export type PropsType = Partial<{ [key: string]: any }> | null;
+export type StateType = { [key: string]: any } | object;
 
-export default class Block<P extends object = any> {
+export default class Block<P extends PropsType> {
   static EVENTS = {
     INIT: 'init',
     FLOW_CDM: 'flow:component-did-mount',
@@ -17,28 +15,21 @@ export default class Block<P extends object = any> {
   } as const;
   static componentName: string;
   public id = nanoid(6);
-  private readonly _meta: BlockMeta;
 
-  protected _element: Nullable<HTMLElement> = null;
+  protected _element: Nullable<HTMLElement | HTMLInputElement> = null;
   protected readonly props: P;
-  protected children: { [id: string]: Block } = {};
+  protected children: { [id: string]: Block<PropsType> } = {};
 
   eventBus: () => EventBus<Events>;
 
-  protected state: any = {};
-  protected refs: { [key: string]: Block } = {};
+  protected state: { [key: string]: any } = {};
+  protected refs: { [key: string]: Block<PropsType> } = {};
 
-  public constructor(props?: P) {
+  public constructor(props?: P | PropsType) {
     const eventBus = new EventBus<Events>();
 
-    this._meta = {
-      props,
-    };
-
-    this.getStateFromProps(props);
-
     this.props = this._makePropsProxy(props || ({} as P));
-    this.state = this._makePropsProxy(this.state);
+    // this.state = this._makeStateProxy(this.state);
 
     this.eventBus = () => eventBus;
 
@@ -58,21 +49,16 @@ export default class Block<P extends object = any> {
     this._element = this._createDocumentElement('div');
   }
 
-  protected getStateFromProps(props: any): void {
-    this.state = {};
-  }
-
   init() {
     this._createResources();
     this.eventBus().emit(Block.EVENTS.FLOW_RENDER, this.props);
   }
 
   _componentDidMount(props: P) {
-    this.componentDidMount(props);
+    // this.componentDidMount(props);
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
-  componentDidMount(props: P) {}
+  // componentDidMount(props: P) {}
 
   _componentDidUpdate(oldProps: P, newProps: P) {
     const response = this.componentDidUpdate(oldProps, newProps);
@@ -91,10 +77,10 @@ export default class Block<P extends object = any> {
       return;
     }
 
-    Object.assign(this.props, nextProps);
+    Object.assign(this.props && this.props, nextProps);
   };
 
-  setState = (nextState: any) => {
+  setState = (nextState: StateType) => {
     if (!nextState) {
       return;
     }
@@ -103,7 +89,11 @@ export default class Block<P extends object = any> {
   };
 
   get element() {
-    return this._element;
+    return this._element as HTMLElement;
+  }
+
+  get inputElement() {
+    return this._element as HTMLInputElement;
   }
 
   _render() {
@@ -137,29 +127,39 @@ export default class Block<P extends object = any> {
     return this.element!;
   }
 
-  _makePropsProxy(props: any): any {
-    // Можно и так передать this
-    // Такой способ больше не применяется с приходом ES6+
-    // eslint-disable-next-line @typescript-eslint/no-this-alias
-    const self = this;
-
+  _makePropsProxy(props: PropsType) {
     return new Proxy(props as unknown as object, {
-      get(target: Record<string, unknown>, prop: string) {
+      get: (target: Record<string, unknown>, prop: string) => {
         const value = target[prop];
         return typeof value === 'function' ? value.bind(target) : value;
       },
-      set(target: Record<string, unknown>, prop: string, value: unknown) {
+      set: (target: Record<string, unknown>, prop: string, value: unknown) => {
         target[prop] = value;
 
-        // Запускаем обновление компоненты
-        // Плохой cloneDeep, в след итерации нужно заставлять добавлять cloneDeep им самим
-        self.eventBus().emit(Block.EVENTS.FLOW_CDU, { ...target }, target);
+        this.eventBus().emit(Block.EVENTS.FLOW_CDU, { ...target }, target);
         return true;
       },
-      deleteProperty() {
+      deleteProperty: () => {
         throw new Error('Нет доступа');
       },
     }) as unknown as P;
+  }
+  _makeStateProxy(props: StateType) {
+    return new Proxy(props as unknown as object, {
+      get: (target: Record<string, unknown>, prop: string) => {
+        const value = target[prop];
+        return typeof value === 'function' ? value.bind(target) : value;
+      },
+      set: (target: Record<string, unknown>, prop: string, value: unknown) => {
+        target[prop] = value;
+
+        this.eventBus().emit(Block.EVENTS.FLOW_CDU, { ...target }, target);
+        return true;
+      },
+      deleteProperty: () => {
+        throw new Error('Нет доступа');
+      },
+    }) as unknown as StateType;
   }
 
   _createDocumentElement(tagName: string) {
@@ -167,7 +167,7 @@ export default class Block<P extends object = any> {
   }
 
   _removeEvents() {
-    const events: Record<string, () => void> = (this.props as any).events;
+    const events: Record<string, () => void> = (this.props as P)?.events;
 
     if (!events || !this._element) {
       return;
@@ -179,7 +179,7 @@ export default class Block<P extends object = any> {
   }
 
   _addEvents() {
-    const events: Record<string, () => void> = (this.props as any).events;
+    const events: Record<string, () => void> = (this.props as P)?.events;
 
     if (!events) {
       return;

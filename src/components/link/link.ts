@@ -6,12 +6,13 @@ interface LinkProps {
   text: string;
   to: string;
   icon?: string;
+  events?: { click?: () => void };
 }
 
-export class Link extends Block {
+export class Link extends Block<LinkProps> {
   static componentName = 'Link';
   constructor(props: LinkProps) {
-    const onClick = (e: MouseEvent) => {
+    const onClick = () => {
       location.href = this.props.to;
     };
 
@@ -21,10 +22,9 @@ export class Link extends Block {
   render() {
     // language=hbs
     return `
-      <a href="{{to}}">
-        {{#if icon}}<i class='fa fa-{{icon}}' aria-hidden='true'></i>{{/if}}        
-      </a>
+        <a href="{{to}}">
+            {{#if icon}}<i class='fa fa-{{icon}}' aria-hidden='true'></i>{{/if}}
+        </a>
     `;
-    // return `<a href="{{to}}">{{text}}</a>`;
   }
 }

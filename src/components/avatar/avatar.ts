@@ -7,17 +7,16 @@ interface AvatarProps {
   name?: string;
 }
 
-export class Avatar extends Block {
+export class Avatar extends Block<AvatarProps> {
   static componentName = 'Avatar';
-  constructor(props: AvatarProps) {
-    super({ ...props });
-  }
 
   render() {
     // language=hbs
     return `
       <span class='avatar'>
-        <img {{#if src}} src={{src}} {{/if}} />{{name}}
+          {{#if src}} <img alt="avatar" src={{src}} />
+          {{/if}}
+          {{name}}
       </span>
     `;
   }

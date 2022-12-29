@@ -1,5 +1,4 @@
 import Block from 'core/Block';
-import Layout from 'components/layout';
 
 import { chatting, chatList } from '../../data/mockData';
 
