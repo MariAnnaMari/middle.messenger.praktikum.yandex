@@ -6,7 +6,7 @@
 - Выполнить `npm run build`
 
 ### Demo
-https://gentle-phoenix-1f2c3d.netlify.app
+https://magical-narwhal-ee494f.netlify.app/
 
 ### UI
 https://www.figma.com/file/jF5fFFzgGOxQeB4CmKWTiE/Chat_external_link?node-id=1%3A612
