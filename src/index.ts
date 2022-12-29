@@ -3,6 +3,7 @@ import LoginPage from 'pages/login';
 import SignupPage from 'pages/signup';
 import ChatsPage from 'pages/chats';
 import ProfilePage from 'pages/profile';
+import ErrorPage from './pages/error';
 
 import './styles/app.css';
 
@@ -27,7 +28,6 @@ registerComponent(ChatItem);
 registerComponent(Chatting);
 
 document.addEventListener('DOMContentLoaded', () => {
-
   const pathName = location.pathname;
   if (pathName === '/profile') {
     renderDOM(new ProfilePage({ title: 'Profile' }));
@@ -35,8 +35,9 @@ document.addEventListener('DOMContentLoaded', () => {
     renderDOM(new ChatsPage({ fullScreen: true }));
   } else if (pathName === '/signup') {
     renderDOM(new SignupPage({ title: 'Sign up' }));
-  } else {
+  } else if (pathName === '/') {
     renderDOM(new LoginPage({ title: 'Sign in' }));
+  } else {
+    renderDOM(new ErrorPage({ status: 404, text: 'Page not found' }));
   }
-
 });
