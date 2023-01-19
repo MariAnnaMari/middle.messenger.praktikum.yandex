@@ -16,7 +16,7 @@ type ProfileProps = {
 
 export class ProfilePage extends Block<ProfileProps> {
   static componentName = 'ProfilePage';
-  constructor(props: ProfileProps) {
+  constructor(props?: ProfileProps) {
     super(props);
     this.state = { validationError: false };
     this.setProps({
@@ -54,7 +54,7 @@ export class ProfilePage extends Block<ProfileProps> {
   render(): string {
     // language=hbs
     return `
-      {{#Layout title=title }}
+      {{#Layout title="Setting profile" }}
         <form>
           <div class="photo-editing-field">
             {{{Avatar name="ME"}}}

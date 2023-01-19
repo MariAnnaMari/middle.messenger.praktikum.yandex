@@ -1,7 +1,9 @@
-import Block from 'core/Block';
+import { Block, PathRouter, Store } from 'core';
 import { ValidateRuleType } from 'helpers/validateForm';
 import ControlledInput from 'components/controlledInput';
 import Layout from 'components/layout';
+import { withRouter } from 'helpers/withRouter';
+import { withStore } from 'helpers/withStore';
 
 type LoginProps = {
   onSignUp?: (e: MouseEvent) => void;
@@ -12,16 +14,18 @@ type LoginProps = {
   setErrorValidation?: (val: boolean) => void;
   loginValue?: string;
   passwordValue?: string;
-  title?: string;
+  router: PathRouter;
+  store: Store<AppState>;
 };
 
 export class LoginPage extends Block<LoginProps> {
   static componentName = 'LoginPage';
-  constructor(props: LoginProps) {
+  constructor(props?: LoginProps) {
     super(props);
     this.state = { validationError: false };
     this.setProps({
-      onSignUp: (e:MouseEvent) => this.onSignUp(e),
+      ...this.props,
+      onSignUp: (e: MouseEvent) => this.onSignUp(e),
       onSubmit: (e: FormDataEvent) => this.onSubmit(e),
       setErrorValidation: (val: boolean) => {
         this.setState({ validationError: val });
@@ -31,9 +35,9 @@ export class LoginPage extends Block<LoginProps> {
     });
   }
 
-  onSignUp = (e:MouseEvent) => {
+  onSignUp = (e: MouseEvent) => {
     e.preventDefault();
-    location.href = '/signup';
+    this.props.router.go('/sign-up');
   };
 
   onSubmit(e: FormDataEvent) {
@@ -52,7 +56,7 @@ export class LoginPage extends Block<LoginProps> {
         formData[`${item.name}`] = item.value;
       });
       console.log('Success', formData);
-      location.href='/chats'
+      this.props.router.go('/messenger');
     } else {
       console.log('error validation');
     }
@@ -61,7 +65,7 @@ export class LoginPage extends Block<LoginProps> {
   render(): string {
     // language=hbs
     return `
-      {{#Layout title=title }}
+      {{#Layout title="Login" }}
         <form>
           {{{ControlledInput
               onInput=onInput
@@ -94,3 +98,4 @@ export class LoginPage extends Block<LoginProps> {
     `;
   }
 }
+export default withRouter(withStore(LoginPage));

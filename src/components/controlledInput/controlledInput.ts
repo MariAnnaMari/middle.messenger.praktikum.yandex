@@ -1,7 +1,7 @@
 import Block from 'core/Block';
 
 import './controlledInput.css';
-import { validateForm, ValidateRuleType } from 'helpers/validateForm';
+import { validateForm, ValidateRuleType } from 'helpers';
 
 interface ControlledInputProps {
   onInput?: () => void;

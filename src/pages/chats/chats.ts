@@ -1,4 +1,6 @@
-import Block from 'core/Block';
+import { Block, PathRouter, Store } from 'core';
+import { withRouter } from 'helpers/withRouter';
+import { withStore } from 'helpers/withStore';
 
 import { chatting, chatList } from '../../data/mockData';
 
@@ -29,11 +31,13 @@ type ChatsPageProps = {
   fullScreen?: boolean;
   chatList?: TChatItem[];
   chatting?: TChatting;
+  router: PathRouter;
+  store: Store<AppState>;
 };
 
 export class ChatsPage extends Block<ChatsPageProps> {
   static componentName = 'ChatsPage';
-  constructor({ fullScreen, ...props }: ChatsPageProps) {
+  constructor(props?: ChatsPageProps) {
     super(props);
     this.props.fullScreen = true;
     this.props.chatList = chatList;
@@ -43,14 +47,14 @@ export class ChatsPage extends Block<ChatsPageProps> {
   render(): string {
     // language=hbs
     return `
-      {{#Layout title=title fullScreen=${this.props.fullScreen} }}
+      {{#Layout title=title fullScreen=true }}
         <div class='chats'>
           <div class='msg-header'>
             {{{Input className="input-search" type="text" placeholder="Search..."}}}
             <div class='profile-link'>
               {{{Avatar name="РГ"}}}
               <span>Profile</span> 
-              {{{Link to="/profile" icon="chevron-right"}}}
+              {{{Link to="/setting" icon="chevron-right"}}}
             </div>
           </div>
             {{#each chatList}}
@@ -64,3 +68,4 @@ export class ChatsPage extends Block<ChatsPageProps> {
     `;
   }
 }
+export default withRouter(withStore(ChatsPage));

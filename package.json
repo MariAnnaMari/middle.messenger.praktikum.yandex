@@ -5,8 +5,8 @@
   "scripts": {
     "dev": "parcel src/index.html --no-cache",
     "build": "parcel build src/index.html --no-cache",
-    "start": "npm run build && node ./server.js",
-    "start2": "parcel src/index.html --no-source-maps --no-cache",
+    "start2": "npm run build && node ./server.js",
+    "start": "parcel src/index.html --no-source-maps --no-cache",
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "eslint . --ext .ts",
     "stylelint": "stylelint '**/*{.css,.scss}'"
@@ -15,7 +15,9 @@
     "core": "./src/core",
     "components": "./src/components",
     "helpers": "./src/helpers",
-    "pages": "./src/pages"
+    "utils": "./src/utils",
+    "pages": "./src/pages",
+    "services": "./src/services"
   },
   "keywords": [],
   "author": "",

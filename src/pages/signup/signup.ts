@@ -1,5 +1,7 @@
-import Block from 'core/Block';
+import { Block, PathRouter, Store } from 'core';
 import { ValidateRuleType } from 'helpers/validateForm';
+import { withRouter } from 'helpers/withRouter';
+import { withStore } from 'helpers/withStore';
 
 type SignupProps = {
   onSignIn?: (e: MouseEvent) => void;
@@ -10,15 +12,17 @@ type SignupProps = {
   setErrorValidation?: (val?: boolean) => void;
   loginValue?: string;
   passwordValue?: string;
-  title?: string;
+  router: PathRouter;
+  store: Store<AppState>;
 };
 
 export class SignupPage extends Block<SignupProps> {
   static componentName = 'SignupPage';
-  constructor(props: SignupProps) {
+  constructor(props?: SignupProps) {
     super(props);
     this.state = { validationError: false };
     this.setProps({
+      ...this.props,
       onSignIn: (e: MouseEvent) => this.onSignIn(e),
       onSubmit: (e: FormDataEvent) => this.onSubmit(e),
       setErrorValidation: (val) => {
@@ -31,7 +35,9 @@ export class SignupPage extends Block<SignupProps> {
 
   onSignIn = (e: MouseEvent) => {
     e.preventDefault();
-    location.href = '/';
+    console.log('onSignIn');
+    // this.props.router.go('/login');
+    this.props.router.go('/sign-up');
   };
 
   onSubmit(e: FormDataEvent) {
@@ -58,7 +64,7 @@ export class SignupPage extends Block<SignupProps> {
   render(): string {
     // language=hbs
     return `
-      {{#Layout title=title }}
+      {{#Layout title="Sign up" }}
         <form>
           {{{ControlledInput
               onInput=onInput
@@ -129,3 +135,5 @@ export class SignupPage extends Block<SignupProps> {
     `;
   }
 }
+
+export default withRouter(withStore(SignupPage));
