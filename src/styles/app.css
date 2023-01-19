@@ -1,0 +1,115 @@
+@import './variables.css';
+
+html {
+  /*background-color: #7fa0ca;*/
+  background-blend-mode: overlay;
+  background-repeat: no-repeat;
+  background-size: cover;
+  height: 100%;
+}
+
+body {
+  background-color: transparent;
+  font-family: 'Open Sans', sans-serif, -apple-system, BlinkMacSystemFont,
+    'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei',
+    'Helvetica Neue', Helvetica, Arial, 'Apple Color Emoji', 'Segoe UI Emoji',
+    'Segoe UI Symbol';
+}
+#root,
+body,
+#app {
+  margin: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+}
+
+.title {
+  padding: 0 5px;
+}
+.main {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  overflow: auto;
+}
+
+.form-container {
+  padding: 40px;
+  border-radius: 10px;
+  box-shadow: 4px 4px 15px rgba(0, 0, 0, 0.2);
+  background-color: #fff;
+}
+
+.form-container {
+  width: 450px;
+}
+
+.auth {
+  width: 350px;
+}
+
+.form-container h3 {
+  font-weight: bold;
+  color: var(--main-dark-color);
+  margin-bottom: 30px;
+  margin-top: 0;
+}
+
+.form-container input {
+  padding: 10px 20px;
+  box-sizing: border-box;
+  width: 100%;
+  border: none;
+  border-bottom: 1px solid var(--main-dark-color);
+}
+
+.form-container .form-item {
+  margin-bottom: 10px;
+}
+.form-btns {
+  display: flex;
+  gap: 10px;
+  margin-top: 50px;
+  justify-content: center;
+}
+
+.info-form-container {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  font-weight: 600;
+  font-size: 32px;
+}
+
+.fa {
+  cursor: pointer;
+}
+.flex {
+  display: flex;
+}
+.justify-center {
+  justify-content: center;
+}
+.align-end {
+  align-items: end;
+}
+.full-container {
+  display: flex;
+  width: 100%;
+  height: 100%;
+}
+.info-container {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  font-weight: 600;
+  font-size: 32px;
+}
