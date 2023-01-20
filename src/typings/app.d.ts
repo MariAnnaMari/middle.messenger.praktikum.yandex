@@ -1,3 +1,5 @@
+import { Params } from 'core/router/PathRouter';
+
 declare global {
   export type Nullable<T> = T | null;
 
@@ -9,6 +11,7 @@ declare global {
     isLoading: boolean;
     loginFormError: string | null;
     user: User | null;
+    params: Params;
   };
 
   export type User = {

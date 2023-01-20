@@ -1,4 +1,34 @@
 import { CoreRouter } from './CoreRouter';
+export type Params = Record<string, string>;
+
+const comparePath = (routName: string, pathName: string) => {
+  const routNameArr = routName.split('/');
+  const pathNameArr = pathName.split('/');
+  if (routNameArr.length !== pathNameArr.length) {
+    return false;
+  }
+  return routNameArr.every((item: string, index: number) => {
+    if (item.startsWith(':')) {
+      return true;
+    }
+    return item === pathNameArr[index];
+  });
+};
+
+const getVariablesFromPath = (routName: string, pathName: string): Params => {
+  const params: Params = {};
+  const routNameArr = routName.split('/');
+  const pathNameArr = pathName.split('/');
+  routNameArr.forEach((item: string, index: number) => {
+    if (!item.startsWith(':')) {
+      return;
+    }
+    const paramName = item.substring(1);
+    const paramVal = pathNameArr[index];
+    params[paramName] = paramVal;
+  });
+  return params;
+};
 
 export class PathRouter implements CoreRouter {
   private routes: Record<string, () => void> = {};
@@ -6,7 +36,6 @@ export class PathRouter implements CoreRouter {
   private isStarted = false;
 
   start() {
-    console.log('start')
     if (!this.isStarted) {
       this.isStarted = true;
 
@@ -19,9 +48,11 @@ export class PathRouter implements CoreRouter {
   }
 
   private onRouteChange(pathname: string = window.location.pathname) {
-    const found = Object.entries(this.routes).some(([routeHash, callback]) => {
-      if (routeHash === pathname) {
-        callback();
+    const found = Object.entries(this.routes).some(([routePath, callback]) => {
+      console.log(routePath, pathname, comparePath(routePath, pathname));
+      if (comparePath(routePath, pathname)) {
+        const params = getVariablesFromPath(routePath, pathname);
+        callback(params);
         return true;
       }
       return false;

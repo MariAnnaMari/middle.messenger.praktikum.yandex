@@ -1,5 +1,6 @@
-import { renderDOM, Store, PathRouter } from "core";
+import { renderDOM, Store, PathRouter } from 'core';
 import { getScreenComponent, Screens } from 'helpers';
+import { Params } from 'core/router/PathRouter';
 
 const routes = [
   {
@@ -22,20 +23,25 @@ const routes = [
     block: Screens.Messenger,
     shouldAuthorized: false,
   },
+  {
+    path: '/messenger/:id',
+    block: Screens.Messenger,
+    shouldAuthorized: false,
+  },
 ];
 
 export function initRouter(router: PathRouter, store: Store<AppState>) {
   routes.forEach((route) => {
-    router.use(route.path, () => {
+    router.use(route.path, (params?: Params) => {
       const isAuthorized = Boolean(store.getState().user);
       const currentScreen = Boolean(store.getState().screen);
       if (isAuthorized || !route.shouldAuthorized) {
-        store.dispatch({ screen: route.block });
+        store.dispatch({ screen: route.block, params: params });
         return;
       }
 
       if (!currentScreen) {
-        store.dispatch({ screen: Screens.Login });
+        store.dispatch({ screen: Screens.Login, params: params });
       }
     });
   });
@@ -48,10 +54,9 @@ export function initRouter(router: PathRouter, store: Store<AppState>) {
     if (!prevState.appIsInited && nextState.appIsInited) {
       router.start();
     }
-
     if (prevState.screen !== nextState.screen) {
       const Page = getScreenComponent(nextState.screen);
-      renderDOM(new Page({}));
+      renderDOM(new Page({ params: nextState.params }));
       document.title = `App / ${Page.componentName}`;
     }
   });

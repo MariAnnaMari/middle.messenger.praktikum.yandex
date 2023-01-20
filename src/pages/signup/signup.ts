@@ -35,9 +35,7 @@ export class SignupPage extends Block<SignupProps> {
 
   onSignIn = (e: MouseEvent) => {
     e.preventDefault();
-    console.log('onSignIn');
-    // this.props.router.go('/login');
-    this.props.router.go('/sign-up');
+    this.props.router.go('/login');
   };
 
   onSubmit(e: FormDataEvent) {

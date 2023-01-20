@@ -1,6 +1,7 @@
 import { Block, PathRouter, Store } from 'core';
 import { withRouter } from 'helpers/withRouter';
 import { withStore } from 'helpers/withStore';
+import { Params } from 'core/router/PathRouter';
 
 import { chatting, chatList } from '../../data/mockData';
 
@@ -33,12 +34,14 @@ type ChatsPageProps = {
   chatting?: TChatting;
   router: PathRouter;
   store: Store<AppState>;
+  params: Params;
 };
 
 export class ChatsPage extends Block<ChatsPageProps> {
   static componentName = 'ChatsPage';
   constructor(props?: ChatsPageProps) {
     super(props);
+    console.log(props.params);
     this.props.fullScreen = true;
     this.props.chatList = chatList;
     this.props.chatting = chatting;
