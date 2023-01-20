@@ -1,4 +1,4 @@
-require('babel-core/register');
+import ChatsPage from 'pages/chats';
 
 import { PropsType } from 'core/Block';
 import { renderDOM, registerComponent, Block, PathRouter, Store } from 'core';
@@ -25,7 +25,7 @@ document.addEventListener('DOMContentLoaded', () => {
   window.router = router;
   window.store = store;
 
-  renderDOM(new LoginPage());
+  renderDOM(new ChatsPage());
 
   store.on('changed', (prevState, nextState) => {
     // if (process.env.DEBUG) {

@@ -12,6 +12,7 @@ declare global {
     loginFormError: string | null;
     user: User | null;
     params: Params;
+    chatting: TChatting;
   };
 
   export type User = {
@@ -23,6 +24,14 @@ declare global {
     avatar: string;
     phone: string;
     email: string;
+  };
+
+  export type TChatting = {
+    user: {
+      shortName: string;
+      name: string;
+    };
+    msgList: TMsg[];
   };
 }
 

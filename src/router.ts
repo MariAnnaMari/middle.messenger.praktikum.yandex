@@ -9,6 +9,11 @@ const routes = [
     shouldAuthorized: false,
   },
   {
+    path: '/login/:id',
+    block: Screens.Login,
+    shouldAuthorized: false,
+  },
+  {
     path: '/sign-up',
     block: Screens.SignUp,
     shouldAuthorized: false,
@@ -28,6 +33,11 @@ const routes = [
     block: Screens.Messenger,
     shouldAuthorized: false,
   },
+  {
+    path: '*',
+    block: Screens.Profile,
+    shouldAuthorized: false,
+  },
 ];
 
 export function initRouter(router: PathRouter, store: Store<AppState>) {
@@ -35,11 +45,11 @@ export function initRouter(router: PathRouter, store: Store<AppState>) {
     router.use(route.path, (params?: Params) => {
       const isAuthorized = Boolean(store.getState().user);
       const currentScreen = Boolean(store.getState().screen);
+
       if (isAuthorized || !route.shouldAuthorized) {
         store.dispatch({ screen: route.block, params: params });
         return;
       }
-
       if (!currentScreen) {
         store.dispatch({ screen: Screens.Login, params: params });
       }

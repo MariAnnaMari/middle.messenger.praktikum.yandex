@@ -4,6 +4,7 @@ import ControlledInput from 'components/controlledInput';
 import Layout from 'components/layout';
 import { withRouter } from 'helpers/withRouter';
 import { withStore } from 'helpers/withStore';
+import { Params } from 'core/router/PathRouter';
 
 type LoginProps = {
   onSignUp?: (e: MouseEvent) => void;
@@ -16,6 +17,7 @@ type LoginProps = {
   passwordValue?: string;
   router: PathRouter;
   store: Store<AppState>;
+  params: Params;
 };
 
 export class LoginPage extends Block<LoginProps> {

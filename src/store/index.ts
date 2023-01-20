@@ -1,3 +1,5 @@
+import { chatting } from '../data/mockData';
+
 export const defaultState: AppState = {
   appIsInited: false,
   isLoading: false,
@@ -5,4 +7,5 @@ export const defaultState: AppState = {
   loginFormError: null,
   user: null,
   params: {},
+  chatting: chatting,
 };

@@ -49,7 +49,6 @@ export class PathRouter implements CoreRouter {
 
   private onRouteChange(pathname: string = window.location.pathname) {
     const found = Object.entries(this.routes).some(([routePath, callback]) => {
-      console.log(routePath, pathname, comparePath(routePath, pathname));
       if (comparePath(routePath, pathname)) {
         const params = getVariablesFromPath(routePath, pathname);
         callback(params);
@@ -63,7 +62,7 @@ export class PathRouter implements CoreRouter {
     }
   }
 
-  use(hash: string, callback: () => void) {
+  use(hash: string, callback: (params?: Params) => void) {
     this.routes[hash] = callback;
     return this;
   }

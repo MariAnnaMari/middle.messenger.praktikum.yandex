@@ -29,7 +29,6 @@ type TChatItem = {
 };
 
 type ChatsPageProps = {
-  fullScreen?: boolean;
   chatList?: TChatItem[];
   chatting?: TChatting;
   router: PathRouter;
@@ -41,13 +40,17 @@ export class ChatsPage extends Block<ChatsPageProps> {
   static componentName = 'ChatsPage';
   constructor(props?: ChatsPageProps) {
     super(props);
-    console.log(props.params);
-    this.props.fullScreen = true;
-    this.props.chatList = chatList;
-    this.props.chatting = chatting;
+    this.setProps({
+      ...this.props,
+      chatList: chatList,
+      chatting: this.props.store.getState().chatting,
+    });
+    this.setState({ activeChat: this.props.params?.id });
   }
 
   render(): string {
+    // const activeChat = this.props.params?.id;
+    console.log('render activeChat', this.state);
     // language=hbs
     return `
       {{#Layout title=title fullScreen=true }}
@@ -66,7 +69,7 @@ export class ChatsPage extends Block<ChatsPageProps> {
                 {{/with}}
             {{/each}}         
         </div>
-        {{{Chatting chatting=chatting}}}
+        {{{Chatting chatting=chatting activeChat=activeChat}}}
       {{/Layout}}
     `;
   }

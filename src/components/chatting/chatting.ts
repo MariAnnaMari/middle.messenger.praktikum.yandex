@@ -11,6 +11,7 @@ type TChatting = {
 };
 interface ChattingProps {
   chatting: TChatting;
+  activeChat: number | undefined;
   onClick?: () => void;
   onInput?: () => void;
 }
@@ -51,28 +52,32 @@ export class Chatting extends Block<ChattingProps> {
 
   render() {
     // language=hbs
-    return `
-        <div class='msg-container'>
-            <div class='msg-header'>
-                {{{Avatar name="${this?.props?.chatting?.user?.shortName}"}}}
-                <span>${this?.props?.chatting?.user?.name}</span>
-                <i class='fa fa-ellipsis-v' aria-hidden='true'></i>
-            </div>
-            <div class='msg-list'>
-                {{#each chatting.msgList}}
-                    {{#with this}}
-                        <div class='msg-item {{#if isMe}}me{{/if}}'>
-                            {{text}}
-                        </div>
-                    {{/with}}
-                {{/each}}
-            </div>
-            <div class='msg-input'>
-                <i class='fa fa-paperclip size-24' aria-hidden='true'></i>
-                {{{Input ref="inputMessageRef" name="message" onInput=onInput type='search' placeholder='Type...'}}}
-                {{{Button type="btn-primary send-btn" onClick=onClick  icon="fa-arrow-right"}}}
-            </div>
-        </div>
-    `;
+    if (this.props.activeChat) {
+      return `
+          <div class='msg-container'>
+              <div class='msg-header'>
+                  {{{Avatar name="${this?.props?.chatting?.user?.shortName}"}}}
+                  <span>${this?.props?.chatting?.user?.name}</span>
+                  <i class='fa fa-ellipsis-v' aria-hidden='true'></i>
+              </div>
+              <div class='msg-list'>
+                  {{#each chatting.msgList}}
+                      {{#with this}}
+                          <div class='msg-item {{#if isMe}}me{{/if}}'>
+                              {{text}}
+                          </div>
+                      {{/with}}
+                  {{/each}}
+              </div>
+              <div class='msg-input'>
+                  <i class='fa fa-paperclip size-24' aria-hidden='true'></i>
+                  {{{Input ref="inputMessageRef" name="message" onInput=onInput type='search' placeholder='Type...'}}}
+                  {{{Button type="btn-primary send-btn" onClick=onClick  icon="fa-arrow-right"}}}
+              </div>
+          </div>
+      `;
+    } else {
+      return `<div class='empty-chat'>Select chat on the left</div>`;
+    }
   }
 }
