@@ -49,8 +49,6 @@ export class ChatsPage extends Block<ChatsPageProps> {
   }
 
   render(): string {
-    // const activeChat = this.props.params?.id;
-    console.log('render activeChat', this.state);
     // language=hbs
     return `
       {{#Layout title=title fullScreen=true }}
@@ -65,7 +63,7 @@ export class ChatsPage extends Block<ChatsPageProps> {
           </div>
             {{#each chatList}}
                 {{#with this}}
-                     {{{ChatItem isActive=isActive shortName=shortName name=name text=text time=time badge=badge isBadge=isBadge }}}
+                     {{{ChatItem activeChat=${this.state.activeChat} id=id shortName=shortName name=name text=text time=time badge=badge isBadge=isBadge }}}
                 {{/with}}
             {{/each}}         
         </div>
