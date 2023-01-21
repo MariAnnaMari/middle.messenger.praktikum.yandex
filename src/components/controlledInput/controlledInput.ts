@@ -51,6 +51,7 @@ export class ControlledInput extends Block<ControlledInputProps> {
                     name="{{name}}"
                     placeholder="{{placeholder}}"
                     type="{{type}}"
+                    value=value
             }}}
             {{{Error ref="errorRef" text=error}}}
         </div>

@@ -5,6 +5,7 @@ import Layout from 'components/layout';
 import { withRouter } from 'helpers/withRouter';
 import { withStore } from 'helpers/withStore';
 import { Params } from 'core/router/PathRouter';
+import { login } from 'services/auth';
 
 type LoginProps = {
   onSignUp?: (e: MouseEvent) => void;
@@ -13,11 +14,11 @@ type LoginProps = {
   onFocus?: () => void;
   onBlur?: () => void;
   setErrorValidation?: (val: boolean) => void;
-  loginValue?: string;
-  passwordValue?: string;
   router: PathRouter;
   store: Store<AppState>;
   params: Params;
+  formError?: () => string | null;
+  formValues: { login: string; password: string };
 };
 
 export class LoginPage extends Block<LoginProps> {
@@ -25,6 +26,7 @@ export class LoginPage extends Block<LoginProps> {
   constructor(props?: LoginProps) {
     super(props);
     this.state = { validationError: false };
+    const defFormValues = { login: '', password: '' };
     this.setProps({
       ...this.props,
       onSignUp: (e: MouseEvent) => this.onSignUp(e),
@@ -32,15 +34,15 @@ export class LoginPage extends Block<LoginProps> {
       setErrorValidation: (val: boolean) => {
         this.setState({ validationError: val });
       },
-      loginValue: '',
-      passwordValue: '',
+      formValues: defFormValues,
+      formError: () => this.props.store.getState().loginFormError,
     });
   }
 
   onSignUp = (e: MouseEvent) => {
     e.preventDefault();
     // this.props.router.go('/sign-up');
-    this.props.router.go('/login/12');
+    this.props.store.dispatch(login, { login: 'mari', password: 'mari' });
   };
 
   onSubmit(e: FormDataEvent) {
@@ -59,7 +61,11 @@ export class LoginPage extends Block<LoginProps> {
         formData[`${item.name}`] = item.value;
       });
       console.log('Success', formData);
-      this.props.router.go('/messenger');
+      this.setProps({
+        ...this.props,
+        formValues: formData,
+      });
+      this.props.store.dispatch(login, formData);
     } else {
       console.log('error validation');
     }
@@ -77,7 +83,7 @@ export class LoginPage extends Block<LoginProps> {
               label="login"
               placeholder="login"
               type="text"
-              value="${this.props.loginValue}"
+              value="${this.props?.formValues?.login}"
               validateRule="${ValidateRuleType.Login}"
               setErrorValidation=setErrorValidation
           }}}
@@ -88,7 +94,7 @@ export class LoginPage extends Block<LoginProps> {
               label="Password"
               placeholder="Password"
               type="text"
-              value="${this.props.loginValue}"
+              value="${this.props?.formValues?.password}"
               validateRule="${ValidateRuleType.Password}"
               setErrorValidation=setErrorValidation
           }}}
@@ -96,6 +102,7 @@ export class LoginPage extends Block<LoginProps> {
             {{{Button title="Sign in" type="btn-primary  btn-block" onClick=onSubmit}}}
             {{{Button title="Sign up"  type="btn-block" onClick=onSignUp}}}
           </div>
+            {{{Error ref="formError" text=formError}}}
         </form>
       {{/Layout}}
     `;

@@ -6,9 +6,12 @@
   border: none;
   color: var(--main-dark-color);
   background: #dfdfb299;
+  cursor: pointer;
 }
+
 a {
   color: inherit;
+  cursor: pointer;
 }
 
 .btn-primary,
@@ -17,9 +20,20 @@ a {
   color: white;
 }
 
+.btn-grey,
+.btn-grey a {
+  background-color: var(--main-middle-color);
+  /*color: white;*/
+}
+
 .btn-block {
   width: 100%;
 }
 .btn a {
   text-decoration: none;
+}
+
+i.left {
+  float: left;
+  padding-right: 5px;
 }

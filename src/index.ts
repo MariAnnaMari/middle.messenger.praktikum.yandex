@@ -25,16 +25,14 @@ document.addEventListener('DOMContentLoaded', () => {
   window.router = router;
   window.store = store;
 
-  renderDOM(new ChatsPage());
+  // renderDOM(new ChatsPage());
 
   store.on('changed', (prevState, nextState) => {
-    // if (process.env.DEBUG) {
-    //   console.log(
-    //     '%cstore updated',
-    //     'background: #222; color: #bada55',
-    //     nextState,
-    //   );
-    // }
+    console.log(
+      '%cstore updated',
+      'background: #222; color: #bada55',
+      nextState
+    );
   });
 
   /**

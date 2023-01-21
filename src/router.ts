@@ -21,21 +21,21 @@ const routes = [
   {
     path: '/setting',
     block: Screens.Profile,
-    shouldAuthorized: false,
+    shouldAuthorized: true,
   },
   {
     path: '/messenger',
     block: Screens.Messenger,
-    shouldAuthorized: false,
+    shouldAuthorized: true,
   },
   {
     path: '/messenger/:id',
     block: Screens.Messenger,
-    shouldAuthorized: false,
+    shouldAuthorized: true,
   },
   {
     path: '*',
-    block: Screens.Profile,
+    block: Screens.Login,
     shouldAuthorized: false,
   },
 ];
@@ -45,12 +45,16 @@ export function initRouter(router: PathRouter, store: Store<AppState>) {
     router.use(route.path, (params?: Params) => {
       const isAuthorized = Boolean(store.getState().user);
       const currentScreen = Boolean(store.getState().screen);
-
+      if ((route.path === '*' || route.path === '/login') && isAuthorized) {
+        store.dispatch({ screen: Screens.Messenger, params: params });
+        return;
+      }
       if (isAuthorized || !route.shouldAuthorized) {
         store.dispatch({ screen: route.block, params: params });
         return;
       }
       if (!currentScreen) {
+        console.log('!currentScreen');
         store.dispatch({ screen: Screens.Login, params: params });
       }
     });

@@ -1,10 +1,14 @@
-import Block from 'core/Block';
+import { Block, Store } from 'core';
+import { withRouter } from 'helpers/withRouter';
+import { withStore } from 'helpers/withStore';
 import { ValidateRuleType } from 'helpers/validateForm';
 import ControlledInput from 'components/controlledInput';
 import Layout from 'components/layout';
+import { login, logout } from 'services/auth';
 
 type ProfileProps = {
   onSubmit?: (e: FormDataEvent) => void;
+  onLogout?: (e: MouseEvent) => void;
   onInput?: () => void;
   onFocus?: () => void;
   onBlur?: () => void;
@@ -12,6 +16,7 @@ type ProfileProps = {
   loginValue?: string;
   passwordValue?: string;
   title?: string;
+  store: Store<AppState>;
 };
 
 export class ProfilePage extends Block<ProfileProps> {
@@ -20,6 +25,8 @@ export class ProfilePage extends Block<ProfileProps> {
     super(props);
     this.state = { validationError: false };
     this.setProps({
+      ...this.props,
+      onLogout: (e: MouseEvent) => this.onLogout(e),
       onSubmit: (e: FormDataEvent) => this.onSubmit(e),
       setErrorValidation: (val: boolean) => {
         this.setState({ validationError: val });
@@ -49,6 +56,10 @@ export class ProfilePage extends Block<ProfileProps> {
     } else {
       console.log('error Validation');
     }
+  }
+  onLogout(e: MouseEvent) {
+    e.preventDefault();
+    this.props.store.dispatch(logout);
   }
 
   render(): string {
@@ -112,10 +123,12 @@ export class ProfilePage extends Block<ProfileProps> {
           }}}
           <div class="form-btns">
             {{{Button title="Edit" type="btn-primary  btn-block" onClick=onSubmit}}}
-            {{{Button title="Edit password"  type="btn-block" onClick=onSubmit}}}
+<!--            {{{Button title="Edit password"  type="btn-block" onClick=onSubmit}}}-->
+            {{{Button title="Logout"  type="btn-block" onClick=onLogout}}}
           </div>
         </form>
       {{/Layout}}
     `;
   }
 }
+export default withStore(ProfilePage);

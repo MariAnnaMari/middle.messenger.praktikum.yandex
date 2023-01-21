@@ -5,11 +5,16 @@ const METHODS = {
   DELETE: 'DELETE',
 };
 
+const BASE_API = 'https://ya-praktikum.tech/api/v2';
+
 interface HttpTransportOptions<P = any> {
   method?: string;
   data?: any;
-  headers?: string;
+  // headers?: string;
+  headers?: Record<string, string>;
   timeout?: number;
+  mode?: string;
+  credentials?: string;
 }
 
 function queryStringify(data: any): string {
@@ -52,22 +57,25 @@ export default class HttpTransport<Props> {
   }
 
   public request(
-    url: string,
+    path: string,
     options: HttpTransportOptions,
     timeout?: number
   ): Promise<any> {
     const { method, data } = options;
+    const url = `${BASE_API}/${path}`;
     return new Promise((resolve, reject) => {
       const xhr = new XMLHttpRequest();
-
+      xhr.withCredentials = true;
       if (method === METHODS.GET) {
-        xhr.open(method, url + '?' + queryStringify(data));
+        xhr.open(method, url);
+        // xhr.open(method, url + '?' + queryStringify(data));
       } else {
         if (typeof method === 'string') {
           xhr.open(method, url);
         }
       }
 
+      xhr.setRequestHeader('Content-Type', 'application/json');
       xhr.onload = function () {
         resolve(xhr);
       };
@@ -86,8 +94,9 @@ export default class HttpTransport<Props> {
       if (method === METHODS.GET || !data) {
         xhr.send();
       } else {
-        xhr.send(queryStringify(data));
+        xhr.send(JSON.stringify(data));
       }
     });
   }
 }
+export const apiRequest = new HttpTransport();

@@ -28,6 +28,8 @@ export default class Block<P extends PropsType> {
   public constructor(props?: P | PropsType) {
     const eventBus = new EventBus<Events>();
 
+    this.getStateFromProps(props);
+
     this.props = this._makePropsProxy(props || ({} as P));
     this.state = this._makeStateProxy(this.state);
 
@@ -49,16 +51,22 @@ export default class Block<P extends PropsType> {
     this._element = this._createDocumentElement('div');
   }
 
+  protected getStateFromProps(props?: P | PropsType): void {
+    this.state = {};
+  }
+
   init() {
     this._createResources();
     this.eventBus().emit(Block.EVENTS.FLOW_RENDER, this.props);
   }
 
   _componentDidMount(props: P) {
-    // this.componentDidMount(props);
+    this.componentDidMount(props);
   }
 
-  // componentDidMount(props: P) {}
+  componentDidMount(props: P) {
+    // console.log('componentDidMount');
+  }
 
   _componentDidUpdate(oldProps: P, newProps: P) {
     const response = this.componentDidUpdate(oldProps, newProps);

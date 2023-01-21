@@ -17,6 +17,7 @@
     "helpers": "./src/helpers",
     "utils": "./src/utils",
     "pages": "./src/pages",
+    "api": "./src/api",
     "services": "./src/services"
   },
   "keywords": [],
