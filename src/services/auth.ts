@@ -44,3 +44,29 @@ export const logout = async (dispatch: Dispatch<AppState>) => {
 
   window.router.go('/login');
 };
+
+export const signup = async (
+  dispatch: Dispatch<AppState>,
+  state: AppState,
+  action: LoginPayload
+) => {
+  dispatch({ isLoading: true });
+  console.log('signup', action);
+  const { response, status } = await authAPI.signup(action);
+
+  if (status !== 200) {
+    dispatch({ isLoading: false, loginFormError: JSON.parse(response).reason });
+    return;
+  }
+  const { response: responseUser, status: statusUser } = await authAPI.me();
+
+  dispatch({ isLoading: false, loginFormError: null });
+  if (statusUser !== 200) {
+    dispatch(logout);
+    return;
+  }
+
+  dispatch({ user: transformUser(JSON.parse(responseUser) as UserDTO) });
+  window.router.go('/messenger');
+};
+
