@@ -16,9 +16,17 @@ export const chatsAPI = {
 
   getChats: () => apiRequest.get('chats'),
 
-  getChatsUsers: (id: number) => apiRequest.get(`chats/${id}/users`),
+  getChatUsers: (id: number) => apiRequest.get(`chats/${id}/users`),
 
-  editProfile: (data: LoginRequestData) => {
-    return apiRequest.put('user/profile', { data: data });
+  searchUserByLogin: (login: string) => {
+    return apiRequest.post(`user/search`, { data: { login: login } });
+  },
+
+  addUserToChat: (params: { chatId: number; users: number[] }) => {
+    return apiRequest.put(`chats/users`, { data: params });
+  },
+
+  deleteUserFromChat: (params: { chatId: number; users: number[] }) => {
+    return apiRequest.delete(`chats/users`, { data: params });
   },
 };

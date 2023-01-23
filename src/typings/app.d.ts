@@ -14,6 +14,7 @@ declare global {
     params: Params;
     chatsList: TChat[];
     chatting: TChatting;
+    chatUsers: TUser[];
   };
 
   export type TUser = {

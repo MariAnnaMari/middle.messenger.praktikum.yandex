@@ -7,7 +7,7 @@ import { logout } from 'services/auth';
 import { chatList } from '../../data/mockData';
 
 import './chats.css';
-import { getChats } from 'services/chats';
+import { createChat, getChats, getChatUsers } from 'services/chats';
 
 type TMsg = { text: string; isMe?: boolean };
 type TChatting = {
@@ -38,6 +38,7 @@ type ChatsPageProps = {
   params: Params;
   redirectToProfile: (e: MouseEvent) => void;
   onLogout: (e: MouseEvent) => void;
+  createChat: () => void;
   chats: TChat;
 };
 
@@ -51,10 +52,16 @@ export class ChatsPage extends Block<ChatsPageProps> {
       chatting: this.props.store.getState().chatting,
       redirectToProfile: (e: MouseEvent) => this.redirectToProfile(e),
       onLogout: (e: MouseEvent) => this.onLogout(e),
+      createChat: () => this.createChat(),
     });
-    this.setState({ activeChat: this.props.params?.id });
 
-    this.props.store.dispatch(getChats);
+    const activeChatId = this.props.store.getState().params?.id;
+
+    if (activeChatId) {
+      this.setState({ activeChat: this.props.params?.id });
+      this.props.store.dispatch(getChats);
+      this.props.store.dispatch(getChatUsers, { id: activeChatId });
+    }
   }
 
   redirectToProfile = (e: MouseEvent) => {
@@ -67,14 +74,27 @@ export class ChatsPage extends Block<ChatsPageProps> {
     this.props.store.dispatch(logout);
   }
 
+  createChat() {
+    const titleChat = this.refs.titleChat.inputElement.value;
+    console.log('createChat', titleChat);
+    this.props.store.dispatch(createChat, {
+      title: titleChat,
+    });
+  }
+
   render(): string {
     const chats = this.props.store.getState().chatsList;
+
     // language=hbs
     return `
       {{#Layout title=title fullScreen=true }}
         <div class='chats'>
           <div class='msg-header'>
             {{{Button title="Logout" type="btn-primary" icon="fa-arrow-left" left="true" onClick=onLogout}}}
+            <div class="input-btn-block">
+                {{{Input ref="titleChat" className="input-search" onInput=onInput type="search" placeholder="Type title..." }}}
+                {{{Button type="btn-grey" onClick=createChat icon="fa-plus"}}}
+            </div>
             <div class='profile-link'>
                 {{{Button title="Profile" type="btn-grey" icon="fa-chevron-right" onClick=redirectToProfile}}}
             </div>
@@ -104,6 +124,7 @@ export class ChatsPage extends Block<ChatsPageProps> {
 export default withRouter(
   withStore(ChatsPage, (state: AppState) => ({
     chatsList: state.chatsList,
+    chatUsers: state.chatUsers,
     params: state.params,
   }))
 );

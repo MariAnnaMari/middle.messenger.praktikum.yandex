@@ -27,19 +27,12 @@ export function withStore<P extends WithStateProps, MappedProps = any>(
         const prevPropsFromState = mapStateToProps(prevState);
         const nextPropsFromState = mapStateToProps(nextState);
         // if (isEqual(prevPropsFromState, nextPropsFromState)) {
-        if (JSON.stringify(prevState) !== JSON.stringify(nextState)) {
+        if (JSON.stringify(prevPropsFromState) !== JSON.stringify(nextPropsFromState)) {
           // @ts-expect-error this is not typed
           this.setProps(nextPropsFromState);
           return;
         }
       }
-      /**
-       * TODO: проверить что стор реально обновлен
-       * и прокидывать не целый стор, а необходимые поля
-       * с помощью метода mapStateToProps
-       */
-      // @ts-expect-error this is not typed
-      // this.setProps({ ...this.props, store: window.store });
     };
 
     componentDidMount(props: P) {

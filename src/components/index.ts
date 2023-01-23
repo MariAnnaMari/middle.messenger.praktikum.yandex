@@ -1,5 +1,6 @@
 export { default as Avatar } from './avatar';
 export { default as Button } from './button';
+export { default as ButtonIcon } from './buttonIcon';
 export { default as ChatItem } from './chatItem';
 export { default as Chatting } from './chatting';
 export { default as ControlledInput } from './controlledInput';

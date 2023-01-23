@@ -1,4 +1,7 @@
-import Block from 'core/Block';
+import { Block } from 'core';
+import { withRouter } from 'helpers/withRouter';
+import { withStore } from 'helpers/withStore';
+import { addUserToChat, deleteUserFromChat } from '../../services/chats';
 
 type TMsg = { text: string; isMe?: boolean };
 
@@ -14,6 +17,8 @@ interface ChattingProps {
   activeChat: number | undefined;
   onClick?: () => void;
   onInput?: () => void;
+  addUserToChat?: () => void;
+  deleteUserFromChat?: (e: MouseEvent) => void;
 }
 
 export class Chatting extends Block<ChattingProps> {
@@ -25,12 +30,32 @@ export class Chatting extends Block<ChattingProps> {
       ...this.props,
       onInput: () => this.onInput(),
       onClick: () => this.onClick(),
+      addUserToChat: () => this.addUserToChat(),
+      deleteUserFromChat: (e: MouseEvent) => this.deleteUserFromChat(e),
+      // getUserList: () => this.props.store.getState().chatUsers,
     });
-
   }
 
   getMessage(): Nullable<string> {
     return this.refs.inputMessageRef.inputElement.value;
+  }
+
+  addUserToChat() {
+    const userLogin = this.refs.userLogin.inputElement.value;
+    const chatId = this.props.store.getState().params?.id;
+    this.props.store.dispatch(addUserToChat, {
+      login: userLogin,
+      chatId: Number(chatId),
+    });
+  }
+
+  deleteUserFromChat(e: MouseEvent) {
+    const userId = e.target.getAttribute('data-info');
+    const chatId = this.props.store.getState().params?.id;
+    this.props.store.dispatch(deleteUserFromChat, {
+      users: [Number(userId)],
+      chatId: Number(chatId),
+    });
   }
 
   onClick() {
@@ -52,6 +77,9 @@ export class Chatting extends Block<ChattingProps> {
   }
 
   render() {
+    const chatUsers = this.props.store.getState().chatUsers;
+    const me = this.props.store.getState().user;
+
     // language=hbs
     if (this.props.activeChat) {
       return `
@@ -59,15 +87,27 @@ export class Chatting extends Block<ChattingProps> {
               <div class='msg-header'>
                   <div style="display: flex; gap: 5px;">
                     <div>
-                      {{{Avatar name="${this?.props?.chatting?.user?.shortName}"}}}
-<!--                      <span>${this?.props?.chatting?.user?.name}</span>-->
+                      {{{Avatar name=""}}}
+                      <span>${me?.displayName}</span>
                     </div>
-                      <div class="photo-editing-field">
-                          {{{Avatar name="ME"}}}
-                          <i class="fa fa-trash" aria-hidden="true"></i>
-                      </div>
+                      ${chatUsers
+                        ?.filter((item: TUser) => item.id !== me.id)
+                        ?.map((item: TUser) => {
+                          return `
+                          <span>
+                            <div class="photo-editing-field">
+                                {{{Avatar name=""}}}
+                                {{{ButtonIcon icon="fa-trash"  dataInfo="${item.id}" onClick=deleteUserFromChat }}}
+                            </div>
+                            <span>${item?.displayName}</span>
+                          </span>
+                          `;
+                        })}
                   </div>
-                  {{{Button type="btn-grey circle-btn" onClick=onClick  icon="fa-user-plus"}}}
+                  <div class="input-btn-block">
+                      {{{Input ref="userLogin" className="input-search" onInput=onInput type="search" placeholder="Type login..." }}}
+                      {{{Button type="btn-grey" onClick=addUserToChat  icon="fa-user-plus"}}}
+                  </div>
               </div>
               <div class='msg-list'>
                   {{#each chatting.msgList}}
@@ -80,8 +120,10 @@ export class Chatting extends Block<ChattingProps> {
               </div>
               <div class='msg-input'>
                   <i class='fa fa-paperclip size-24' aria-hidden='true'></i>
-                  {{{Input ref="inputMessageRef" name="message" onInput=onInput type='search' placeholder='Type...'}}}
-                  {{{Button type="btn-primary circle-btn" onClick=onClick  icon="fa-arrow-right"}}}
+                  <div class="input-btn-block" style="width: 100%">
+                    {{{Input ref="inputMessageRef" name="message" onInput=onInput type='search' placeholder='Type...'}}}
+                    {{{Button type="btn-grey" onClick=onClick  icon="fa-arrow-right"}}}
+                  </div>
               </div>
           </div>
       `;
@@ -90,3 +132,11 @@ export class Chatting extends Block<ChattingProps> {
     }
   }
 }
+
+export default withRouter(
+  withStore(Chatting, (state: AppState) => ({
+    user: state.user,
+    params: state.params,
+    chatUsers: state.chatUsers,
+  }))
+);

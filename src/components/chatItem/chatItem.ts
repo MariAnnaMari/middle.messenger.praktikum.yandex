@@ -1,8 +1,8 @@
-import { Block, PathRouter, Store } from 'core';
+import { Block, Store } from 'core';
 import { withRouter } from 'helpers/withRouter';
 import { withStore } from 'helpers/withStore';
 import { Params } from 'core/router/PathRouter';
-import { chatList } from '../../data/mockData';
+import { getChatUsers } from '../../services/chats';
 
 interface ChatItemProps {
   store: Store<AppState>;
@@ -25,14 +25,13 @@ export class ChatItem extends Block<ChatItemProps> {
   }
 
   redirectToChat = () => {
-    console.log('redirectToChat');
     this.props.router.go(`/messenger/${this.props.id}`);
+    this.props.store.dispatch(getChatUsers, { id: this.props.id });
   };
 
   render() {
     const activeChat = this.props.store.getState().params?.id;
     const isActive = String(activeChat) === String(this.props.id);
-    console.log('activeChat, isActive', activeChat, isActive);
     const isBadge = Number(this.props.badge) !== 0;
     // language=hbs
     return `
@@ -58,4 +57,9 @@ export class ChatItem extends Block<ChatItemProps> {
     `;
   }
 }
-export default withRouter(withStore(ChatItem));
+
+export default withRouter(
+  withStore(ChatItem, (state: AppState) => ({
+    params: state.params,
+  }))
+);
