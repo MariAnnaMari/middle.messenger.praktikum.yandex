@@ -20,7 +20,7 @@
 .photo-editing-field {
   display: flex;
   justify-content: center;
-  align-items: end;
+  /*align-items: end;*/
 }
 .photo-editing-field .fa {
   margin-left: -10px;

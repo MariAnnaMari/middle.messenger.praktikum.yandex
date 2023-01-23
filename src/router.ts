@@ -54,7 +54,6 @@ export function initRouter(router: PathRouter, store: Store<AppState>) {
         return;
       }
       if (!currentScreen) {
-        console.log('!currentScreen');
         store.dispatch({ screen: Screens.Login, params: params });
       }
     });

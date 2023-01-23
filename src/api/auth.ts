@@ -1,4 +1,5 @@
 import { apiRequest } from './HttpTransport';
+import { editProfile } from '../services/auth';
 // import { APIError, UserDTO } from './types';
 
 type LoginRequestData = {
@@ -21,5 +22,9 @@ export const authAPI = {
 
   signup: (data: LoginRequestData) => {
     return apiRequest.post('auth/signup', { data: data });
+  },
+
+  editProfile: (data: LoginRequestData) => {
+    return apiRequest.put('user/profile', { data: data });
   },
 };

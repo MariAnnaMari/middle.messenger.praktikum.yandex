@@ -83,7 +83,6 @@ export class SignupPage extends Block<SignupProps> {
   }
 
   render(): string {
-    console.log('render')
     // language=hbs
     return `
       {{#Layout title="Sign up" }}

@@ -7,6 +7,7 @@ import { logout } from 'services/auth';
 import { chatList } from '../../data/mockData';
 
 import './chats.css';
+import { getChats } from 'services/chats';
 
 type TMsg = { text: string; isMe?: boolean };
 type TChatting = {
@@ -37,6 +38,7 @@ type ChatsPageProps = {
   params: Params;
   redirectToProfile: (e: MouseEvent) => void;
   onLogout: (e: MouseEvent) => void;
+  chats: TChat;
 };
 
 export class ChatsPage extends Block<ChatsPageProps> {
@@ -51,6 +53,8 @@ export class ChatsPage extends Block<ChatsPageProps> {
       onLogout: (e: MouseEvent) => this.onLogout(e),
     });
     this.setState({ activeChat: this.props.params?.id });
+
+    this.props.store.dispatch(getChats);
   }
 
   redirectToProfile = (e: MouseEvent) => {
@@ -64,23 +68,32 @@ export class ChatsPage extends Block<ChatsPageProps> {
   }
 
   render(): string {
+    const chats = this.props.store.getState().chatsList;
+    // console.log(this.props.store.getState().chatsList)
     // language=hbs
     return `
       {{#Layout title=title fullScreen=true }}
         <div class='chats'>
           <div class='msg-header'>
             {{{Button title="Logout" type="btn-primary" icon="fa-arrow-left" left="true" onClick=onLogout}}}
-<!--            {{{Input className="input-search" type="text" placeholder="Search..."}}}-->
             <div class='profile-link'>
                 {{{Button title="Profile" type="btn-grey" icon="fa-chevron-right" onClick=redirectToProfile}}}
-<!--              {{{Avatar name="РГ"}}}-->
-<!--              <span>Profile</span> -->
-<!--              {{{Link to="/setting" icon="chevron-right"}}}-->
             </div>
           </div>
+            ${chats.map((item) => {
+              return `{{{ChatItem 
+              id="${item.id}"
+              title="${item.title}"
+              text="${
+                item.last_message?.content ? item.last_message?.content : ''
+              }" 
+              time="${item.last_message?.time ? item.last_message?.time : ''}" 
+              badge="${item?.unread_count}" 
+              }}}`;
+            })}
             {{#each chatList}}
                 {{#with this}}
-                     {{{ChatItem activeChat=${this.state.activeChat} id=id shortName=shortName name=name text=text time=time badge=badge isBadge=isBadge }}}
+                     {{{ChatItem id=id title=shortName shortName=shortName name=name text=text time=time badge=badge }}}
                 {{/with}}
             {{/each}}         
         </div>
@@ -89,4 +102,6 @@ export class ChatsPage extends Block<ChatsPageProps> {
     `;
   }
 }
-export default withRouter(withStore(ChatsPage));
+export default withStore(ChatsPage, (state: AppState) => ({
+  chatsList: state.chatsList,
+}));

@@ -8,4 +8,5 @@ export const defaultState: AppState = {
   user: null,
   params: {},
   chatting: chatting,
+  chatsList: []
 };

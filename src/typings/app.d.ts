@@ -10,12 +10,13 @@ declare global {
     screen: Screens | null;
     isLoading: boolean;
     loginFormError: string | null;
-    user: User | null;
+    user: TUser | null;
     params: Params;
+    chatsList: TChat[];
     chatting: TChatting;
   };
 
-  export type User = {
+  export type TUser = {
     id: number;
     login: string;
     firstName: string;
@@ -24,6 +25,7 @@ declare global {
     avatar: string;
     phone: string;
     email: string;
+    role?: string;
   };
 
   export type TChatting = {
@@ -32,6 +34,28 @@ declare global {
       name: string;
     };
     msgList: TMsg[];
+  };
+
+  export type TChat = {
+    id: number;
+    title: string;
+    avatar: string | null;
+    created_by: number;
+    unread_count: number;
+    last_message: TMsg | null;
+  };
+
+  export type TMsg = {
+    user: {
+      first_name: string;
+      second_name: string;
+      avatar: string | null;
+      email: string;
+      login: string;
+      phone: string;
+    };
+    time: string;
+    content: string;
   };
 }
 

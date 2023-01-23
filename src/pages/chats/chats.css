@@ -19,6 +19,7 @@
   padding: 15px;
   display: flex;
   gap: 15px;
+  cursor: pointer;
 }
 
 .chats-item.active {
@@ -154,10 +155,10 @@
   float: right;
 }
 
-.send-btn {
-  min-width: 30px;
-  height: 30px;
-  font-size: 12px !important;
+.circle-btn {
+  min-width: 40px;
+  height: 40px;
+  /*font-size: 12px !important;*/
   border-radius: 50% !important;
   margin: 0;
   padding: 0 !important;

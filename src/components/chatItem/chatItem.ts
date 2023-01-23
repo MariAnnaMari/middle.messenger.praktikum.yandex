@@ -1,38 +1,53 @@
-import Block from 'core/Block';
+import { Block, PathRouter, Store } from 'core';
+import { withRouter } from 'helpers/withRouter';
+import { withStore } from 'helpers/withStore';
+import { Params } from 'core/router/PathRouter';
+import { chatList } from '../../data/mockData';
 
 interface ChatItemProps {
-  id: number;
-  shortName: string;
-  name: string;
-  text: string;
-  time: string;
+  store: Store<AppState>;
+  params: Params;
+  redirectToChat: (e: MouseEvent) => void;
+  events?: { click?: () => void };
+  id?: number;
+  title?: string;
+  name?: string;
+  text?: string;
+  time?: string;
   badge?: number;
-  activeChat?: number | undefined;
-  isBadge?: boolean;
 }
 
 export class ChatItem extends Block<ChatItemProps> {
   static componentName = 'ChatItem';
   constructor(props: ChatItemProps) {
-    super(props);
+    super({ ...props });
+    this.setProps({ ...this.props, events: { click: this.redirectToChat } });
   }
 
+  redirectToChat = () => {
+    console.log('redirectToChat');
+    this.props.router.go(`/messenger/${this.props.id}`);
+  };
+
   render() {
-    const isActive = String(this.props.activeChat) === String(this.props.id);
+    const activeChat = this.props.store.getState().params?.id;
+    const isActive = String(activeChat) === String(this.props.id);
+    console.log('activeChat, isActive', activeChat, isActive);
+    const isBadge = Number(this.props.badge) !== 0;
     // language=hbs
     return `
-      <div id="{{id}}" class="chats-item ${isActive ? 'active' : ''}">
+      <div id="{{id}}" class="chats-item ${isActive ? 'active' : ''}" >
         <div>
-          {{{Avatar name=shortName}}}
+          {{{Avatar}}}
         </div>
         <div class='contact'>
-          <span class='contact-name'>{{name}}</span>
+          <strong class='contact-name'>${this.props.title}</strong>
           <br />
-          <span class='contact-msg'>{{text}}</span>
+            <span class='contact-name'>{{name}}</span> <span class='contact-msg'>{{text}}</span>
         </div>
         <div class='msg-info'>
           <span class='msg-time'>{{time}}</span>
-            {{#if isBadge}}
+            {{#if ${isBadge}}}
               <span class='msg-count'>
                 <img />{{badge}}
               </span>
@@ -43,3 +58,4 @@ export class ChatItem extends Block<ChatItemProps> {
     `;
   }
 }
+export default withRouter(withStore(ChatItem));

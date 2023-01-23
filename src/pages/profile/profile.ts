@@ -4,7 +4,7 @@ import { withStore } from 'helpers/withStore';
 import { ValidateRuleType } from 'helpers/validateForm';
 import ControlledInput from 'components/controlledInput';
 import Layout from 'components/layout';
-import { login, logout } from 'services/auth';
+import { editProfile, login, logout, signup } from 'services/auth';
 
 type ProfileProps = {
   onSubmit?: (e: FormDataEvent) => void;
@@ -13,8 +13,15 @@ type ProfileProps = {
   onFocus?: () => void;
   onBlur?: () => void;
   setErrorValidation?: (val: boolean) => void;
-  loginValue?: string;
-  passwordValue?: string;
+  formValues: {
+    login: string;
+    first_name: string;
+    second_name: string;
+    display_name: string;
+    email: string;
+    phone: string;
+  };
+  formError?: () => string | null;
   title?: string;
   store: Store<AppState>;
 };
@@ -23,7 +30,16 @@ export class ProfilePage extends Block<ProfileProps> {
   static componentName = 'ProfilePage';
   constructor(props?: ProfileProps) {
     super(props);
+    const userValue = this.props.store.getState().user;
     this.state = { validationError: false };
+    const defFormValues = {
+      login: userValue.login,
+      display_name: userValue.displayName,
+      first_name: userValue.firstName,
+      second_name: userValue.secondName,
+      email: userValue.email,
+      phone: userValue.phone,
+    };
     this.setProps({
       ...this.props,
       onLogout: (e: MouseEvent) => this.onLogout(e),
@@ -31,8 +47,8 @@ export class ProfilePage extends Block<ProfileProps> {
       setErrorValidation: (val: boolean) => {
         this.setState({ validationError: val });
       },
-      loginValue: '',
-      passwordValue: '',
+      formValues: defFormValues,
+      formError: () => this.props.store.getState().loginFormError,
     });
   }
 
@@ -53,6 +69,7 @@ export class ProfilePage extends Block<ProfileProps> {
         formData[`${item.name}`] = item.value;
       });
       console.log('Success', formData);
+      this.props.store.dispatch(editProfile, formData);
     } else {
       console.log('error Validation');
     }
@@ -63,6 +80,7 @@ export class ProfilePage extends Block<ProfileProps> {
   }
 
   render(): string {
+    console.log('render profile');
     // language=hbs
     return `
       {{#Layout title="Setting profile" }}
@@ -78,6 +96,7 @@ export class ProfilePage extends Block<ProfileProps> {
               label="login"
               placeholder="Login"
               type="text"
+              value="${this.props?.formValues?.login}"
               validateRule="${ValidateRuleType.Login}"
               setErrorValidation=setErrorValidation
           }}}
@@ -88,6 +107,7 @@ export class ProfilePage extends Block<ProfileProps> {
               label="name"
               placeholder="Name"
               type="text"
+              value="${this.props?.formValues?.first_name}"
               validateRule="${ValidateRuleType.Name}"
               setErrorValidation=setErrorValidation
           }}}
@@ -98,6 +118,18 @@ export class ProfilePage extends Block<ProfileProps> {
               label="Surname"
               placeholder="Surname"
               type="text"
+              value="${this.props?.formValues?.second_name}"
+              validateRule="${ValidateRuleType.Name}"
+              setErrorValidation=setErrorValidation
+          }}}
+          {{{ControlledInput
+              onInput=onInput
+              onFocus=onFocus
+              name="display_name"
+              label="Display name"
+              placeholder="Display name"
+              type="text"
+              value="${this.props?.formValues?.display_name}"
               validateRule="${ValidateRuleType.Name}"
               setErrorValidation=setErrorValidation
           }}}
@@ -108,6 +140,7 @@ export class ProfilePage extends Block<ProfileProps> {
               label="Phone"
               placeholder="Phone"
               type="text"
+              value="${this.props?.formValues?.phone}"
               validateRule="${ValidateRuleType.Phone}"
               setErrorValidation=setErrorValidation
           }}}
@@ -118,6 +151,7 @@ export class ProfilePage extends Block<ProfileProps> {
               label="email"
               placeholder="Email"
               type="text"
+              value="${this.props?.formValues?.email}"
               validateRule="${ValidateRuleType.Email}"
               setErrorValidation=setErrorValidation
           }}}

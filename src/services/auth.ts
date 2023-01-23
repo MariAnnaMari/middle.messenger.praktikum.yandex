@@ -70,3 +70,21 @@ export const signup = async (
   window.router.go('/messenger');
 };
 
+export const editProfile = async (
+  dispatch: Dispatch<AppState>,
+  state: AppState,
+  action: LoginPayload
+) => {
+  dispatch({ isLoading: true });
+  console.log('edit profile', action);
+  const { response, status } = await authAPI.editProfile(action);
+
+  if (status !== 200) {
+    dispatch({ isLoading: false, loginFormError: JSON.parse(response).reason });
+    return;
+  }
+
+  dispatch({ user: transformUser(JSON.parse(response) as UserDTO) });
+  window.router.go('/messenger');
+};
+

@@ -26,6 +26,7 @@ export class Chatting extends Block<ChattingProps> {
       onInput: () => this.onInput(),
       onClick: () => this.onClick(),
     });
+
   }
 
   getMessage(): Nullable<string> {
@@ -56,9 +57,17 @@ export class Chatting extends Block<ChattingProps> {
       return `
           <div class='msg-container'>
               <div class='msg-header'>
-                  {{{Avatar name="${this?.props?.chatting?.user?.shortName}"}}}
-                  <span>${this?.props?.chatting?.user?.name}</span>
-                  <i class='fa fa-ellipsis-v' aria-hidden='true'></i>
+                  <div style="display: flex; gap: 5px;">
+                    <div>
+                      {{{Avatar name="${this?.props?.chatting?.user?.shortName}"}}}
+<!--                      <span>${this?.props?.chatting?.user?.name}</span>-->
+                    </div>
+                      <div class="photo-editing-field">
+                          {{{Avatar name="ME"}}}
+                          <i class="fa fa-trash" aria-hidden="true"></i>
+                      </div>
+                  </div>
+                  {{{Button type="btn-grey circle-btn" onClick=onClick  icon="fa-user-plus"}}}
               </div>
               <div class='msg-list'>
                   {{#each chatting.msgList}}
@@ -72,7 +81,7 @@ export class Chatting extends Block<ChattingProps> {
               <div class='msg-input'>
                   <i class='fa fa-paperclip size-24' aria-hidden='true'></i>
                   {{{Input ref="inputMessageRef" name="message" onInput=onInput type='search' placeholder='Type...'}}}
-                  {{{Button type="btn-primary send-btn" onClick=onClick  icon="fa-arrow-right"}}}
+                  {{{Button type="btn-primary circle-btn" onClick=onClick  icon="fa-arrow-right"}}}
               </div>
           </div>
       `;
