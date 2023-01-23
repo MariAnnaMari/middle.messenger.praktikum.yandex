@@ -69,7 +69,6 @@ export class ChatsPage extends Block<ChatsPageProps> {
 
   render(): string {
     const chats = this.props.store.getState().chatsList;
-    // console.log(this.props.store.getState().chatsList)
     // language=hbs
     return `
       {{#Layout title=title fullScreen=true }}
@@ -102,6 +101,9 @@ export class ChatsPage extends Block<ChatsPageProps> {
     `;
   }
 }
-export default withStore(ChatsPage, (state: AppState) => ({
-  chatsList: state.chatsList,
-}));
+export default withRouter(
+  withStore(ChatsPage, (state: AppState) => ({
+    chatsList: state.chatsList,
+    params: state.params,
+  }))
+);
