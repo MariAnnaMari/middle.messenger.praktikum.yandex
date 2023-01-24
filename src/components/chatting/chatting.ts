@@ -1,19 +1,12 @@
 import { Block } from 'core';
 import { withRouter } from 'helpers/withRouter';
 import { withStore } from 'helpers/withStore';
-import { addUserToChat, deleteUserFromChat } from '../../services/chats';
+import { addUserToChat, deleteUserFromChat } from 'services/chats';
+import { mockMsgList } from 'data/mockData';
+import { TMsg, TUser } from 'api/types';
 
-type TMsg = { text: string; isMe?: boolean };
-
-type TChatting = {
-  user: {
-    shortName: string;
-    name: string;
-  };
-  msgList: TMsg[];
-};
 interface ChattingProps {
-  chatting: TChatting;
+  msgList: TMsg[];
   activeChat: number | undefined;
   onClick?: () => void;
   onInput?: () => void;
@@ -28,6 +21,7 @@ export class Chatting extends Block<ChattingProps> {
     this.state = { isSendBtnDisable: true };
     this.setProps({
       ...this.props,
+      msgList: mockMsgList,
       onInput: () => this.onInput(),
       onClick: () => this.onClick(),
       addUserToChat: () => this.addUserToChat(),
@@ -110,10 +104,10 @@ export class Chatting extends Block<ChattingProps> {
                   </div>
               </div>
               <div class='msg-list'>
-                  {{#each chatting.msgList}}
+                  {{#each msgList}}
                       {{#with this}}
                           <div class='msg-item {{#if isMe}}me{{/if}}'>
-                              {{text}}
+                              {{content}}
                           </div>
                       {{/with}}
                   {{/each}}

@@ -18,7 +18,8 @@
     "utils": "./src/utils",
     "pages": "./src/pages",
     "api": "./src/api",
-    "services": "./src/services"
+    "services": "./src/services",
+    "data": "./src/data"
   },
   "keywords": [],
   "author": "",

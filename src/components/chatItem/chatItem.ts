@@ -2,7 +2,7 @@ import { Block, Store } from 'core';
 import { withRouter } from 'helpers/withRouter';
 import { withStore } from 'helpers/withStore';
 import { Params } from 'core/router/PathRouter';
-import { getChatUsers } from '../../services/chats';
+import { getChatUsers } from 'services/chats';
 
 interface ChatItemProps {
   store: Store<AppState>;

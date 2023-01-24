@@ -3,20 +3,10 @@ import { withRouter } from 'helpers/withRouter';
 import { withStore } from 'helpers/withStore';
 import { Params } from 'core/router/PathRouter';
 import { logout } from 'services/auth';
-
-import { chatList } from '../../data/mockData';
-
-import './chats.css';
+import { mockChat } from 'data/mockData';
 import { createChat, getChats, getChatUsers } from 'services/chats';
-
-type TMsg = { text: string; isMe?: boolean };
-type TChatting = {
-  user: {
-    shortName: string;
-    name: string;
-  };
-  msgList: TMsg[];
-};
+import { TChat } from 'api/types';
+import './chats.css';
 
 type TChatItem = {
   id: number;
@@ -32,14 +22,13 @@ type TChatItem = {
 
 type ChatsPageProps = {
   chatList?: TChatItem[];
-  chatting?: TChatting;
   router: PathRouter;
   store: Store<AppState>;
   params: Params;
   redirectToProfile: (e: MouseEvent) => void;
   onLogout: (e: MouseEvent) => void;
   createChat: () => void;
-  chats: TChat;
+  mockChat: TChat[];
 };
 
 export class ChatsPage extends Block<ChatsPageProps> {
@@ -48,8 +37,7 @@ export class ChatsPage extends Block<ChatsPageProps> {
     super(props);
     this.setProps({
       ...this.props,
-      chatList: chatList,
-      chatting: this.props.store.getState().chatting,
+      mockChat: mockChat,
       redirectToProfile: (e: MouseEvent) => this.redirectToProfile(e),
       onLogout: (e: MouseEvent) => this.onLogout(e),
       createChat: () => this.createChat(),
@@ -84,6 +72,7 @@ export class ChatsPage extends Block<ChatsPageProps> {
 
   render(): string {
     const chats = this.props.store.getState().chatsList;
+    const mockChats = this.props?.mockChat;
 
     // language=hbs
     return `
@@ -99,7 +88,7 @@ export class ChatsPage extends Block<ChatsPageProps> {
                 {{{Button title="Profile" type="btn-grey" icon="fa-chevron-right" onClick=redirectToProfile}}}
             </div>
           </div>
-            ${chats.map((item) => {
+            ${chats.map((item: TChat) => {
               return `{{{ChatItem 
               id="${item.id}"
               title="${item.title}"
@@ -110,13 +99,24 @@ export class ChatsPage extends Block<ChatsPageProps> {
               badge="${item?.unread_count}" 
               }}}`;
             })}
-            {{#each chatList}}
-                {{#with this}}
-                     {{{ChatItem id=id title=shortName shortName=shortName name=name text=text time=time badge=badge }}}
-                {{/with}}
-            {{/each}}         
+            ${mockChats?.map((item: TChat) => {
+              const date =
+                item.last_message?.time && new Date(item.last_message?.time);
+              const time =
+                date && `${date.getUTCHours()}:${date.getUTCMinutes()}`;
+              return `{{{ChatItem 
+              id="${item.id}"
+              title="${item.title}"
+              text="${
+                item.last_message?.content ? item.last_message?.content : ''
+              }" 
+              time="${item.last_message?.time ? time : ''}" 
+              name="${item.last_message?.user.first_name}"
+              badge="${item?.unread_count}" 
+              }}}`;
+            })}       
         </div>
-        {{{Chatting chatting=chatting activeChat=activeChat}}}
+        {{{Chatting activeChat=activeChat}}}
       {{/Layout}}
     `;
   }
