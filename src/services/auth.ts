@@ -40,7 +40,7 @@ export const logout = async (dispatch: Dispatch<AppState>) => {
   dispatch({ isLoading: true });
 
   await authAPI.logout();
-  dispatch({ isLoading: false, user: null });
+  dispatch({ isLoading: false, user: null, loginFormError: null });
 
   window.router.go('/login');
 };
@@ -87,4 +87,3 @@ export const editProfile = async (
   dispatch({ user: transformUser(JSON.parse(response) as UserDTO) });
   window.router.go('/messenger');
 };
-

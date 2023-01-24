@@ -43,11 +43,11 @@ export class ChatsPage extends Block<ChatsPageProps> {
       createChat: () => this.createChat(),
     });
 
+    this.props.store.dispatch(getChats);
     const activeChatId = this.props.store.getState().params?.id;
 
     if (activeChatId) {
       this.setState({ activeChat: this.props.params?.id });
-      this.props.store.dispatch(getChats);
       this.props.store.dispatch(getChatUsers, { id: activeChatId });
     }
   }
@@ -116,7 +116,7 @@ export class ChatsPage extends Block<ChatsPageProps> {
               }}}`;
             })}       
         </div>
-        {{{Chatting activeChat=activeChat}}}
+        {{{Chatting}}}
       {{/Layout}}
     `;
   }

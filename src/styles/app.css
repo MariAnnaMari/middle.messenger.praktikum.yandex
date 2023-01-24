@@ -31,8 +31,11 @@ body,
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100%;
+  height: auto;
   overflow: auto;
+}
+.main-full {
+  height: 100%;
 }
 
 .form-container {
@@ -40,6 +43,7 @@ body,
   border-radius: 10px;
   box-shadow: 4px 4px 15px rgba(0, 0, 0, 0.2);
   background-color: #fff;
+  margin: 50px;
 }
 
 .form-container {

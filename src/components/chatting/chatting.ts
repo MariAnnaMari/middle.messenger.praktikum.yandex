@@ -7,7 +7,6 @@ import { TMsg, TUser } from 'api/types';
 
 interface ChattingProps {
   msgList: TMsg[];
-  activeChat: number | undefined;
   onClick?: () => void;
   onInput?: () => void;
   addUserToChat?: () => void;
@@ -73,9 +72,10 @@ export class Chatting extends Block<ChattingProps> {
   render() {
     const chatUsers = this.props.store.getState().chatUsers;
     const me = this.props.store.getState().user;
+    const activeChatId = this.props.store.getState().params?.id;
 
     // language=hbs
-    if (this.props.activeChat) {
+    if (activeChatId) {
       return `
           <div class='msg-container'>
               <div class='msg-header'>
