@@ -12,6 +12,7 @@ type ProfileProps = {
   onInput?: () => void;
   onFocus?: () => void;
   onBlur?: () => void;
+  changeAvatar?: () => void;
   setErrorValidation?: (val: boolean) => void;
   formValues: {
     login: string;
@@ -42,6 +43,7 @@ export class ProfilePage extends Block<ProfileProps> {
     };
     this.setProps({
       ...this.props,
+      changeAvatar: () => this.changeAvatar(),
       onLogout: (e: MouseEvent) => this.onLogout(e),
       onSubmit: (e: FormDataEvent) => this.onSubmit(e),
       setErrorValidation: (val: boolean) => {
@@ -79,16 +81,22 @@ export class ProfilePage extends Block<ProfileProps> {
     this.props.store.dispatch(logout);
   }
 
+  changeAvatar() {
+    console.log('changeAvatar');
+  }
+
   render(): string {
     console.log('render profile');
     // language=hbs
     return `
       {{#Layout title="Setting profile" }}
-        <form>
-          <div class="photo-editing-field">
-            {{{Avatar name="ME"}}}
-            <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
-          </div>
+        <form>        
+          <span>
+            <div class="photo-editing-field">
+                {{{Avatar name=""}}}
+                {{{ButtonIcon icon="fa-pencil-square-o"  dataInfo="" onClick=changeAvatar }}}
+            </div>
+          </span>
           {{{ControlledInput
               onInput=onInput
               onFocus=onFocus

@@ -1,13 +1,5 @@
 import { apiRequest } from './HttpTransport';
-import { editProfile } from '../services/auth';
-// import { APIError, UserDTO } from './types';
-
-type LoginRequestData = {
-  login: string;
-  password: string;
-};
-
-// type LoginResponseData = {} | APIError;
+import { LoginRequestData, ProfileRequestData } from './types';
 
 export const authAPI = {
   login: (data: LoginRequestData) => {
@@ -20,11 +12,11 @@ export const authAPI = {
 
   logout: () => apiRequest.post('auth/logout'),
 
-  signup: (data: LoginRequestData) => {
+  signup: (data: ProfileRequestData) => {
     return apiRequest.post('auth/signup', { data: data });
   },
 
-  editProfile: (data: LoginRequestData) => {
+  editProfile: (data: ProfileRequestData) => {
     return apiRequest.put('user/profile', { data: data });
   },
 };

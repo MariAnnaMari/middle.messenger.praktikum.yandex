@@ -1,10 +1,7 @@
-import ChatsPage from 'pages/chats';
-
 import { PropsType } from 'core/Block';
-import { renderDOM, registerComponent, Block, PathRouter, Store } from 'core';
+import { registerComponent, Block, PathRouter, Store } from 'core';
 import './styles/app.css';
 import { defaultState } from './store';
-import LoginPage from 'pages/login';
 import { initRouter } from './router';
 import { initApp } from 'services';
 

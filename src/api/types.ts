@@ -13,7 +13,6 @@ export type UserDTO = {
   email: string;
 };
 
-
 export type TUser = {
   id: number;
   login: string;
@@ -54,4 +53,19 @@ export type TMsg = {
   };
   time?: string;
   content: string;
+};
+
+export type LoginRequestData = {
+  login: string;
+  password: string;
+};
+
+export type ProfileRequestData = {
+  login: string;
+  password?: string;
+  display_name?: string;
+  first_name: string;
+  second_name: string;
+  email: string;
+  phone: string;
 };

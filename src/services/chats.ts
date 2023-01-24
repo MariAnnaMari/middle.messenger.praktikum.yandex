@@ -14,12 +14,12 @@ export const getChats = async (dispatch: Dispatch<AppState>) => {
 
 export const getChatUsers = async (
   dispatch: Dispatch<AppState>,
-  state: AppState,
-  action: { id: number }
+  state: AppState
 ) => {
   dispatch({ isLoading: true });
-
-  const { response, status } = await chatsAPI.getChatUsers(action.id);
+  console.log('getChatUsers state', state);
+  const chatId = state.activeChatId;
+  const { response, status } = await chatsAPI.getChatUsers(chatId);
 
   if (status !== 200) {
     dispatch({ isLoading: false, loginFormError: JSON.parse(response).reason });
@@ -43,20 +43,24 @@ export const deleteUserFromChat = async (
 ) => {
   dispatch({ isLoading: true });
 
-  const { response, status } = await chatsAPI.deleteUserFromChat(action);
+  const chatId = state.activeChatId;
+  const { response, status } = await chatsAPI.deleteUserFromChat({
+    users: action.users,
+    chatId: chatId,
+  });
 
   if (status !== 200) {
     dispatch({ isLoading: false, loginFormError: JSON.parse(response).reason });
     return;
   }
 
-  dispatch(getChatUsers, { id: action.chatId });
+  dispatch(getChatUsers);
 };
 
 export const addUserToChat = async (
   dispatch: Dispatch<AppState>,
   state: AppState,
-  action: { login: string; chatId: number }
+  action: { login: string }
 ) => {
   dispatch({ isLoading: true });
   const { response, status } = await chatsAPI.searchUserByLogin(action.login);
@@ -65,9 +69,9 @@ export const addUserToChat = async (
     return;
   }
   const userId = JSON.parse(response)[0].id;
-
+  const chatId = state.activeChatId;
   const { response: responseAdd, status: statusAdd } =
-    await chatsAPI.addUserToChat({ users: [userId], chatId: action.chatId });
+    await chatsAPI.addUserToChat({ users: [userId], chatId: chatId });
 
   if (statusAdd !== 200) {
     dispatch({
@@ -76,7 +80,7 @@ export const addUserToChat = async (
     });
     return;
   }
-  dispatch(getChatUsers, { id: action.chatId });
+  dispatch(getChatUsers);
 };
 
 export const createChat = async (

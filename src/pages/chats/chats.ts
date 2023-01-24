@@ -3,10 +3,10 @@ import { withRouter } from 'helpers/withRouter';
 import { withStore } from 'helpers/withStore';
 import { Params } from 'core/router/PathRouter';
 import { logout } from 'services/auth';
-import { mockChat } from 'data/mockData';
 import { createChat, getChats, getChatUsers } from 'services/chats';
 import { TChat } from 'api/types';
 import './chats.css';
+import { createWebSocket } from 'services/socket';
 
 type TChatItem = {
   id: number;
@@ -28,7 +28,6 @@ type ChatsPageProps = {
   redirectToProfile: (e: MouseEvent) => void;
   onLogout: (e: MouseEvent) => void;
   createChat: () => void;
-  mockChat: TChat[];
 };
 
 export class ChatsPage extends Block<ChatsPageProps> {
@@ -37,7 +36,6 @@ export class ChatsPage extends Block<ChatsPageProps> {
     super(props);
     this.setProps({
       ...this.props,
-      mockChat: mockChat,
       redirectToProfile: (e: MouseEvent) => this.redirectToProfile(e),
       onLogout: (e: MouseEvent) => this.onLogout(e),
       createChat: () => this.createChat(),
@@ -48,7 +46,11 @@ export class ChatsPage extends Block<ChatsPageProps> {
 
     if (activeChatId) {
       this.setState({ activeChat: this.props.params?.id });
-      this.props.store.dispatch(getChatUsers, { id: activeChatId });
+      this.props.store.dispatch({ activeChatId: Number(activeChatId) });
+      this.props.store.dispatch(getChatUsers);
+      this.props.store.dispatch(createWebSocket);
+    } else {
+      this.props.store.dispatch({ activeChatId: null });
     }
   }
 
@@ -64,7 +66,6 @@ export class ChatsPage extends Block<ChatsPageProps> {
 
   createChat() {
     const titleChat = this.refs.titleChat.inputElement.value;
-    console.log('createChat', titleChat);
     this.props.store.dispatch(createChat, {
       title: titleChat,
     });
@@ -89,17 +90,6 @@ export class ChatsPage extends Block<ChatsPageProps> {
             </div>
           </div>
             ${chats.map((item: TChat) => {
-              return `{{{ChatItem 
-              id="${item.id}"
-              title="${item.title}"
-              text="${
-                item.last_message?.content ? item.last_message?.content : ''
-              }" 
-              time="${item.last_message?.time ? item.last_message?.time : ''}" 
-              badge="${item?.unread_count}" 
-              }}}`;
-            })}
-            ${mockChats?.map((item: TChat) => {
               const date =
                 item.last_message?.time && new Date(item.last_message?.time);
               const time =
@@ -111,10 +101,9 @@ export class ChatsPage extends Block<ChatsPageProps> {
                 item.last_message?.content ? item.last_message?.content : ''
               }" 
               time="${item.last_message?.time ? time : ''}" 
-              name="${item.last_message?.user.first_name}"
               badge="${item?.unread_count}" 
               }}}`;
-            })}       
+            })}      
         </div>
         {{{Chatting}}}
       {{/Layout}}

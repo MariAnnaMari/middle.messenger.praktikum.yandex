@@ -22,6 +22,10 @@ export const chatsAPI = {
     return apiRequest.post(`user/search`, { data: { login: login } });
   },
 
+  getToken: (chatId: number) => {
+    return apiRequest.post(`chats/token/${chatId}`);
+  },
+
   addUserToChat: (params: { chatId: number; users: number[] }) => {
     return apiRequest.put(`chats/users`, { data: params });
   },

@@ -17,7 +17,7 @@ export class Chatting extends Block<ChattingProps> {
   static componentName = 'Chatting';
   constructor(props: ChattingProps) {
     super(props);
-    this.state = { isSendBtnDisable: true };
+    // this.state = { isSendBtnDisable: true };
     this.setProps({
       ...this.props,
       msgList: mockMsgList,
@@ -30,6 +30,10 @@ export class Chatting extends Block<ChattingProps> {
   }
 
   getMessage(): Nullable<string> {
+    console.log(
+      this.refs.inputMessageRef.inputElement,
+      this.refs.inputMessageRef.inputElement.value
+    );
     return this.refs.inputMessageRef.inputElement.value;
   }
 
@@ -44,29 +48,26 @@ export class Chatting extends Block<ChattingProps> {
 
   deleteUserFromChat(e: MouseEvent) {
     const userId = e.target.getAttribute('data-info');
-    const chatId = this.props.store.getState().params?.id;
     this.props.store.dispatch(deleteUserFromChat, {
       users: [Number(userId)],
-      chatId: Number(chatId),
     });
   }
 
   onClick() {
     const message: Nullable<string> = this.getMessage();
-    if (!this.state?.isSendBtnDisable) {
-      console.log('message', message);
-    } else {
-      console.log('message is empty');
+    const socket = this.props.store.getState().chatSocket;
+    if (socket && message.length !== 0) {
+      socket.send(
+        JSON.stringify({
+          content: message,
+          type: 'message',
+        })
+      );
     }
   }
 
   onInput() {
-    const message: Nullable<string> = this.getMessage();
-    if (message && message.length !== 0) {
-      this.setState({ isSendBtnDisable: false });
-    } else {
-      this.setState({ isSendBtnDisable: true });
-    }
+    console.log('onInput');
   }
 
   render() {
@@ -113,11 +114,9 @@ export class Chatting extends Block<ChattingProps> {
                   {{/each}}
               </div>
               <div class='msg-input'>
-                  <i class='fa fa-paperclip size-24' aria-hidden='true'></i>
-                  <div class="input-btn-block" style="width: 100%">
-                    {{{Input ref="inputMessageRef" name="message" onInput=onInput type='search' placeholder='Type...'}}}
-                    {{{Button type="btn-grey" onClick=onClick  icon="fa-arrow-right"}}}
-                  </div>
+                  <i class='fa fa-paperclip size-24' aria-hidden='true'></i>      
+                  {{{Input ref="inputMessageRef" name="message" onInput=onInput type='search' placeholder='Type...'}}}
+                  {{{Button type="btn-primary circle-btn" onClick=onClick  icon="fa-arrow-right"}}}
               </div>
           </div>
       `;
