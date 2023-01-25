@@ -1,7 +1,7 @@
 import type { Dispatch } from 'core';
 import { chatsAPI } from 'api/chats';
 import { transformUser } from 'helpers/apiTransformers';
-import { TChat, UserDTO } from 'api/types';
+import { UserDTO } from 'api/types';
 
 export const getChats = async (dispatch: Dispatch<AppState>) => {
   dispatch({ isLoading: true });
@@ -16,7 +16,7 @@ export const getChatUsers = async (
   state: AppState
 ) => {
   dispatch({ isLoading: true });
-  console.log('getChatUsers state', state);
+
   const chatId = state.activeChatId;
   const { response, status } = await chatsAPI.getChatUsers(chatId);
 
@@ -31,7 +31,6 @@ export const getChatUsers = async (
     return transformUser(item);
   });
 
-  console.log('getChatUsers', transformUserList);
   dispatch({ chatUsers: transformUserList });
 };
 

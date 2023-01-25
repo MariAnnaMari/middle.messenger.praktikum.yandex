@@ -18,11 +18,7 @@ export const createWebSocket = async (
   if (prevChatSocket) {
     prevChatSocket.close();
   }
-  console.log(
-    'createWebSocket сhatId',
-    chatId,
-    window.store.getState().activeChatId
-  );
+
   dispatch({ isLoading: true });
 
   const { response, status } = await chatsAPI.getToken(chatId);
@@ -33,8 +29,6 @@ export const createWebSocket = async (
   }
 
   const token = JSON.parse(response).token;
-
-  console.log('getToken', JSON.parse(response));
   // const socket = new WebSocket('wss://ya-praktikum.tech/ws/chats/<USER_ID>/<CHAT_ID>/<TOKEN_VALUE>');
 
   const socket = new WebSocket(
@@ -55,12 +49,6 @@ export const createWebSocket = async (
         type: 'get old',
       })
     );
-    // socket.send(
-    //   JSON.stringify({
-    //     content: 'Моё первое сообщение миру!',
-    //     type: 'message',
-    //   })
-    // );
   });
 
   socket.addEventListener('close', (event) => {

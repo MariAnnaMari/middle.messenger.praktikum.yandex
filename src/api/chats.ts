@@ -1,10 +1,5 @@
 import { apiRequest } from './HttpTransport';
 
-type LoginRequestData = {
-  login: string;
-  password: string;
-};
-
 export const chatsAPI = {
   create: (data: { title: string }) => {
     return apiRequest.post('chats', { data: data });
