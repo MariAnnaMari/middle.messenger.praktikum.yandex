@@ -85,3 +85,25 @@ export const editProfile = async (
   dispatch({ user: transformUser(JSON.parse(response) as UserDTO) });
   window.router.go('/messenger');
 };
+
+export const editAvatar = async (
+  dispatch: Dispatch<AppState>,
+  state: AppState,
+  action
+) => {
+  console.log('edit avatar', action);
+  const output = document.getElementById('output');
+
+  for (const [key, value] of action) {
+    output.textContent += `${key}: ${value}\n`;
+  }
+  const { response, status } = await authAPI.editAvatar(action);
+
+  if (status !== 200) {
+    dispatch({ isLoading: false, loginFormError: JSON.parse(response).reason });
+    return;
+  }
+
+  dispatch({ user: transformUser(JSON.parse(response) as UserDTO) });
+  // window.router.go('/messenger');
+};

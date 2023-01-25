@@ -19,4 +19,11 @@ export const authAPI = {
   editProfile: (data: ProfileRequestData) => {
     return apiRequest.put('user/profile', { data: data });
   },
+
+  editAvatar: (data: FormData) => {
+    return apiRequest.put('user/profile/avatar', {
+      data: data,
+      headers: { contentType: false },
+    });
+  },
 };

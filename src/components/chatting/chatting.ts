@@ -89,7 +89,7 @@ export class Chatting extends Block<ChattingProps> {
               <div class='msg-header'>
                   <div style="display: flex; gap: 5px;">
                     <div>
-                      {{{Avatar name=""}}}
+                      {{{Avatar name="" src="${me.avatar}"}}}
                       <span>${me?.displayName}</span>
                     </div>
                       ${chatUsers
@@ -97,7 +97,7 @@ export class Chatting extends Block<ChattingProps> {
                         ?.map((item: TUser) => {
                           return `
                           <span>
-                            <div class="photo-editing-field">
+                            <div class="avatar-field">
                                 {{{Avatar name=""}}}
                                 {{{ButtonIcon icon="fa-trash"  dataInfo="${item.id}" onClick=deleteUserFromChat }}}
                             </div>

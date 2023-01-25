@@ -17,13 +17,22 @@
   object-fit: cover;
 }
 
-.photo-editing-field {
+.avatar-field {
   display: flex;
   justify-content: center;
-  /*align-items: end;*/
 }
-.photo-editing-field .fa {
+
+.avatar-field .fa {
   margin-left: -10px;
   font-size: 20px;
   color: gray;
+}
+
+.photo-editing-field{
+  display: flex;
+  margin-bottom: 30px;
+}
+
+.photo-editing-field input{
+  border: none;
 }

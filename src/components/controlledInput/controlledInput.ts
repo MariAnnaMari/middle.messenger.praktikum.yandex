@@ -44,15 +44,18 @@ export class ControlledInput extends Block<ControlledInputProps> {
     // language=hbs
     return `
         <div class="controlled-input">
-            {{{Input
-                    onInput=onInput
-                    onBlur=onBlur
-                    onFocus=onFocus
-                    name="{{name}}"
-                    placeholder="{{placeholder}}"
-                    type="{{type}}"
-                    value=value
-            }}}
+            <div class="input-with-label">
+                <label>{{placeholder}}</label>
+                {{{Input
+                        onInput=onInput
+                        onBlur=onBlur
+                        onFocus=onFocus
+                        name="{{name}}"
+                        placeholder="{{placeholder}}"
+                        type="{{type}}"
+                        value=value
+                }}}
+            </div>
             {{{Error ref="errorRef" text=error}}}
         </div>
     `;

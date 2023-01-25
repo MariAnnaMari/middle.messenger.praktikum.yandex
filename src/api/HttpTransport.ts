@@ -61,8 +61,9 @@ export default class HttpTransport<Props> {
     options: HttpTransportOptions,
     timeout?: number
   ): Promise<any> {
-    const { method, data } = options;
+    const { method, data, headers } = options;
     const url = `${BASE_API}/${path}`;
+
     return new Promise((resolve, reject) => {
       const xhr = new XMLHttpRequest();
       xhr.withCredentials = true;
@@ -74,8 +75,10 @@ export default class HttpTransport<Props> {
           xhr.open(method, url);
         }
       }
+      if (!headers) {
+        xhr.setRequestHeader('Content-Type', 'application/json');
+      }
 
-      xhr.setRequestHeader('Content-Type', 'application/json');
       xhr.onload = function () {
         resolve(xhr);
       };
@@ -94,7 +97,11 @@ export default class HttpTransport<Props> {
       if (method === METHODS.GET || !data) {
         xhr.send();
       } else {
-        xhr.send(JSON.stringify(data));
+        if (!headers) {
+          xhr.send(JSON.stringify(data));
+        } else {
+          xhr.send(data);
+        }
       }
     });
   }

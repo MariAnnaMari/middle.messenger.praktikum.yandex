@@ -4,7 +4,7 @@ import { withStore } from 'helpers/withStore';
 import { ValidateRuleType } from 'helpers/validateForm';
 import ControlledInput from 'components/controlledInput';
 import Layout from 'components/layout';
-import { editProfile, login, logout, signup } from 'services/auth';
+import { editAvatar, editProfile, login, logout, signup } from 'services/auth';
 
 type ProfileProps = {
   onSubmit?: (e: FormDataEvent) => void;
@@ -65,13 +65,22 @@ export class ProfilePage extends Block<ProfileProps> {
       item.dispatchEvent(event);
     });
     const isInvalidForm = this.state.validationError;
-    const formData: any = {};
+    const profileData: any = {};
     if (!isInvalidForm) {
       inputList.forEach((item: HTMLInputElement) => {
-        formData[`${item.name}`] = item.value;
+        if (item.name === 'avatar') {
+          if (item.value) {
+            const avatarFormData = new FormData();
+            avatarFormData.append('avatar', item.files[0]);
+            this.props.store.dispatch(editAvatar, avatarFormData);
+          }
+        } else {
+          profileData[`${item.name}`] = item.value;
+        }
       });
-      console.log('Success', formData);
-      this.props.store.dispatch(editProfile, formData);
+
+      console.log('Success', profileData);
+      this.props.store.dispatch(editProfile, profileData);
     } else {
       console.log('error Validation');
     }
@@ -87,17 +96,18 @@ export class ProfilePage extends Block<ProfileProps> {
 
   render(): string {
     console.log('render profile');
+    const user = this.props.store.getState().user;
     // language=hbs
     return `
       {{#Layout title="Setting profile" }}
         <form>        
           <span>
             <div class="photo-editing-field">
-                {{{Avatar name=""}}}
-                {{{ButtonIcon icon="fa-pencil-square-o"  dataInfo="" onClick=changeAvatar }}}
+              {{{Avatar src="${this.props?.formValues?.avatar}"}}}
+              <input type="file" id="avatar" name="avatar" accept="image/png, image/jpeg">
             </div>
           </span>
-          {{{ControlledInput
+            {{{ControlledInput
               onInput=onInput
               onFocus=onFocus
               name="login"
@@ -168,6 +178,7 @@ export class ProfilePage extends Block<ProfileProps> {
 <!--            {{{Button title="Edit password"  type="btn-block" onClick=onSubmit}}}-->
             {{{Button title="Logout"  type="btn-block" onClick=onLogout}}}
           </div>
+            <div id="output"></div>
         </form>
       {{/Layout}}
     `;
