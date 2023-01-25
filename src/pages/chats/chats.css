@@ -6,7 +6,6 @@
   border-right: 1px solid var(--main-middle-color);
 }
 
-
 .chats-item {
   border-bottom: 1px solid var(--main-middle-color);
   padding: 15px;
@@ -119,19 +118,37 @@
 }
 
 .msg-item {
+  display: flex;
+  flex-direction: column;
+}
+
+.msg-item.me {
+  /*flex-direction: column-reverse;*/
+  text-align: right;
+  align-items: end;
+}
+
+.msg-item .content {
   border-radius: 30px;
   padding: 15px;
-  display: flex;
-  gap: 15px;
   border-top-left-radius: 0;
   background: #efefef;
   margin-bottom: 15px;
   width: 50%;
 }
-.msg-item.me {
+
+.msg-item.me .content {
   background: var(--main-light-color-2);
   border-top-left-radius: 30px;
   border-bottom-right-radius: 0;
-  float: right;
 }
 
+.msg-item .time {
+  font-size: 12px;
+  opacity: 0.6;
+  padding: 5px;
+}
+
+/*.msg-item.me .time {*/
+/*  text-align: right;*/
+/*}*/

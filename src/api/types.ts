@@ -25,14 +25,6 @@ export type TUser = {
   role?: string;
 };
 
-export type TChatting = {
-  user: {
-    shortName: string;
-    name: string;
-  };
-  msgList: TMsg[];
-};
-
 export type TChat = {
   id: number;
   title: string;
@@ -43,14 +35,7 @@ export type TChat = {
 };
 
 export type TMsg = {
-  user: {
-    first_name: string;
-    second_name: string;
-    avatar: string | null;
-    email: string;
-    login: string;
-    phone: string;
-  };
+  user_id: number;
   time?: string;
   content: string;
 };

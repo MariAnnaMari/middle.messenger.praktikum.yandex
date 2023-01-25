@@ -4,6 +4,7 @@ import { withStore } from 'helpers/withStore';
 import { addUserToChat, deleteUserFromChat } from 'services/chats';
 import { mockMsgList } from 'data/mockData';
 import { TMsg, TUser } from 'api/types';
+import { getTimeDateFormat } from '../../helpers/dateFormat';
 
 interface ChattingProps {
   msgList: TMsg[];
@@ -30,11 +31,11 @@ export class Chatting extends Block<ChattingProps> {
   }
 
   getMessage(): Nullable<string> {
-    console.log(
-      this.refs.inputMessageRef.inputElement,
-      this.refs.inputMessageRef.inputElement.value
-    );
     return this.refs.inputMessageRef.inputElement.value;
+  }
+
+  clearMessage(): Nullable<string> {
+    this.refs.inputMessageRef.inputElement.value = '';
   }
 
   addUserToChat() {
@@ -64,6 +65,7 @@ export class Chatting extends Block<ChattingProps> {
         })
       );
     }
+    this.clearMessage();
   }
 
   onInput() {
@@ -72,6 +74,7 @@ export class Chatting extends Block<ChattingProps> {
 
   render() {
     const chatUsers = this.props.store.getState().chatUsers;
+    const msgList = this.props.msgList;
     const me = this.props.store.getState().user;
     const activeChatId = this.props.store.getState().params?.id;
 
@@ -105,13 +108,17 @@ export class Chatting extends Block<ChattingProps> {
                   </div>
               </div>
               <div class='msg-list'>
-                  {{#each msgList}}
-                      {{#with this}}
-                          <div class='msg-item {{#if isMe}}me{{/if}}'>
-                              {{content}}
+                  ${msgList?.map((item: TMsg) => {
+                    const time = getTimeDateFormat(item?.time);
+                    const isMe =
+                      me.id === item.user_id ? 'msg-item me' : 'msg-item';
+                    return `                      
+                          <div class="${isMe}">    
+                              <span class="time">${time}</span>                                                   
+                              <div class="content">${item.content}</div>
                           </div>
-                      {{/with}}
-                  {{/each}}
+                          `;
+                  })}
               </div>
               <div class='msg-input'>
                   <i class='fa fa-paperclip size-24' aria-hidden='true'></i>      

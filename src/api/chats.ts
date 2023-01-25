@@ -33,4 +33,6 @@ export const chatsAPI = {
   deleteUserFromChat: (params: { chatId: number; users: number[] }) => {
     return apiRequest.delete(`chats/users`, { data: params });
   },
+
+  getCountNewMessage: (chatId: number) => apiRequest.get(`chats/new/${chatId}`),
 };

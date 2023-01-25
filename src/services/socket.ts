@@ -1,5 +1,11 @@
 import { Dispatch } from 'core';
 import { chatsAPI } from 'api/chats';
+import { getChats } from './chats';
+
+function checkConnect(socket: WebSocket) {
+  console.log('ping');
+  socket.send(JSON.stringify({ type: 'ping' }));
+}
 
 export const createWebSocket = async (
   dispatch: Dispatch<AppState>,
@@ -29,9 +35,18 @@ export const createWebSocket = async (
   const socket = new WebSocket(
     `wss://ya-praktikum.tech/ws/chats/${userId}/${chatId}/${token}`
   );
+
+  // повторить checkConnect с интервалом 30 секунды
+  const timerId = setInterval(() => checkConnect(socket), 30000);
+
   socket.addEventListener('open', () => {
     console.log('Соединение установлено');
-
+    socket.send(
+      JSON.stringify({
+        content: '0',
+        type: 'get old',
+      })
+    );
     // socket.send(
     //   JSON.stringify({
     //     content: 'Моё первое сообщение миру!',
@@ -41,6 +56,7 @@ export const createWebSocket = async (
   });
 
   socket.addEventListener('close', (event) => {
+    clearInterval(timerId);
     if (event.wasClean) {
       console.log('Соединение закрыто чисто');
     } else {
@@ -52,16 +68,13 @@ export const createWebSocket = async (
 
   socket.addEventListener('message', (event) => {
     console.log('Получены данные', event.data);
+    dispatch(getChats);
+    console.log(JSON.parse(event.data));
   });
 
   socket.addEventListener('error', (event) => {
     console.log('Ошибка', event.message);
   });
-  // window.socket = socket;
-  dispatch({ chatSocket: socket });
-};
 
-export const closeWebSocket = (dispatch: Dispatch<AppState>) => {
-  // const socket = window.socket;
-  // socket.close();
+  dispatch({ chatSocket: socket });
 };

@@ -7,6 +7,7 @@ import { createChat, getChats, getChatUsers } from 'services/chats';
 import { TChat } from 'api/types';
 import './chats.css';
 import { createWebSocket } from 'services/socket';
+import { getTimeDateFormat } from '../../helpers/dateFormat';
 
 type TChatItem = {
   id: number;
@@ -90,10 +91,7 @@ export class ChatsPage extends Block<ChatsPageProps> {
             </div>
           </div>
             ${chats.map((item: TChat) => {
-              const date =
-                item.last_message?.time && new Date(item.last_message?.time);
-              const time =
-                date && `${date.getUTCHours()}:${date.getUTCMinutes()}`;
+              const time = getTimeDateFormat(item?.last_message?.time);
               return `{{{ChatItem 
               id="${item.id}"
               title="${item.title}"
