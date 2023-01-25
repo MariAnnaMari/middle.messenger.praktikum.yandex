@@ -5,7 +5,6 @@ import { addUserToChat, deleteUserFromChat } from 'services/chats';
 import { mockMsgList } from 'data/mockData';
 import { TMsg, TUser } from 'api/types';
 import { getTimeDateFormat } from 'helpers/dateFormat';
-import { createWebSocket } from 'services/socket';
 
 interface ChattingProps {
   msgList: TMsg[];
@@ -42,10 +41,12 @@ export class Chatting extends Block<ChattingProps> {
   addUserToChat() {
     const userLogin = this.refs.userLogin.inputElement.value;
     const chatId = this.props.store.getState().params?.id;
-    this.props.store.dispatch(addUserToChat, {
-      login: userLogin,
-      chatId: Number(chatId),
-    });
+    if (userLogin.length !== 0) {
+      this.props.store.dispatch(addUserToChat, {
+        login: userLogin,
+        chatId: Number(chatId),
+      });
+    }
   }
 
   deleteUserFromChat(e: MouseEvent) {
