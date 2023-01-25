@@ -6,8 +6,8 @@ import { logout } from 'services/auth';
 import { createChat, getChats, getChatUsers } from 'services/chats';
 import { TChat } from 'api/types';
 import './chats.css';
-import { createWebSocket } from 'services/socket';
-import { getTimeDateFormat } from '../../helpers/dateFormat';
+import { getTimeDateFormat } from 'helpers/dateFormat';
+import { createWebSocket } from "../../services/socket";
 
 type TChatItem = {
   id: number;
@@ -49,7 +49,9 @@ export class ChatsPage extends Block<ChatsPageProps> {
       this.setState({ activeChat: this.props.params?.id });
       this.props.store.dispatch({ activeChatId: Number(activeChatId) });
       this.props.store.dispatch(getChatUsers);
-      this.props.store.dispatch(createWebSocket);
+      this.props.store.dispatch(createWebSocket, {
+        chatId: Number(this.props.params?.id),
+      });
     } else {
       this.props.store.dispatch({ activeChatId: null });
     }
@@ -67,20 +69,21 @@ export class ChatsPage extends Block<ChatsPageProps> {
 
   createChat() {
     const titleChat = this.refs.titleChat.inputElement.value;
-    this.props.store.dispatch(createChat, {
-      title: titleChat,
-    });
+    if (titleChat.length !== 0) {
+      this.props.store.dispatch(createChat, {
+        title: titleChat,
+      });
+    }
   }
 
   render(): string {
     const chats = this.props.store.getState().chatsList;
-    const mockChats = this.props?.mockChat;
 
     // language=hbs
     return `
       {{#Layout title=title fullScreen=true }}
-        <div class='chats'>
-          <div class='msg-header'>
+        <div class='chats-left-menu'>
+          <div class='chats-left-menu-header'>
             {{{Button title="Logout" type="btn-primary" icon="fa-arrow-left" left="true" onClick=onLogout}}}
             <div class="input-btn-block">
                 {{{Input ref="titleChat" className="input-search" onInput=onInput type="search" placeholder="Type title..." }}}
@@ -90,6 +93,7 @@ export class ChatsPage extends Block<ChatsPageProps> {
                 {{{Button title="Profile" type="btn-grey" icon="fa-chevron-right" onClick=redirectToProfile}}}
             </div>
           </div>
+          <div class='chats-left-menu-content'>
             ${chats.map((item: TChat) => {
               const time = getTimeDateFormat(item?.last_message?.time);
               return `{{{ChatItem 
@@ -101,7 +105,8 @@ export class ChatsPage extends Block<ChatsPageProps> {
               time="${item.last_message?.time ? time : ''}" 
               badge="${item?.unread_count}" 
               }}}`;
-            })}      
+            })}
+          </div>
         </div>
         {{{Chatting}}}
       {{/Layout}}

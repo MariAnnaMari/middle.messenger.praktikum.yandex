@@ -9,15 +9,20 @@ function checkConnect(socket: WebSocket) {
 
 export const createWebSocket = async (
   dispatch: Dispatch<AppState>,
-  state: AppState
+  state: AppState,
+  action: { chatId: number }
 ) => {
-  const chatId = state.activeChatId;
+  const chatId = action.chatId;
   const userId = state.user?.id;
-  const prevChatSocket = state.chatSocket;
-  console.log('prevChatSocket', prevChatSocket);
+  const prevChatSocket = window.store.getState().chatSocket;
   if (prevChatSocket) {
     prevChatSocket.close();
   }
+  console.log(
+    'createWebSocket сhatId',
+    chatId,
+    window.store.getState().activeChatId
+  );
   dispatch({ isLoading: true });
 
   const { response, status } = await chatsAPI.getToken(chatId);
@@ -41,6 +46,9 @@ export const createWebSocket = async (
 
   socket.addEventListener('open', () => {
     console.log('Соединение установлено');
+
+    dispatch({ chatSocket: socket });
+
     socket.send(
       JSON.stringify({
         content: '0',
@@ -57,6 +65,8 @@ export const createWebSocket = async (
 
   socket.addEventListener('close', (event) => {
     clearInterval(timerId);
+
+    dispatch({ messages: [] });
     if (event.wasClean) {
       console.log('Соединение закрыто чисто');
     } else {
@@ -67,14 +77,21 @@ export const createWebSocket = async (
   });
 
   socket.addEventListener('message', (event) => {
-    console.log('Получены данные', event.data);
+    console.log('Получены данные от', socket.url);
+    console.log('Получены данные', JSON.parse(event.data));
+    const data = JSON.parse(event.data);
+    if (data.type !== ('pong' || 'user_connect')) {
+      const prevMsg = window.store.getState().messages;
+      if (data instanceof Array) {
+        dispatch({ messages: data });
+      } else {
+        dispatch({ messages: [data, ...prevMsg] });
+      }
+    }
     dispatch(getChats);
-    console.log(JSON.parse(event.data));
   });
 
   socket.addEventListener('error', (event) => {
     console.log('Ошибка', event.message);
   });
-
-  dispatch({ chatSocket: socket });
 };

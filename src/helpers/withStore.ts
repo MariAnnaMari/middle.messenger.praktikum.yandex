@@ -1,5 +1,4 @@
 import { Block, Store } from 'core';
-import { isEqual } from './isEqual';
 
 type WithStateProps = { store: Store<AppState> };
 type MapStateToProps<MappedProps> = (state: AppState) => MappedProps;

@@ -8,4 +8,6 @@ export const defaultState: AppState = {
   chatsList: [],
   chatUsers: [],
   chatSocket: null,
+  activeChatId: null,
+  messages: [],
 };

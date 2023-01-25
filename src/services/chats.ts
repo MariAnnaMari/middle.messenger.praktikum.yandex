@@ -1,15 +1,14 @@
 import type { Dispatch } from 'core';
 import { chatsAPI } from 'api/chats';
 import { transformUser } from 'helpers/apiTransformers';
-import { UserDTO } from 'api/types';
+import { TChat, UserDTO } from 'api/types';
 
 export const getChats = async (dispatch: Dispatch<AppState>) => {
   dispatch({ isLoading: true });
 
   const { response } = await chatsAPI.getChats();
-
-  console.log('get chats', response);
-  dispatch({ chatsList: JSON.parse(response) });
+  const chatsList = JSON.parse(response);
+  dispatch({ chatsList: chatsList });
 };
 
 export const getChatUsers = async (

@@ -4,7 +4,8 @@ import { withStore } from 'helpers/withStore';
 import { addUserToChat, deleteUserFromChat } from 'services/chats';
 import { mockMsgList } from 'data/mockData';
 import { TMsg, TUser } from 'api/types';
-import { getTimeDateFormat } from '../../helpers/dateFormat';
+import { getTimeDateFormat } from 'helpers/dateFormat';
+import { createWebSocket } from 'services/socket';
 
 interface ChattingProps {
   msgList: TMsg[];
@@ -57,7 +58,9 @@ export class Chatting extends Block<ChattingProps> {
   onClick() {
     const message: Nullable<string> = this.getMessage();
     const socket = this.props.store.getState().chatSocket;
+
     if (socket && message.length !== 0) {
+      console.log('currentSocket', socket.url);
       socket.send(
         JSON.stringify({
           content: message,
@@ -74,9 +77,9 @@ export class Chatting extends Block<ChattingProps> {
 
   render() {
     const chatUsers = this.props.store.getState().chatUsers;
-    const msgList = this.props.msgList;
     const me = this.props.store.getState().user;
     const activeChatId = this.props.store.getState().params?.id;
+    const messages = this.props.store.getState().messages;
 
     // language=hbs
     if (activeChatId) {
@@ -108,7 +111,7 @@ export class Chatting extends Block<ChattingProps> {
                   </div>
               </div>
               <div class='msg-list'>
-                  ${msgList?.map((item: TMsg) => {
+                  ${messages?.map((item: TMsg) => {
                     const time = getTimeDateFormat(item?.time);
                     const isMe =
                       me.id === item.user_id ? 'msg-item me' : 'msg-item';
@@ -138,5 +141,6 @@ export default withRouter(
     user: state.user,
     params: state.params,
     chatUsers: state.chatUsers,
+    messages: state.messages,
   }))
 );

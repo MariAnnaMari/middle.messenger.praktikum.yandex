@@ -3,7 +3,7 @@ import { withRouter } from 'helpers/withRouter';
 import { withStore } from 'helpers/withStore';
 import { Params } from 'core/router/PathRouter';
 import { getChatUsers } from 'services/chats';
-import { createWebSocket } from "../../services/socket";
+import { createWebSocket } from 'services/socket';
 
 interface ChatItemProps {
   store: Store<AppState>;
@@ -26,10 +26,13 @@ export class ChatItem extends Block<ChatItemProps> {
   }
 
   redirectToChat = () => {
+    console.log('redirect');
     this.props.router.go(`/messenger/${this.props.id}`);
     this.props.store.dispatch({ activeChatId: Number(this.props.id) });
     this.props.store.dispatch(getChatUsers);
-    this.props.store.dispatch(createWebSocket);
+    this.props.store.dispatch(createWebSocket, {
+      chatId: Number(this.props.id),
+    });
   };
 
   render() {
