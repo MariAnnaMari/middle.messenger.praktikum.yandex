@@ -10,4 +10,5 @@ export const defaultState: AppState = {
   chatSocket: null,
   activeChatId: null,
   messages: [],
+  avatarList: [],
 };

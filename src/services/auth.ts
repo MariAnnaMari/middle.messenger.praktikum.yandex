@@ -1,7 +1,7 @@
 import { authAPI } from 'api/auth';
 import type { Dispatch } from 'core';
 import { transformUser } from 'helpers/apiTransformers';
-import { UserDTO } from 'api/types';
+import { AvatarItem, UserDTO } from 'api/types';
 
 type LoginPayload = {
   login: string;
@@ -74,7 +74,6 @@ export const editProfile = async (
   action: LoginPayload
 ) => {
   dispatch({ isLoading: true });
-  console.log('edit profile', action);
   const { response, status } = await authAPI.editProfile(action);
 
   if (status !== 200) {
@@ -91,11 +90,6 @@ export const editAvatar = async (
   state: AppState,
   action
 ) => {
-  const output = document.getElementById('output');
-
-  for (const [key, value] of action) {
-    output.textContent += `${key}: ${value}\n`;
-  }
   const { response, status } = await authAPI.editAvatar(action);
 
   if (status !== 200) {
@@ -104,4 +98,25 @@ export const editAvatar = async (
   }
 
   dispatch({ user: transformUser(JSON.parse(response) as UserDTO) });
+};
+
+export const getAvatar = async (
+  dispatch: Dispatch<AppState>,
+  state: AppState,
+  action: { id: number; avatar: string }
+) => {
+  const itemId = action.id;
+  const avatarList = window.store.getState().avatarList;
+  if (
+    !avatarList
+      .map((item: AvatarItem) => Number(item.id))
+      .includes(Number(itemId))
+  ) {
+    const { responseURL } = await authAPI.getAvatar(action.avatar);
+    if (responseURL) {
+      dispatch({
+        avatarList: [...avatarList, { id: Number(itemId), src: responseURL }],
+      });
+    }
+  }
 };

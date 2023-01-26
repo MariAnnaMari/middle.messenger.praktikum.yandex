@@ -54,3 +54,5 @@ export type ProfileRequestData = {
   email: string;
   phone: string;
 };
+
+export type AvatarItem = { id: number; src: string };

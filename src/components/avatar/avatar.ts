@@ -1,37 +1,40 @@
-import Block from 'core/Block';
+import { Block } from 'core';
+import { withStore } from 'helpers/withStore';
 
 import './avatar.css';
-import { authAPI } from 'api/auth';
+import { getAvatar } from 'services/auth';
 
 interface AvatarProps {
+  id?: number | string;
   src?: string;
   name?: string;
-  path?: string;
 }
 
 export class Avatar extends Block<AvatarProps> {
   static componentName = 'Avatar';
   constructor(props: AvatarProps) {
     super(props);
-    console.log('this.props', this.props);
-    if (props.src) {
-      this.getAvatar(props.src);
+    if (props.src && props.id) {
+      this.props.store.dispatch(getAvatar, { id: props.id, avatar: props.src });
     }
   }
 
-  async getAvatar(path: string): Promise<any> {
-    const { responseURL } = await authAPI.getAvatar(path);
-    this.setProps({ ...this.props, path: responseURL });
-  }
-
   render() {
+    const avatar = this.props.store
+      .getState()
+      .avatarList?.find((item) => item.id === Number(this.props?.id));
+    const img = avatar
+      ? `<img class='avatar' alt="avatar" src=${avatar.src} />`
+      : '';
     // language=hbs
     return `
-      <span class='avatar'>
-          {{#if path}} <img class='avatar' alt="avatar" src={{path}} />
-          {{/if}}
+      <span class='avatar'>          
+          ${img}
           {{name}}
       </span>
     `;
   }
 }
+export default withStore(Avatar, (state: AppState) => ({
+  avatarList: state.avatarList,
+}));

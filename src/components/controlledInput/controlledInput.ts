@@ -45,7 +45,7 @@ export class ControlledInput extends Block<ControlledInputProps> {
     return `
         <div class="controlled-input">
             <div class="input-with-label">
-                <label>{{placeholder}}</label>
+                <label>{{label}}</label>
                 {{{Input
                         onInput=onInput
                         onBlur=onBlur

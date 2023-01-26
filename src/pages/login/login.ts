@@ -80,8 +80,8 @@ export class LoginPage extends Block<LoginProps> {
               onInput=onInput
               onFocus=onFocus
               name="login"
-              label="login"
-              placeholder="login"
+              label="Login"
+              placeholder="Login"
               type="text"
               value="${this.props?.formValues?.login}"
               validateRule="${ValidateRuleType.Login}"

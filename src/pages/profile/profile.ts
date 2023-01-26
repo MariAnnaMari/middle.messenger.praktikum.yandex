@@ -12,7 +12,6 @@ type ProfileProps = {
   onInput?: () => void;
   onFocus?: () => void;
   onBlur?: () => void;
-  changeAvatar?: () => void;
   setErrorValidation?: (val: boolean) => void;
   formValues: {
     login: string;
@@ -32,7 +31,6 @@ export class ProfilePage extends Block<ProfileProps> {
   constructor(props?: ProfileProps) {
     super(props);
     const userValue = this.props.store.getState().user;
-    console.log('ProfilePage', userValue);
     this.state = { validationError: false };
     const defFormValues = {
       login: userValue.login,
@@ -45,7 +43,6 @@ export class ProfilePage extends Block<ProfileProps> {
     };
     this.setProps({
       ...this.props,
-      changeAvatar: () => this.changeAvatar(),
       onLogout: (e: MouseEvent) => this.onLogout(e),
       onSubmit: (e: FormDataEvent) => this.onSubmit(e),
       setErrorValidation: (val: boolean) => {
@@ -92,12 +89,7 @@ export class ProfilePage extends Block<ProfileProps> {
     this.props.store.dispatch(logout);
   }
 
-  changeAvatar() {
-    console.log('changeAvatar');
-  }
-
   render(): string {
-    console.log('render profile');
     const user = this.props.store.getState().user;
     // language=hbs
     return `
@@ -105,11 +97,7 @@ export class ProfilePage extends Block<ProfileProps> {
         <form>        
           <span>
             <div class="photo-editing-field">
-              {{{Avatar src="${
-                this.props?.formValues?.avatar
-                  ? this.props?.formValues?.avatar
-                  : ''
-              }"}}}
+              {{{Avatar id="${user?.id}" src="${user?.avatar}"}}}
               <input type="file" id="avatar" name="avatar" accept="image/png, image/jpeg">
             </div>
           </span>

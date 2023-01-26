@@ -1,5 +1,5 @@
 import { Params } from 'core/router/PathRouter';
-import { TChat, TMsg, TUser } from 'api/types';
+import { AvatarItem, TChat, TMsg, TUser } from "api/types";
 
 declare global {
   export type Nullable<T> = T | null;
@@ -20,6 +20,7 @@ declare global {
     chatSocket: WebSocket | null;
     activeChatId: number | null;
     messages: TMsg[];
+    avatarList: AvatarItem[];
   };
 }
 

@@ -11,6 +11,7 @@ interface ChatItemProps {
   redirectToChat: (e: MouseEvent) => void;
   events?: { click?: () => void };
   id?: number;
+  avatar?: string;
   title?: string;
   name?: string;
   text?: string;
@@ -43,7 +44,7 @@ export class ChatItem extends Block<ChatItemProps> {
     return `
       <div id="{{id}}" class="chats-item ${isActive ? 'active' : ''}" >
         <div>
-          {{{Avatar}}}
+          {{{Avatar id=id src=avatar}}}
         </div>
         <div class='contact'>
           <strong class='contact-name'>${this.props.title}</strong>

@@ -89,7 +89,7 @@ export class Chatting extends Block<ChattingProps> {
               <div class='msg-header'>
                   <div style="display: flex; gap: 5px;">
                     <div>
-                      {{{Avatar name="" src="${me.avatar}"}}}
+                      {{{Avatar id="${me?.id}" name="" src="${me.avatar}"}}}
                       <span>${me?.displayName}</span>
                     </div>
                       ${chatUsers
@@ -98,7 +98,7 @@ export class Chatting extends Block<ChattingProps> {
                           return `
                           <span>
                             <div class="avatar-field">
-                                {{{Avatar name=""}}}
+                                {{{Avatar id="${item.id}" avatar="${item?.avatar}" }}}
                                 {{{ButtonIcon icon="fa-trash"  dataInfo="${item.id}" onClick=deleteUserFromChat }}}
                             </div>
                             <span>${item?.displayName}</span>

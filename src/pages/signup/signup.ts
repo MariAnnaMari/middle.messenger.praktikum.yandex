@@ -74,7 +74,6 @@ export class SignupPage extends Block<SignupProps> {
         ...this.props,
         formValues: formData,
       });
-      console.log('formData', formData)
       this.props.store.dispatch(signup, formData);
       console.log('Success', formData);
     } else {
