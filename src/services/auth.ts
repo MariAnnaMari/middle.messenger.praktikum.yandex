@@ -91,7 +91,6 @@ export const editAvatar = async (
   state: AppState,
   action
 ) => {
-  console.log('edit avatar', action);
   const output = document.getElementById('output');
 
   for (const [key, value] of action) {
@@ -105,5 +104,4 @@ export const editAvatar = async (
   }
 
   dispatch({ user: transformUser(JSON.parse(response) as UserDTO) });
-  // window.router.go('/messenger');
 };

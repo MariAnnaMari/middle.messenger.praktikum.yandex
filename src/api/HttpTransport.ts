@@ -10,7 +10,6 @@ const BASE_API = 'https://ya-praktikum.tech/api/v2';
 interface HttpTransportOptions<P = any> {
   method?: string;
   data?: any;
-  // headers?: string;
   headers?: Record<string, string>;
   timeout?: number;
   mode?: string;
@@ -40,6 +39,7 @@ export default class HttpTransport<Props> {
       options.timeout
     );
   }
+
   public put(url: string, options: HttpTransportOptions = {}) {
     return this.request(
       url,
@@ -69,7 +69,6 @@ export default class HttpTransport<Props> {
       xhr.withCredentials = true;
       if (method === METHODS.GET) {
         xhr.open(method, url);
-        // xhr.open(method, url + '?' + queryStringify(data));
       } else {
         if (typeof method === 'string') {
           xhr.open(method, url);
@@ -77,6 +76,8 @@ export default class HttpTransport<Props> {
       }
       if (!headers) {
         xhr.setRequestHeader('Content-Type', 'application/json');
+      } else if (headers?.contentType !== false) {
+        xhr.setRequestHeader('Content-Type', headers?.contentType);
       }
 
       xhr.onload = function () {

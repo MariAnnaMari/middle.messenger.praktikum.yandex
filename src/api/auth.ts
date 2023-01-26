@@ -26,4 +26,8 @@ export const authAPI = {
       headers: { contentType: false },
     });
   },
+
+  getAvatar: (path: string) => {
+    return apiRequest.get(`resources${path}`);
+  },
 };

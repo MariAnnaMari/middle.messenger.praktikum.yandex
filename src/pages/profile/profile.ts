@@ -32,6 +32,7 @@ export class ProfilePage extends Block<ProfileProps> {
   constructor(props?: ProfileProps) {
     super(props);
     const userValue = this.props.store.getState().user;
+    console.log('ProfilePage', userValue);
     this.state = { validationError: false };
     const defFormValues = {
       login: userValue.login,
@@ -40,6 +41,7 @@ export class ProfilePage extends Block<ProfileProps> {
       second_name: userValue.secondName,
       email: userValue.email,
       phone: userValue.phone,
+      avatar: userValue.avatar,
     };
     this.setProps({
       ...this.props,
@@ -103,7 +105,11 @@ export class ProfilePage extends Block<ProfileProps> {
         <form>        
           <span>
             <div class="photo-editing-field">
-              {{{Avatar src="${this.props?.formValues?.avatar}"}}}
+              {{{Avatar src="${
+                this.props?.formValues?.avatar
+                  ? this.props?.formValues?.avatar
+                  : ''
+              }"}}}
               <input type="file" id="avatar" name="avatar" accept="image/png, image/jpeg">
             </div>
           </span>
