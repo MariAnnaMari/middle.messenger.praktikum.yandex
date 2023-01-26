@@ -4,6 +4,7 @@ import Handlebars from 'handlebars';
 
 type Events = Values<typeof Block.EVENTS>;
 export type PropsType = Partial<{ [key: string]: any }> | object | null;
+
 export type StateType = { [key: string]: any } | object;
 
 export default class Block<P extends PropsType> {
@@ -18,6 +19,7 @@ export default class Block<P extends PropsType> {
 
   protected _element: Nullable<HTMLElement | HTMLInputElement> = null;
   protected props: Readonly<P | PropsType>;
+
   protected children: { [id: string]: Block<PropsType> } = {};
 
   eventBus: () => EventBus<Events>;
@@ -36,6 +38,7 @@ export default class Block<P extends PropsType> {
     // this.props = this._makePropsProxy(props || ({} as P));
     this.props = props || ({} as P);
     this.state = this._makePropsProxy(this.state);
+
 
     this.eventBus = () => eventBus;
 
@@ -115,7 +118,7 @@ export default class Block<P extends PropsType> {
     // Object.assign(this.props && this.props, nextProps);
   };
 
-  setState = (nextState: PropsType) => {
+  setState = (nextState: PropsType) =>
     if (!nextState) {
       return;
     }
@@ -183,6 +186,23 @@ export default class Block<P extends PropsType> {
         throw new Error('Нет доступа');
       },
     }) as unknown as PropsType;
+  }
+  _makeStateProxy(props: StateType) {
+    return new Proxy(props as unknown as object, {
+      get: (target: Record<string, unknown>, prop: string) => {
+        const value = target[prop];
+        return typeof value === 'function' ? value.bind(target) : value;
+      },
+      set: (target: Record<string, unknown>, prop: string, value: unknown) => {
+        target[prop] = value;
+
+        this.eventBus().emit(Block.EVENTS.FLOW_CDU, { ...target }, target);
+        return true;
+      },
+      deleteProperty: () => {
+        throw new Error('Нет доступа');
+      },
+    }) as unknown as StateType;
   }
 
   _createDocumentElement(tagName: string) {

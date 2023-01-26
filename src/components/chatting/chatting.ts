@@ -56,6 +56,10 @@ export class Chatting extends Block<ChattingProps> {
     });
   }
 
+  getMessage(): Nullable<string> {
+    return this.refs.inputMessageRef.inputElement.value;
+  }
+
   onClick() {
     const message: Nullable<string> = this.getMessage();
     const socket = this.props.store.getState().chatSocket;

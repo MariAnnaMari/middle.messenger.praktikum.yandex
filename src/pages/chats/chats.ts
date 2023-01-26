@@ -5,6 +5,7 @@ import { Params } from 'core/router/PathRouter';
 import { logout } from 'services/auth';
 import { createChat, getChats, getChatUsers } from 'services/chats';
 import { TChat } from 'api/types';
+
 import './chats.css';
 import { getTimeDateFormat } from 'helpers/dateFormat';
 import { createWebSocket } from 'services/socket';
@@ -113,6 +114,7 @@ export class ChatsPage extends Block<ChatsPageProps> {
     `;
   }
 }
+
 export default withRouter(
   withStore(ChatsPage, (state: AppState) => ({
     chatsList: state.chatsList,

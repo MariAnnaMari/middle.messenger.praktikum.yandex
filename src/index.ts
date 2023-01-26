@@ -1,5 +1,6 @@
 import { PropsType } from 'core/Block';
 import { registerComponent, Block, PathRouter, Store } from 'core';
+
 import './styles/app.css';
 import { defaultState } from './store';
 import { initRouter } from './router';
