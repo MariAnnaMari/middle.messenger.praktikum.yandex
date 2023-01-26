@@ -24,6 +24,7 @@ type ProfileProps = {
   formError?: () => string | null;
   title?: string;
   store: Store<AppState>;
+  redirectToEditPassword: (e: MouseEvent) => void;
 };
 
 export class ProfilePage extends Block<ProfileProps> {
@@ -50,6 +51,7 @@ export class ProfilePage extends Block<ProfileProps> {
       },
       formValues: defFormValues,
       formError: () => this.props.store.getState().loginFormError,
+      redirectToEditPassword: (e: MouseEvent) => this.redirectToEditPassword(e),
     });
   }
 
@@ -89,11 +91,17 @@ export class ProfilePage extends Block<ProfileProps> {
     this.props.store.dispatch(logout);
   }
 
+  redirectToEditPassword = (e: MouseEvent) => {
+    e.preventDefault();
+    this.props.router.go('/password');
+  };
+
   render(): string {
     const user = this.props.store.getState().user;
     // language=hbs
     return `
       {{#Layout title="Setting profile" }}
+        {{{Button title="Logout"  type="btn-right-top-angle" onClick=onLogout}}}
         <form>        
           <span>
             <div class="photo-editing-field">
@@ -169,8 +177,7 @@ export class ProfilePage extends Block<ProfileProps> {
           }}}
           <div class="form-btns">
             {{{Button title="Edit" type="btn-primary  btn-block" onClick=onSubmit}}}
-<!--            {{{Button title="Edit password"  type="btn-block" onClick=onSubmit}}}-->
-            {{{Button title="Logout"  type="btn-block" onClick=onLogout}}}
+            {{{Button title="Edit password"  type="btn-block" onClick=redirectToEditPassword}}}
           </div>
             <div id="output"></div>
         </form>
@@ -178,4 +185,4 @@ export class ProfilePage extends Block<ProfileProps> {
     `;
   }
 }
-export default withStore(ProfilePage);
+export default withRouter(withStore(ProfilePage));

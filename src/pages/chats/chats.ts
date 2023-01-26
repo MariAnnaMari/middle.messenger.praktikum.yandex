@@ -7,7 +7,7 @@ import { createChat, getChats, getChatUsers } from 'services/chats';
 import { TChat } from 'api/types';
 import './chats.css';
 import { getTimeDateFormat } from 'helpers/dateFormat';
-import { createWebSocket } from "../../services/socket";
+import { createWebSocket } from 'services/socket';
 
 type TChatItem = {
   id: number;

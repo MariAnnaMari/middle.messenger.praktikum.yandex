@@ -1,5 +1,6 @@
 import { apiRequest } from './HttpTransport';
 import { LoginRequestData, ProfileRequestData } from './types';
+import { editPassword, PasswordPayload } from '../services/auth';
 
 export const authAPI = {
   login: (data: LoginRequestData) => {
@@ -18,6 +19,10 @@ export const authAPI = {
 
   editProfile: (data: ProfileRequestData) => {
     return apiRequest.put('user/profile', { data: data });
+  },
+
+  editPassword: (data: PasswordPayload) => {
+    return apiRequest.put('user/password', { data: data });
   },
 
   editAvatar: (data: FormData) => {

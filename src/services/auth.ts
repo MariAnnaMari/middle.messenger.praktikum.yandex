@@ -7,6 +7,7 @@ type LoginPayload = {
   login: string;
   password: string;
 };
+export type PasswordPayload = { oldPassword: string; newPassword: string };
 
 export const login = async (
   dispatch: Dispatch<AppState>,
@@ -83,6 +84,22 @@ export const editProfile = async (
 
   dispatch({ user: transformUser(JSON.parse(response) as UserDTO) });
   window.router.go('/messenger');
+};
+
+export const editPassword = async (
+  dispatch: Dispatch<AppState>,
+  state: AppState,
+  action: PasswordPayload
+) => {
+  dispatch({ isLoading: true });
+  const { response, status } = await authAPI.editPassword(action);
+
+  if (status !== 200) {
+    dispatch({ isLoading: false, loginFormError: JSON.parse(response).reason });
+    return;
+  }
+
+  window.router.go('/setting');
 };
 
 export const editAvatar = async (

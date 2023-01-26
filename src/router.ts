@@ -24,6 +24,11 @@ const routes = [
     shouldAuthorized: true,
   },
   {
+    path: '/password',
+    block: Screens.Password,
+    shouldAuthorized: true,
+  },
+  {
     path: '/messenger',
     block: Screens.Messenger,
     shouldAuthorized: true,
@@ -46,7 +51,8 @@ export function initRouter(router: PathRouter, store: Store<AppState>) {
       const isAuthorized = Boolean(store.getState().user);
       const currentScreen = Boolean(store.getState().screen);
       if ((route.path === '*' || route.path === '/login') && isAuthorized) {
-        store.dispatch({ screen: Screens.Messenger, params: params });
+        // store.dispatch({ screen: Screens.Messenger, params: params });
+        router.go('/messenger');
         return;
       }
       if (isAuthorized || !route.shouldAuthorized) {
@@ -54,7 +60,8 @@ export function initRouter(router: PathRouter, store: Store<AppState>) {
         return;
       }
       if (!currentScreen) {
-        store.dispatch({ screen: Screens.Login, params: params });
+        // store.dispatch({ screen: Screens.Login, params: params });
+        router.go('/login');
       }
     });
   });
