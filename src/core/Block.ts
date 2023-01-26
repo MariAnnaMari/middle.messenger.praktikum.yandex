@@ -118,7 +118,7 @@ export default class Block<P extends PropsType> {
     // Object.assign(this.props && this.props, nextProps);
   };
 
-  setState = (nextState: PropsType) =>
+  setState = (nextState: PropsType) =>{
     if (!nextState) {
       return;
     }
