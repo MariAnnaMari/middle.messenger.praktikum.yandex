@@ -105,16 +105,25 @@ export const editPassword = async (
 export const editAvatar = async (
   dispatch: Dispatch<AppState>,
   state: AppState,
-  action
+  action: { avatarFormData: FormData; itemId: string | number }
 ) => {
-  const { response, status } = await authAPI.editAvatar(action);
+  try {
+    const { response } = await authAPI.editAvatar(action.avatarFormData);
+    const itemId = action.itemId;
+    const avatarList = window.store.getState().avatarList;
+    //удаляем из списка старую аватарку, чтобы получить новую
+    const filteredAvatarList = avatarList.filter(
+      (item: AvatarItem) => item.id !== Number(itemId)
+    );
 
-  if (status !== 200) {
-    dispatch({ isLoading: false, loginFormError: JSON.parse(response).reason });
+    dispatch({
+      user: transformUser(JSON.parse(response) as UserDTO),
+      avatarList: filteredAvatarList,
+    });
+  } catch (err) {
+    dispatch({ isLoading: false, loginFormError: JSON.parse(err).reason });
     return;
   }
-
-  dispatch({ user: transformUser(JSON.parse(response) as UserDTO) });
 };
 
 export const getAvatar = async (

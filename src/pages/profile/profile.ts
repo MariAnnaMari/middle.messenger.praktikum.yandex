@@ -4,7 +4,7 @@ import { withStore } from 'helpers/withStore';
 import { ValidateRuleType } from 'helpers/validateForm';
 import ControlledInput from 'components/controlledInput';
 import Layout from 'components/layout';
-import { editAvatar, editProfile, login, logout, signup } from 'services/auth';
+import { editAvatar, editProfile, logout } from 'services/auth';
 
 type ProfileProps = {
   onSubmit?: (e: FormDataEvent) => void;
@@ -73,7 +73,11 @@ export class ProfilePage extends Block<ProfileProps> {
           if (item.value) {
             const avatarFormData = new FormData();
             avatarFormData.append('avatar', item.files[0]);
-            this.props.store.dispatch(editAvatar, avatarFormData);
+            const user = this.props.store.getState().user;
+            this.props.store.dispatch(editAvatar, {
+              avatarFormData: avatarFormData,
+              itemId: user.id,
+            });
           }
         } else {
           profileData[`${item.name}`] = item.value;
