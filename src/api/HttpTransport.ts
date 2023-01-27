@@ -67,6 +67,12 @@ export default class HttpTransport<Props> {
     return new Promise((resolve, reject) => {
       const xhr = new XMLHttpRequest();
       xhr.withCredentials = true;
+      xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4 && xhr.status >= 400) {
+          reject(xhr.responseText);
+        }
+      };
+
       if (method === METHODS.GET) {
         xhr.open(method, url);
       } else {
@@ -86,8 +92,7 @@ export default class HttpTransport<Props> {
 
       xhr.onabort = reject;
       xhr.onerror = function (err) {
-        console.log(err);
-        reject();
+        reject(err);
       };
 
       if (timeout != null) {

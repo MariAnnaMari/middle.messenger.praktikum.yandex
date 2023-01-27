@@ -108,4 +108,8 @@ export class LoginPage extends Block<LoginProps> {
     `;
   }
 }
-export default withRouter(withStore(LoginPage));
+export default withRouter(
+  withStore(LoginPage, (state: AppState) => ({
+    loginFormError: state.loginFormError,
+  }))
+);

@@ -15,24 +15,25 @@ export const login = async (
   action: LoginPayload
 ) => {
   dispatch({ isLoading: true });
-  console.log('login', action);
-  //в ответе не json, не надо делать JSON.parse
-  const { response, status } = await authAPI.login(action);
 
-  if (status !== 200) {
-    dispatch({ isLoading: false, loginFormError: JSON.parse(response).reason });
+  try {
+    console.log('login');
+    const { status } = await authAPI.login(action);
+    console.log(status)
+    try {
+      const { response: responseUser } = await authAPI.me();
+      dispatch({ isLoading: false, loginFormError: null });
+      dispatch({ user: transformUser(JSON.parse(responseUser) as UserDTO) });
+      window.router.go('/messenger');
+    } catch (err) {
+      dispatch(logout);
+      return;
+    }
+  } catch (err) {
+    console.log('err', JSON.parse(err).reason);
+    dispatch({ isLoading: false, loginFormError: JSON.parse(err).reason });
     return;
   }
-  const { response: responseUser, status: statusUser } = await authAPI.me();
-
-  dispatch({ isLoading: false, loginFormError: null });
-  if (statusUser !== 200) {
-    dispatch(logout);
-    return;
-  }
-
-  dispatch({ user: transformUser(JSON.parse(responseUser) as UserDTO) });
-  window.router.go('/messenger');
 };
 
 export const logout = async (dispatch: Dispatch<AppState>) => {
