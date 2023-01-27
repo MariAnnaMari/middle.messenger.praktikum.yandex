@@ -6,11 +6,11 @@ const METHODS = {
 };
 
 const BASE_API = process.env.API_ENDPOINT;
-console.log('process.env.API_ENDPOINT', process.env.API_ENDPOINT)
+console.log('process.env.API_ENDPOINT', process.env.API_ENDPOINT);
 interface HttpTransportOptions {
   method?: string;
   data?: any;
-  headers?: Record<string, string>;
+  headers?: Record<string, string | boolean>;
   timeout?: number;
   mode?: string;
   credentials?: string;
@@ -82,8 +82,8 @@ export default class HttpTransport<Props> {
       }
       if (!headers) {
         xhr.setRequestHeader('Content-Type', 'application/json');
-      } else if (!headers?.contentType) {
-        xhr.setRequestHeader('Content-Type', headers?.contentType);
+      } else if (headers?.contentType !== false) {
+        xhr.setRequestHeader('Content-Type', <string>headers?.contentType);
       }
 
       xhr.onload = function () {
