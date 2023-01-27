@@ -57,7 +57,7 @@ export class EditPasswordPage extends Block<LoginProps> {
     const formData: any = {};
     if (!this.state.validationError) {
       inputList.forEach((item: HTMLInputElement) => {
-        formData[`${item.name}`] = item.value;
+        formData[item.name] = item.value;
       });
       console.log('Success', formData);
       this.setProps({

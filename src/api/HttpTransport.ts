@@ -5,8 +5,8 @@ const METHODS = {
   DELETE: 'DELETE',
 };
 
-const BASE_API = 'https://ya-praktikum.tech/api/v2';
-
+const BASE_API = process.env.API_ENDPOINT;
+console.log('process.env.API_ENDPOINT', process.env.API_ENDPOINT)
 interface HttpTransportOptions {
   method?: string;
   data?: any;

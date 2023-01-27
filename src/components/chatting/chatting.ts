@@ -29,7 +29,7 @@ export class Chatting extends Block<ChattingProps> {
     });
   }
 
-  clearMessage(): Nullable<string> {
+  clearMessage(): void {
     this.refs.inputMessageRef.inputElement.value = '';
   }
 

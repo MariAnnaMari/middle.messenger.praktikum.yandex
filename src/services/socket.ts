@@ -8,6 +8,8 @@ function checkConnect(socket: WebSocket) {
   socket.send(JSON.stringify({ type: 'ping' }));
 }
 
+const SOCKET_ENDPOINT = process.env.SOCKET_ENDPOINT;
+console.log('SOCKET_ENDPOINT', SOCKET_ENDPOINT)
 export const createWebSocket = async (
   dispatch: Dispatch<AppState>,
   state: AppState,
@@ -27,7 +29,7 @@ export const createWebSocket = async (
     // const socket = new WebSocket('wss://ya-praktikum.tech/ws/chats/<USER_ID>/<CHAT_ID>/<TOKEN_VALUE>');
 
     const socket = new WebSocket(
-      `wss://ya-praktikum.tech/ws/chats/${userId}/${chatId}/${token}`
+      `${SOCKET_ENDPOINT}${userId}/${chatId}/${token}`
     );
 
     // повторить checkConnect с интервалом 30 секунды
