@@ -30,7 +30,7 @@ export class Input extends Block<InputProps> {
   protected render(): string {
     // language=hbs
     return `
-        <input class="{{className}}" name="{{name}}" value="{{value}}" type={{type}} placeholder={{placeholder}} />
+        <input class="{{className}}" name="{{name}}" value="{{value}}" type={{type}} placeholder="{{placeholder}}" />
     `;
   }
 }

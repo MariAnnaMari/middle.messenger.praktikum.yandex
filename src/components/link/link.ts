@@ -1,4 +1,6 @@
-import Block from '../../core/Block';
+import { Block, PathRouter, Store } from 'core';
+import { withRouter } from 'helpers/withRouter';
+import { withStore } from 'helpers/withStore';
 
 import './link.css';
 
@@ -7,13 +9,16 @@ interface LinkProps {
   to: string;
   icon?: string;
   events?: { click?: () => void };
+  withRout?: boolean;
+  router: PathRouter;
+  store: Store<AppState>;
 }
 
 export class Link extends Block<LinkProps> {
   static componentName = 'Link';
   constructor(props: LinkProps) {
     const onClick = () => {
-      location.href = this.props.to;
+      this.props.router.go('/setting');
     };
 
     super({ ...props, events: { click: onClick } });
@@ -22,9 +27,10 @@ export class Link extends Block<LinkProps> {
   render() {
     // language=hbs
     return `
-        <a href="{{to}}">
+        <span>
             {{#if icon}}<i class='fa fa-{{icon}}' aria-hidden='true'></i>{{/if}}
-        </a>
+        </span>
     `;
   }
 }
+export default withRouter(withStore(Link));

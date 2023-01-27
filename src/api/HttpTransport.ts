@@ -5,11 +5,15 @@ const METHODS = {
   DELETE: 'DELETE',
 };
 
-interface HttpTransportOptions<P = any> {
+const BASE_API = process.env.API_ENDPOINT;
+console.log('process.env.API_ENDPOINT', process.env.API_ENDPOINT);
+interface HttpTransportOptions {
   method?: string;
   data?: any;
-  headers?: string;
+  headers?: Record<string, string | boolean>;
   timeout?: number;
+  mode?: string;
+  credentials?: string;
 }
 
 function queryStringify(data: any): string {
@@ -35,6 +39,7 @@ export default class HttpTransport<Props> {
       options.timeout
     );
   }
+
   public put(url: string, options: HttpTransportOptions = {}) {
     return this.request(
       url,
@@ -52,20 +57,33 @@ export default class HttpTransport<Props> {
   }
 
   public request(
-    url: string,
+    path: string,
     options: HttpTransportOptions,
     timeout?: number
   ): Promise<any> {
-    const { method, data } = options;
+    const { method, data, headers } = options;
+    const url = `${BASE_API}/${path}`;
+
     return new Promise((resolve, reject) => {
       const xhr = new XMLHttpRequest();
+      xhr.withCredentials = true;
+      xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4 && xhr.status >= 400) {
+          reject(xhr.responseText);
+        }
+      };
 
       if (method === METHODS.GET) {
-        xhr.open(method, url + '?' + queryStringify(data));
+        xhr.open(method, url);
       } else {
         if (typeof method === 'string') {
           xhr.open(method, url);
         }
+      }
+      if (!headers) {
+        xhr.setRequestHeader('Content-Type', 'application/json');
+      } else if (headers?.contentType !== false) {
+        xhr.setRequestHeader('Content-Type', <string>headers?.contentType);
       }
 
       xhr.onload = function () {
@@ -74,8 +92,7 @@ export default class HttpTransport<Props> {
 
       xhr.onabort = reject;
       xhr.onerror = function (err) {
-        console.log(err);
-        reject();
+        reject(err);
       };
 
       if (timeout != null) {
@@ -86,8 +103,13 @@ export default class HttpTransport<Props> {
       if (method === METHODS.GET || !data) {
         xhr.send();
       } else {
-        xhr.send(queryStringify(data));
+        if (!headers) {
+          xhr.send(JSON.stringify(data));
+        } else {
+          xhr.send(data);
+        }
       }
     });
   }
 }
+export const apiRequest = new HttpTransport();

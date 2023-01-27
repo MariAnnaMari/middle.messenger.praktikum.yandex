@@ -15,7 +15,11 @@
     "core": "./src/core",
     "components": "./src/components",
     "helpers": "./src/helpers",
-    "pages": "./src/pages"
+    "utils": "./src/utils",
+    "pages": "./src/pages",
+    "api": "./src/api",
+    "services": "./src/services",
+    "data": "./src/data"
   },
   "keywords": [],
   "author": "",

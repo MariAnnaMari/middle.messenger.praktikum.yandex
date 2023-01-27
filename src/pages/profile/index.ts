@@ -1,1 +1,2 @@
-export { ProfilePage as default } from './profile';
+export { default } from './profile';
+export { default as EditPasswordPage } from './password';

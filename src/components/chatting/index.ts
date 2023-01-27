@@ -1,1 +1,1 @@
-export { Chatting as default } from './chatting';
+export { default } from './chatting';

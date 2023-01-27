@@ -1,5 +1,8 @@
-import Block from 'core/Block';
+import { Block, PathRouter, Store } from 'core';
 import { ValidateRuleType } from 'helpers/validateForm';
+import { withRouter } from 'helpers/withRouter';
+import { withStore } from 'helpers/withStore';
+import { signup } from 'services/auth';
 
 type SignupProps = {
   onSignIn?: (e: MouseEvent) => void;
@@ -8,30 +11,48 @@ type SignupProps = {
   onFocus?: () => void;
   onBlur?: () => void;
   setErrorValidation?: (val?: boolean) => void;
-  loginValue?: string;
-  passwordValue?: string;
-  title?: string;
+  formValues: {
+    login: string;
+    password: string;
+    first_name: string;
+    second_name: string;
+    email: string;
+    phone: string;
+  };
+  formError?: () => string | null;
+  router: PathRouter;
+  store: Store<AppState>;
 };
 
 export class SignupPage extends Block<SignupProps> {
   static componentName = 'SignupPage';
-  constructor(props: SignupProps) {
+  constructor(props?: SignupProps) {
     super(props);
+    console.log('SignupPage');
     this.state = { validationError: false };
+    const defFormValues = {
+      login: '',
+      password: '',
+      first_name: '',
+      second_name: '',
+      email: '',
+      phone: '',
+    };
     this.setProps({
+      ...this.props,
       onSignIn: (e: MouseEvent) => this.onSignIn(e),
       onSubmit: (e: FormDataEvent) => this.onSubmit(e),
       setErrorValidation: (val) => {
         this.setState({ validationError: val });
       },
-      loginValue: '',
-      passwordValue: '',
+      formValues: defFormValues,
+      formError: () => this.props.store.getState().loginFormError,
     });
   }
 
   onSignIn = (e: MouseEvent) => {
     e.preventDefault();
-    location.href = '/';
+    this.props.router.go('/login');
   };
 
   onSubmit(e: FormDataEvent) {
@@ -49,6 +70,11 @@ export class SignupPage extends Block<SignupProps> {
       inputList.forEach((item: HTMLInputElement) => {
         formData[`${item.name}`] = item.value;
       });
+      this.setProps({
+        ...this.props,
+        formValues: formData,
+      });
+      this.props.store.dispatch(signup, formData);
       console.log('Success', formData);
     } else {
       console.log('error Validation');
@@ -58,7 +84,7 @@ export class SignupPage extends Block<SignupProps> {
   render(): string {
     // language=hbs
     return `
-      {{#Layout title=title }}
+      {{#Layout title="Sign up" }}
         <form>
           {{{ControlledInput
               onInput=onInput
@@ -67,6 +93,7 @@ export class SignupPage extends Block<SignupProps> {
               label="email"
               placeholder="Email"
               type="text"
+              value="${this.props?.formValues?.email}"
               validateRule="${ValidateRuleType.Email}"
               setErrorValidation=setErrorValidation
           }}}          
@@ -77,6 +104,7 @@ export class SignupPage extends Block<SignupProps> {
               label="login"
               placeholder="Login"
               type="text"
+              value="${this.props?.formValues?.login}"
               validateRule="${ValidateRuleType.Login}"
               setErrorValidation=setErrorValidation
           }}}          
@@ -87,6 +115,7 @@ export class SignupPage extends Block<SignupProps> {
               label="name"
               placeholder="Name"
               type="text"
+              value="${this.props?.formValues?.first_name}"
               validateRule="${ValidateRuleType.Name}"
               setErrorValidation=setErrorValidation
           }}}          
@@ -97,6 +126,7 @@ export class SignupPage extends Block<SignupProps> {
               label="Surname"
               placeholder="Surname"
               type="text"
+              value="${this.props?.formValues?.second_name}"
               validateRule="${ValidateRuleType.Name}"
               setErrorValidation=setErrorValidation
           }}}        
@@ -107,6 +137,7 @@ export class SignupPage extends Block<SignupProps> {
               label="Phone"
               placeholder="Phone"
               type="text"
+              value="${this.props?.formValues?.phone}"
               validateRule="${ValidateRuleType.Phone}"
               setErrorValidation=setErrorValidation
           }}}
@@ -124,8 +155,15 @@ export class SignupPage extends Block<SignupProps> {
             {{{Button title="Sign up" type="btn-primary  btn-block" onClick=onSubmit}}}
             {{{Button title="Sign in"  type="btn-block" onClick=onSignIn}}}
           </div>
+            {{{Error ref="formError" text=formError}}}
         </form>
       {{/Layout}}
     `;
   }
 }
+
+export default withRouter(
+  withStore(SignupPage, (state: AppState) => ({
+    loginFormError: state.loginFormError,
+  }))
+);

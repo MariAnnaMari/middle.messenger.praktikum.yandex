@@ -1,36 +1,59 @@
-import Block from 'core/Block';
+import { Block, Store } from 'core';
+import { withRouter } from 'helpers/withRouter';
+import { withStore } from 'helpers/withStore';
+import { Params } from 'core/router/PathRouter';
+import { getChatUsers } from 'services/chats';
+import { createWebSocket } from 'services/socket';
 
 interface ChatItemProps {
-  shortName: string;
-  name: string;
-  text: string;
-  time: string;
+  store: Store<AppState>;
+  params: Params;
+  redirectToChat: (e: MouseEvent) => void;
+  events?: { click?: () => void };
+  id?: number;
+  avatar?: string;
+  title?: string;
+  name?: string;
+  text?: string;
+  time?: string;
   badge?: number;
-  isBadge?: boolean;
-  isActive?: boolean;
 }
 
 export class ChatItem extends Block<ChatItemProps> {
   static componentName = 'ChatItem';
   constructor(props: ChatItemProps) {
     super({ ...props });
+    this.setProps({ ...this.props, events: { click: this.redirectToChat } });
   }
 
+  redirectToChat = () => {
+    console.log('redirect');
+    this.props.router.go(`/messenger/${this.props.id}`);
+    this.props.store.dispatch({ activeChatId: Number(this.props.id) });
+    this.props.store.dispatch(getChatUsers);
+    this.props.store.dispatch(createWebSocket, {
+      chatId: Number(this.props.id),
+    });
+  };
+
   render() {
+    const activeChat = this.props.store.getState().params?.id;
+    const isActive = String(activeChat) === String(this.props.id);
+    const isBadge = Number(this.props.badge) !== 0;
     // language=hbs
     return `
-      <div class='chats-item {{#if isActive}}active{{/if}}'>
+      <div id="{{id}}" class="chats-item ${isActive ? 'active' : ''}" >
         <div>
-          {{{Avatar name=shortName}}}
+          {{{Avatar id=id src=avatar}}}
         </div>
         <div class='contact'>
-          <span class='contact-name'>{{name}}</span>
+          <strong class='contact-name'>${this.props.title}</strong>
           <br />
-          <span class='contact-msg'>{{text}}</span>
+            <span class='contact-name'>{{name}}</span> <span class='contact-msg'>{{text}}</span>
         </div>
         <div class='msg-info'>
           <span class='msg-time'>{{time}}</span>
-            {{#if isBadge}}
+            {{#if ${isBadge}}}
               <span class='msg-count'>
                 <img />{{badge}}
               </span>
@@ -41,3 +64,9 @@ export class ChatItem extends Block<ChatItemProps> {
     `;
   }
 }
+
+export default withRouter(
+  withStore(ChatItem, (state: AppState) => ({
+    params: state.params,
+  }))
+);

@@ -3,7 +3,8 @@ import { nanoid } from 'nanoid';
 import Handlebars from 'handlebars';
 
 type Events = Values<typeof Block.EVENTS>;
-export type PropsType = Partial<{ [key: string]: any }> | null;
+export type PropsType = Partial<{ [key: string]: any }> | object | null;
+
 export type StateType = { [key: string]: any } | object;
 
 export default class Block<P extends PropsType> {
@@ -17,25 +18,48 @@ export default class Block<P extends PropsType> {
   public id = nanoid(6);
 
   protected _element: Nullable<HTMLElement | HTMLInputElement> = null;
-  protected readonly props: P;
+  protected props: Readonly<P | PropsType>;
+
   protected children: { [id: string]: Block<PropsType> } = {};
 
   eventBus: () => EventBus<Events>;
 
-  protected state: { [key: string]: any } = {};
+  /**
+   * @deprecated state Не использовать, использовать this.props
+   **/
+  protected state: PropsType = {};
   protected refs: { [key: string]: Block<PropsType> } = {};
 
   public constructor(props?: P | PropsType) {
     const eventBus = new EventBus<Events>();
 
-    this.props = this._makePropsProxy(props || ({} as P));
-    this.state = this._makeStateProxy(this.state);
+    this.getStateFromProps(props);
+
+    // this.props = this._makePropsProxy(props || ({} as P));
+    this.props = props || ({} as P);
+    this.state = this._makePropsProxy(this.state);
+
 
     this.eventBus = () => eventBus;
 
     this._registerEvents(eventBus);
 
     eventBus.emit(Block.EVENTS.INIT, this.props);
+  }
+
+  /**
+   * Хелпер, который проверяет, находится ли элемент в DOM дереве
+   * И есть нет, триггерит событие COMPONENT_WILL_UNMOUNT
+   */
+  _checkInDom() {
+    const elementInDOM = document.body.contains(this._element);
+
+    if (elementInDOM) {
+      setTimeout(() => this._checkInDom(), 1000);
+      return;
+    }
+
+    this.eventBus().emit(Block.EVENTS.FLOW_CWU, this.props);
   }
 
   _registerEvents(eventBus: EventBus<Events>) {
@@ -49,16 +73,26 @@ export default class Block<P extends PropsType> {
     this._element = this._createDocumentElement('div');
   }
 
+  /**
+   * @deprecated state Не использовать, использовать this.props
+   **/
+  protected getStateFromProps(props?: P | PropsType): void {
+    this.state = {};
+  }
+
   init() {
     this._createResources();
     this.eventBus().emit(Block.EVENTS.FLOW_RENDER, this.props);
   }
 
   _componentDidMount(props: P) {
-    // this.componentDidMount(props);
+    this._checkInDom();
+    this.componentDidMount(props);
   }
 
-  // componentDidMount(props: P) {}
+  componentDidMount(props: P) {
+    // console.log('componentDidMount');
+  }
 
   _componentDidUpdate(oldProps: P, newProps: P) {
     const response = this.componentDidUpdate(oldProps, newProps);
@@ -72,15 +106,19 @@ export default class Block<P extends PropsType> {
     return true;
   }
 
-  setProps = (nextProps: P) => {
-    if (!nextProps) {
+  setProps = (nextPartialProps: Partial<P>) => {
+    if (!nextPartialProps) {
       return;
     }
+    const prevProps = this.props;
+    const nextProps = { ...prevProps, ...nextPartialProps };
+    this.props = nextProps;
 
-    Object.assign(this.props && this.props, nextProps);
+    this.eventBus().emit(Block.EVENTS.FLOW_CDU, prevProps, nextProps);
+    // Object.assign(this.props && this.props, nextProps);
   };
 
-  setState = (nextState: StateType) => {
+  setState = (nextState: PropsType) =>{
     if (!nextState) {
       return;
     }
@@ -134,15 +172,20 @@ export default class Block<P extends PropsType> {
         return typeof value === 'function' ? value.bind(target) : value;
       },
       set: (target: Record<string, unknown>, prop: string, value: unknown) => {
+        const oldTarget = { ...target };
         target[prop] = value;
-
-        this.eventBus().emit(Block.EVENTS.FLOW_CDU, { ...target }, target);
+        if (
+          typeof oldTarget[prop] !== 'function' &&
+          JSON.stringify(oldTarget[prop]) !== JSON.stringify(value)
+        ) {
+          this.eventBus().emit(Block.EVENTS.FLOW_CDU, oldTarget, target);
+        }
         return true;
       },
       deleteProperty: () => {
         throw new Error('Нет доступа');
       },
-    }) as unknown as P;
+    }) as unknown as PropsType;
   }
   _makeStateProxy(props: StateType) {
     return new Proxy(props as unknown as object, {

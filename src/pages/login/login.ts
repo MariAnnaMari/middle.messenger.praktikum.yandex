@@ -1,7 +1,11 @@
-import Block from 'core/Block';
+import { Block, PathRouter, Store } from 'core';
 import { ValidateRuleType } from 'helpers/validateForm';
 import ControlledInput from 'components/controlledInput';
 import Layout from 'components/layout';
+import { withRouter } from 'helpers/withRouter';
+import { withStore } from 'helpers/withStore';
+import { Params } from 'core/router/PathRouter';
+import { login } from 'services/auth';
 
 type LoginProps = {
   onSignUp?: (e: MouseEvent) => void;
@@ -10,30 +14,35 @@ type LoginProps = {
   onFocus?: () => void;
   onBlur?: () => void;
   setErrorValidation?: (val: boolean) => void;
-  loginValue?: string;
-  passwordValue?: string;
-  title?: string;
+  router: PathRouter;
+  store: Store<AppState>;
+  params: Params;
+  formError?: () => string | null;
+  formValues: { login: string; password: string };
 };
 
 export class LoginPage extends Block<LoginProps> {
   static componentName = 'LoginPage';
-  constructor(props: LoginProps) {
+  constructor(props?: LoginProps) {
     super(props);
     this.state = { validationError: false };
+    const defFormValues = { login: '', password: '' };
     this.setProps({
-      onSignUp: (e:MouseEvent) => this.onSignUp(e),
+      ...this.props,
+      onSignUp: (e: MouseEvent) => this.onSignUp(e),
       onSubmit: (e: FormDataEvent) => this.onSubmit(e),
       setErrorValidation: (val: boolean) => {
         this.setState({ validationError: val });
       },
-      loginValue: '',
-      passwordValue: '',
+      formValues: defFormValues,
+      formError: () => this.props.store.getState().loginFormError,
     });
   }
 
-  onSignUp = (e:MouseEvent) => {
+  onSignUp = (e: MouseEvent) => {
     e.preventDefault();
-    location.href = '/signup';
+    this.props.router.go('/sign-up');
+    // this.props.store.dispatch(login, { login: 'mari', password: 'mari' });
   };
 
   onSubmit(e: FormDataEvent) {
@@ -52,7 +61,11 @@ export class LoginPage extends Block<LoginProps> {
         formData[`${item.name}`] = item.value;
       });
       console.log('Success', formData);
-      location.href='/chats'
+      this.setProps({
+        ...this.props,
+        formValues: formData,
+      });
+      this.props.store.dispatch(login, formData);
     } else {
       console.log('error validation');
     }
@@ -61,16 +74,16 @@ export class LoginPage extends Block<LoginProps> {
   render(): string {
     // language=hbs
     return `
-      {{#Layout title=title }}
+      {{#Layout title="Login" }}
         <form>
           {{{ControlledInput
               onInput=onInput
               onFocus=onFocus
               name="login"
-              label="login"
-              placeholder="login"
+              label="Login"
+              placeholder="Login"
               type="text"
-              value="${this.props.loginValue}"
+              value="${this.props?.formValues?.login}"
               validateRule="${ValidateRuleType.Login}"
               setErrorValidation=setErrorValidation
           }}}
@@ -81,7 +94,7 @@ export class LoginPage extends Block<LoginProps> {
               label="Password"
               placeholder="Password"
               type="text"
-              value="${this.props.loginValue}"
+              value="${this.props?.formValues?.password}"
               validateRule="${ValidateRuleType.Password}"
               setErrorValidation=setErrorValidation
           }}}
@@ -89,8 +102,14 @@ export class LoginPage extends Block<LoginProps> {
             {{{Button title="Sign in" type="btn-primary  btn-block" onClick=onSubmit}}}
             {{{Button title="Sign up"  type="btn-block" onClick=onSignUp}}}
           </div>
+            {{{Error ref="formError" text=formError}}}
         </form>
       {{/Layout}}
     `;
   }
 }
+export default withRouter(
+  withStore(LoginPage, (state: AppState) => ({
+    loginFormError: state.loginFormError,
+  }))
+);

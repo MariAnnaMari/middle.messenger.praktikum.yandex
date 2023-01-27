@@ -1,43 +1,45 @@
-import { renderDOM, registerComponent } from './core';
-import LoginPage from 'pages/login';
-import SignupPage from 'pages/signup';
-import ChatsPage from 'pages/chats';
-import ProfilePage from 'pages/profile';
-import ErrorPage from './pages/error';
+import { PropsType } from 'core/Block';
+import { registerComponent, Block, PathRouter, Store } from 'core';
 
 import './styles/app.css';
+import { defaultState } from './store';
+import { initRouter } from './router';
+import { initApp } from 'services';
 
-import Button from 'components/button';
-import Link from 'components/link';
-import Input from 'components/input';
-import ControlledInput from 'components/controlledInput';
-import ErrorComponent from 'components/error';
-import Layout from 'components/layout';
-import Avatar from 'components/avatar';
-import ChatItem from 'components/chatItem';
-import Chatting from 'components/chatting';
+import * as components from './components';
 
-registerComponent(Button);
-registerComponent(Link);
-registerComponent(ErrorComponent);
-registerComponent(ControlledInput);
-registerComponent(Input);
-registerComponent(Layout);
-registerComponent(Avatar);
-registerComponent(ChatItem);
-registerComponent(Chatting);
+Object.values(components).forEach((Component: Block<PropsType>) => {
+  registerComponent(Component);
+});
 
 document.addEventListener('DOMContentLoaded', () => {
-  const pathName = location.pathname;
-  if (pathName === '/profile') {
-    renderDOM(new ProfilePage({ title: 'Profile' }));
-  } else if (pathName === '/chats') {
-    renderDOM(new ChatsPage({ fullScreen: true }));
-  } else if (pathName === '/signup') {
-    renderDOM(new SignupPage({ title: 'Sign up' }));
-  } else if (pathName === '/') {
-    renderDOM(new LoginPage({ title: 'Sign in' }));
-  } else {
-    renderDOM(new ErrorPage({ status: 404, text: 'Page not found' }));
-  }
+  const store = new Store<AppState>(defaultState);
+  const router = new PathRouter();
+
+  /**
+   * Помещаем роутер и стор в глобальную область для доступа в хоках with*
+   * @warning Не использовать такой способ на реальный проектах
+   */
+  window.router = router;
+  window.store = store;
+
+  // renderDOM(new ChatsPage());
+
+  store.on('changed', (prevState, nextState) => {
+    console.log(
+      '%cstore updated',
+      'background: #222; color: #bada55',
+      nextState
+    );
+  });
+
+  /**
+   * Инициализируем роутер
+   */
+  initRouter(router, store);
+
+  /**
+   * Загружаем данные для приложения
+   */
+  store.dispatch(initApp);
 });

@@ -20,3 +20,12 @@
   text-align: center;
   height: 12px;
 }
+
+.input-with-label {
+  display: flex;
+  align-items: center;
+}
+.input-with-label label {
+  color: var(--main-dark-color);
+  width: 100px;
+}

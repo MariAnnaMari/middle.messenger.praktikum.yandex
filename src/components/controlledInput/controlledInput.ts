@@ -1,7 +1,7 @@
 import Block from 'core/Block';
 
 import './controlledInput.css';
-import { validateForm, ValidateRuleType } from 'helpers/validateForm';
+import { validateForm, ValidateRuleType } from 'helpers';
 
 interface ControlledInputProps {
   onInput?: () => void;
@@ -44,14 +44,18 @@ export class ControlledInput extends Block<ControlledInputProps> {
     // language=hbs
     return `
         <div class="controlled-input">
-            {{{Input
-                    onInput=onInput
-                    onBlur=onBlur
-                    onFocus=onFocus
-                    name="{{name}}"
-                    placeholder="{{placeholder}}"
-                    type="{{type}}"
-            }}}
+            <div class="input-with-label">
+                <label>{{label}}</label>
+                {{{Input
+                        onInput=onInput
+                        onBlur=onBlur
+                        onFocus=onFocus
+                        name="{{name}}"
+                        placeholder="{{placeholder}}"
+                        type="{{type}}"
+                        value=value
+                }}}
+            </div>
             {{{Error ref="errorRef" text=error}}}
         </div>
     `;
