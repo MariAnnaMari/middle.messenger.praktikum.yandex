@@ -28,7 +28,7 @@ export class SignupPage extends Block<SignupProps> {
   static componentName = 'SignupPage';
   constructor(props?: SignupProps) {
     super(props);
-    console.log('SignupPage')
+    console.log('SignupPage');
     this.state = { validationError: false };
     const defFormValues = {
       login: '',
@@ -162,4 +162,8 @@ export class SignupPage extends Block<SignupProps> {
   }
 }
 
-export default withRouter(withStore(SignupPage));
+export default withRouter(
+  withStore(SignupPage, (state: AppState) => ({
+    loginFormError: state.loginFormError,
+  }))
+);

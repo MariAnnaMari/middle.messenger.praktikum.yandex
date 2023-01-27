@@ -26,12 +26,7 @@ export class Chatting extends Block<ChattingProps> {
       onClick: () => this.onClick(),
       addUserToChat: () => this.addUserToChat(),
       deleteUserFromChat: (e: MouseEvent) => this.deleteUserFromChat(e),
-      // getUserList: () => this.props.store.getState().chatUsers,
     });
-  }
-
-  getMessage(): Nullable<string> {
-    return this.refs.inputMessageRef.inputElement.value;
   }
 
   clearMessage(): Nullable<string> {
@@ -41,7 +36,7 @@ export class Chatting extends Block<ChattingProps> {
   addUserToChat() {
     const userLogin = this.refs.userLogin.inputElement.value;
     const chatId = this.props.store.getState().params?.id;
-    if (userLogin.length !== 0) {
+    if (userLogin.length !== 0 && chatId) {
       this.props.store.dispatch(addUserToChat, {
         login: userLogin,
         chatId: Number(chatId),
@@ -51,9 +46,13 @@ export class Chatting extends Block<ChattingProps> {
 
   deleteUserFromChat(e: MouseEvent) {
     const userId = e.target.getAttribute('data-info');
-    this.props.store.dispatch(deleteUserFromChat, {
-      users: [Number(userId)],
-    });
+    const chatId = this.props.store.getState().params?.id;
+    if (userId && chatId) {
+      this.props.store.dispatch(deleteUserFromChat, {
+        users: [Number(userId)],
+        chatId: Number(chatId),
+      });
+    }
   }
 
   getMessage(): Nullable<string> {
@@ -64,7 +63,7 @@ export class Chatting extends Block<ChattingProps> {
     const message: Nullable<string> = this.getMessage();
     const socket = this.props.store.getState().chatSocket;
 
-    if (socket && message.length !== 0) {
+    if (socket && message?.length !== 0) {
       console.log('currentSocket', socket.url);
       socket.send(
         JSON.stringify({

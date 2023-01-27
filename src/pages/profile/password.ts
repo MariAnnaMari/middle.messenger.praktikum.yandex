@@ -5,7 +5,7 @@ import Layout from 'components/layout';
 import { withRouter } from 'helpers/withRouter';
 import { withStore } from 'helpers/withStore';
 import { Params } from 'core/router/PathRouter';
-import { editPassword, login } from "services/auth";
+import { editPassword } from 'services/auth';
 
 type LoginProps = {
   redirectToProfile?: (e: MouseEvent) => void;
@@ -107,4 +107,8 @@ export class EditPasswordPage extends Block<LoginProps> {
     `;
   }
 }
-export default withRouter(withStore(EditPasswordPage));
+export default withRouter(
+  withStore(EditPasswordPage, (state: AppState) => ({
+    loginFormError: state.loginFormError,
+  }))
+);

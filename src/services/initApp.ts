@@ -1,21 +1,15 @@
 import type { Dispatch } from 'core';
 import { authAPI } from 'api/auth';
 import { transformUser } from 'helpers/apiTransformers';
-import { UserDTO } from 'api/types';
+import { APIError, UserDTO } from 'api/types';
 
 export async function initApp(dispatch: Dispatch<AppState>) {
   try {
-    const { response, status } = await authAPI.me();
-    if (status !== 200) {
-      return;
-    }
-
+    const { response } = await authAPI.me();
     dispatch({ user: transformUser(JSON.parse(response) as UserDTO) });
-  } catch (err) {
-    console.log(err);
+  } catch (err: APIError) {
+    dispatch({ loginFormError: JSON.parse(err).reason });
   } finally {
     dispatch({ appIsInited: true });
   }
-
-  dispatch({ appIsInited: true });
 }

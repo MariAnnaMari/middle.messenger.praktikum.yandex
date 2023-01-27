@@ -1,7 +1,7 @@
 import { authAPI } from 'api/auth';
 import type { Dispatch } from 'core';
 import { transformUser } from 'helpers/apiTransformers';
-import { AvatarItem, UserDTO } from 'api/types';
+import { APIError, AvatarItem, ProfileRequestData, UserDTO } from 'api/types';
 
 type LoginPayload = {
   login: string;
@@ -17,9 +17,7 @@ export const login = async (
   dispatch({ isLoading: true });
 
   try {
-    console.log('login');
-    const { status } = await authAPI.login(action);
-    console.log(status)
+    await authAPI.login(action);
     try {
       const { response: responseUser } = await authAPI.me();
       dispatch({ isLoading: false, loginFormError: null });
@@ -27,12 +25,10 @@ export const login = async (
       window.router.go('/messenger');
     } catch (err) {
       dispatch(logout);
-      return;
+      dispatch({ isLoading: false, loginFormError: JSON.parse(err).reason });
     }
   } catch (err) {
-    console.log('err', JSON.parse(err).reason);
     dispatch({ isLoading: false, loginFormError: JSON.parse(err).reason });
-    return;
   }
 };
 
@@ -48,43 +44,44 @@ export const logout = async (dispatch: Dispatch<AppState>) => {
 export const signup = async (
   dispatch: Dispatch<AppState>,
   state: AppState,
-  action: LoginPayload
+  action: ProfileRequestData
 ) => {
   dispatch({ isLoading: true });
-  console.log('signup', action);
-  const { response, status } = await authAPI.signup(action);
-
-  if (status !== 200) {
-    dispatch({ isLoading: false, loginFormError: JSON.parse(response).reason });
-    return;
+  try {
+    await authAPI.signup(action);
+    try {
+      const { response: responseUser } = await authAPI.me();
+      dispatch({
+        user: transformUser(JSON.parse(responseUser) as UserDTO),
+        isLoading: false,
+        loginFormError: null,
+      });
+      window.router.go('/messenger');
+    } catch (err: APIError) {
+      dispatch(logout);
+      dispatch({ isLoading: false, loginFormError: JSON.parse(err).reason });
+    }
+  } catch (err: APIError) {
+    dispatch({ isLoading: false, loginFormError: JSON.parse(err).reason });
   }
-  const { response: responseUser, status: statusUser } = await authAPI.me();
-
-  dispatch({ isLoading: false, loginFormError: null });
-  if (statusUser !== 200) {
-    dispatch(logout);
-    return;
-  }
-
-  dispatch({ user: transformUser(JSON.parse(responseUser) as UserDTO) });
-  window.router.go('/messenger');
 };
 
 export const editProfile = async (
   dispatch: Dispatch<AppState>,
   state: AppState,
-  action: LoginPayload
+  action: ProfileRequestData
 ) => {
   dispatch({ isLoading: true });
-  const { response, status } = await authAPI.editProfile(action);
-
-  if (status !== 200) {
-    dispatch({ isLoading: false, loginFormError: JSON.parse(response).reason });
-    return;
+  try {
+    const { response } = await authAPI.editProfile(action);
+    dispatch({
+      user: transformUser(JSON.parse(response) as UserDTO),
+      isLoading: false,
+    });
+    window.router.go('/messenger');
+  } catch (err: APIError) {
+    dispatch({ isLoading: false, loginFormError: JSON.parse(err).reason });
   }
-
-  dispatch({ user: transformUser(JSON.parse(response) as UserDTO) });
-  window.router.go('/messenger');
 };
 
 export const editPassword = async (
@@ -93,14 +90,12 @@ export const editPassword = async (
   action: PasswordPayload
 ) => {
   dispatch({ isLoading: true });
-  const { response, status } = await authAPI.editPassword(action);
-
-  if (status !== 200) {
-    dispatch({ isLoading: false, loginFormError: JSON.parse(response).reason });
-    return;
+  try {
+    await authAPI.editPassword(action);
+    window.router.go('/setting');
+  } catch (err: APIError) {
+    dispatch({ isLoading: false, loginFormError: JSON.parse(err).reason });
   }
-
-  window.router.go('/setting');
 };
 
 export const editAvatar = async (
@@ -121,9 +116,8 @@ export const editAvatar = async (
       user: transformUser(JSON.parse(response) as UserDTO),
       avatarList: filteredAvatarList,
     });
-  } catch (err) {
+  } catch (err: APIError) {
     dispatch({ isLoading: false, loginFormError: JSON.parse(err).reason });
-    return;
   }
 };
 
@@ -139,11 +133,15 @@ export const getAvatar = async (
       .map((item: AvatarItem) => Number(item.id))
       .includes(Number(itemId))
   ) {
-    const { responseURL } = await authAPI.getAvatar(action.avatar);
-    if (responseURL) {
-      dispatch({
-        avatarList: [...avatarList, { id: Number(itemId), src: responseURL }],
-      });
+    try {
+      const { responseURL } = await authAPI.getAvatar(action.avatar);
+      if (responseURL) {
+        dispatch({
+          avatarList: [...avatarList, { id: Number(itemId), src: responseURL }],
+        });
+      }
+    } catch (err: APIError) {
+      dispatch({ loginFormError: JSON.parse(err).reason });
     }
   }
 };

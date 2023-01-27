@@ -1,14 +1,17 @@
 import type { Dispatch } from 'core';
 import { chatsAPI } from 'api/chats';
 import { transformUser } from 'helpers/apiTransformers';
-import { UserDTO } from 'api/types';
+import { APIError, UserDTO } from 'api/types';
 
 export const getChats = async (dispatch: Dispatch<AppState>) => {
   dispatch({ isLoading: true });
-
-  const { response } = await chatsAPI.getChats();
-  const chatsList = JSON.parse(response);
-  dispatch({ chatsList: chatsList });
+  try {
+    const { response } = await chatsAPI.getChats();
+    const chatsList = JSON.parse(response);
+    dispatch({ chatsList: chatsList });
+  } catch (err: APIError) {
+    dispatch({ isLoading: false, loginFormError: JSON.parse(err).reason });
+  }
 };
 
 export const getChatUsers = async (
@@ -18,20 +21,19 @@ export const getChatUsers = async (
   dispatch({ isLoading: true });
 
   const chatId = state.activeChatId;
-  const { response, status } = await chatsAPI.getChatUsers(chatId);
-
-  if (status !== 200) {
-    dispatch({ isLoading: false, loginFormError: JSON.parse(response).reason });
-
-    dispatch({ chatUsers: [] });
-    return;
+  try {
+    const { response } = await chatsAPI.getChatUsers(chatId);
+    const transformUserList = JSON.parse(response).map((item: UserDTO) => {
+      return transformUser(item);
+    });
+    dispatch({ chatUsers: transformUserList });
+  } catch (err: APIError) {
+    dispatch({
+      chatUsers: [],
+      isLoading: false,
+      loginFormError: JSON.parse(err).reason,
+    });
   }
-
-  const transformUserList = JSON.parse(response).map((item: UserDTO) => {
-    return transformUser(item);
-  });
-
-  dispatch({ chatUsers: transformUserList });
 };
 
 export const deleteUserFromChat = async (
@@ -40,45 +42,39 @@ export const deleteUserFromChat = async (
   action: { users: number[]; chatId: number }
 ) => {
   dispatch({ isLoading: true });
+  try {
+    await chatsAPI.deleteUserFromChat({
+      users: action.users,
+      chatId: action.chatId,
+    });
 
-  const chatId = state.activeChatId;
-  const { response, status } = await chatsAPI.deleteUserFromChat({
-    users: action.users,
-    chatId: chatId,
-  });
-
-  if (status !== 200) {
-    dispatch({ isLoading: false, loginFormError: JSON.parse(response).reason });
-    return;
+    dispatch(getChatUsers);
+  } catch (err: APIError) {
+    dispatch({ isLoading: false, loginFormError: JSON.parse(err).reason });
   }
-
-  dispatch(getChatUsers);
 };
 
 export const addUserToChat = async (
   dispatch: Dispatch<AppState>,
   state: AppState,
-  action: { login: string }
+  action: { login: string; chatId: number }
 ) => {
   dispatch({ isLoading: true });
-  const { response, status } = await chatsAPI.searchUserByLogin(action.login);
-  if (status !== 200) {
+  try {
+    const { response } = await chatsAPI.searchUserByLogin(action.login);
+    const userId = JSON.parse(response)[0].id;
+    try {
+      await chatsAPI.addUserToChat({ users: [userId], chatId: action.chatId });
+      dispatch(getChatUsers);
+    } catch (err: APIError) {
+      dispatch({
+        isLoading: false,
+        loginFormError: JSON.parse(err).reason,
+      });
+    }
+  } catch (err: APIError) {
     dispatch({ isLoading: false, loginFormError: JSON.parse(response).reason });
-    return;
   }
-  const userId = JSON.parse(response)[0].id;
-  const chatId = state.activeChatId;
-  const { response: responseAdd, status: statusAdd } =
-    await chatsAPI.addUserToChat({ users: [userId], chatId: chatId });
-
-  if (statusAdd !== 200) {
-    dispatch({
-      isLoading: false,
-      loginFormError: JSON.parse(responseAdd).reason,
-    });
-    return;
-  }
-  dispatch(getChatUsers);
 };
 
 export const createChat = async (
@@ -87,11 +83,10 @@ export const createChat = async (
   action: { title: string }
 ) => {
   dispatch({ isLoading: true });
-  const { response, status } = await chatsAPI.create(action);
-  if (status !== 200) {
-    dispatch({ isLoading: false, loginFormError: JSON.parse(response).reason });
-    return;
+  try {
+    await chatsAPI.create(action);
+    dispatch(getChats);
+  } catch (err: APIError) {
+    dispatch({ isLoading: false, loginFormError: JSON.parse(err).reason });
   }
-
-  dispatch(getChats);
 };
