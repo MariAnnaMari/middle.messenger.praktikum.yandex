@@ -1,4 +1,5 @@
 import { Block, Store } from 'core';
+import isEqual from './isEqual';
 
 type WithStateProps = { store: Store<AppState> };
 type MapStateToProps<MappedProps> = (state: AppState) => MappedProps;
@@ -14,19 +15,13 @@ export function withStore<P extends WithStateProps, MappedProps = any>(
 
     constructor(props: P) {
       super({ ...props, store: window.store });
-      // if (typeof mapStateToProps === 'function') {
-      //   super({ ...props, ...mapStateToProps(window.store.getState()) });
-      // } else {
-      //   super({ ...props, store: window.store });
-      // }
     }
 
     __onChangeStoreCallback = (prevState: AppState, nextState: AppState) => {
       if (typeof mapStateToProps === 'function') {
         const prevPropsFromState = mapStateToProps(prevState);
         const nextPropsFromState = mapStateToProps(nextState);
-        // if (isEqual(prevPropsFromState, nextPropsFromState)) {
-        if (JSON.stringify(prevPropsFromState) !== JSON.stringify(nextPropsFromState)) {
+        if (!isEqual(prevPropsFromState, nextPropsFromState)) {
           // @ts-expect-error this is not typed
           this.setProps(nextPropsFromState);
           return;

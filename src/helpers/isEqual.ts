@@ -1,34 +1,42 @@
-function isEqual(a:object, b: object): boolean {
-  const props1 = Object.getOwnPropertyNames(a);
-  const props2 = Object.getOwnPropertyNames(b);
+export type PlainObject<T = any> = {
+  [k in string]: T;
+};
 
-  if(props1.length !==props2.length){
-    return false
+function isPlainObject(value: unknown): value is PlainObject {
+  return typeof value === 'object'
+    && value !== null
+    && value.constructor === Object
+    && Object.prototype.toString.call(value) === '[object Object]';
+}
+
+function isArray(value: unknown): value is [] {
+  return Array.isArray(value);
+}
+
+function isArrayOrObject(value: unknown): value is [] | PlainObject {
+  return isPlainObject(value) || isArray(value);
+}
+
+function isEqual(lhs: any, rhs: any) {
+  if (Object.keys(lhs).length !== Object.keys(rhs).length) {
+    return false;
   }
-  else{
-    for (const [key, value] of Object.entries(a)) {
-      // eslint-disable-next-line no-prototype-builtins
-      if(!b.hasOwnProperty(key)){
-        return false;
+
+  for (const [key, value] of Object.entries(lhs)) {
+    const rightValue = rhs[key];
+    if (isArrayOrObject(value) && isArrayOrObject(rightValue)) {
+      if (isEqual(value, rightValue)) {
+        continue;
       }
-      else if(typeof value ==="object"){
-        for (const [key2, value2] of Object.entries(b)) {
-          if(key===key2&&value!==null&&value2!==null){
-            isEqual(value, value2);
-          }
-        }
-      }
-      else{
-        for (const [key2, value2] of Object.entries(b)) {
-          if(key===key2&&value!==value2){
-            return false
-          }
-        }
-      }
+      return false;
+    }
+
+    if (value !== rightValue) {
+      return false;
     }
   }
-  return true
 
+  return true;
 }
 
 export default isEqual

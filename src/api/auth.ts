@@ -1,6 +1,6 @@
 import { apiRequest } from './HttpTransport';
 import { LoginRequestData, ProfileRequestData } from './types';
-import { editPassword, PasswordPayload } from '../services/auth';
+import { PasswordPayload } from 'services/auth';
 
 export const authAPI = {
   login: (data: LoginRequestData) => {

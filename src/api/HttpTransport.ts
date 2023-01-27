@@ -7,7 +7,7 @@ const METHODS = {
 
 const BASE_API = 'https://ya-praktikum.tech/api/v2';
 
-interface HttpTransportOptions<P = any> {
+interface HttpTransportOptions {
   method?: string;
   data?: any;
   headers?: Record<string, string>;
@@ -82,7 +82,7 @@ export default class HttpTransport<Props> {
       }
       if (!headers) {
         xhr.setRequestHeader('Content-Type', 'application/json');
-      } else if (headers?.contentType !== false) {
+      } else if (!headers?.contentType) {
         xhr.setRequestHeader('Content-Type', headers?.contentType);
       }
 
