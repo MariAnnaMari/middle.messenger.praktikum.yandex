@@ -2,12 +2,11 @@ import { Block } from 'core';
 import { withRouter } from 'helpers/withRouter';
 import { withStore } from 'helpers/withStore';
 import { addUserToChat, deleteUserFromChat } from 'services/chats';
-import { mockMsgList } from 'data/mockData';
 import { TMsg, TUser } from 'api/types';
 import { getTimeDateFormat } from 'helpers/dateFormat';
 
 interface ChattingProps {
-  msgList: TMsg[];
+  // msgList: TMsg[];
   onClick?: () => void;
   onInput?: () => void;
   addUserToChat?: () => void;
@@ -21,7 +20,6 @@ export class Chatting extends Block<ChattingProps> {
     // this.state = { isSendBtnDisable: true };
     this.setProps({
       ...this.props,
-      msgList: mockMsgList,
       onInput: () => this.onInput(),
       onClick: () => this.onClick(),
       addUserToChat: () => this.addUserToChat(),

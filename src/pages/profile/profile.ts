@@ -105,7 +105,7 @@ export class ProfilePage extends Block<ProfileProps> {
     // language=hbs
     return `
       {{#Layout title="Setting profile" }}
-        {{{Button title="Logout"  type="btn-right-top-angle" onClick=onLogout}}}
+        {{{Button dataTestId="logout-btn" title="Logout"  type="btn-right-top-angle" onClick=onLogout}}}
         <form>        
           <span>
             <div class="photo-editing-field">

@@ -2,25 +2,42 @@ import Block from 'core/Block';
 
 import './button.css';
 
-interface ButtonProps {
+export interface ButtonProps {
   title: string;
   link?: string;
   icon?: string;
   type?: string;
-  onClick?: () => void;
+  onClick?: (e: MouseEvent) => void;
   events?: { click?: () => void };
   left?: boolean;
+  dataTestId?: string;
 }
 
 export class Button extends Block<ButtonProps> {
   static componentName = 'Button';
-  constructor({ title, link, icon, type, onClick, left }: ButtonProps) {
-    super({ title, link, icon, type,left, events: { click: onClick } });
+  constructor({
+    title,
+    link,
+    icon,
+    type,
+    onClick,
+    left,
+    dataTestId,
+  }: ButtonProps) {
+    super({
+      title,
+      link,
+      icon,
+      type,
+      left,
+      events: { click: onClick },
+      dataTestId,
+    });
   }
   protected render(): string {
     // language=hbs
     return `
-        <button class='btn {{type}}' type='submit'>
+        <button {{#if dataTestId}}data-testid="{{dataTestId}}"{{/if}} class='btn {{type}}' type='submit'>
             {{#if link}}
                 <a href={{link}}>
                     {{title}}

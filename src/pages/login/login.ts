@@ -75,7 +75,7 @@ export class LoginPage extends Block<LoginProps> {
     // language=hbs
     return `
       {{#Layout title="Login" }}
-        <form>
+        <form data-testid="login-screen">
           {{{ControlledInput
               onInput=onInput
               onFocus=onFocus
