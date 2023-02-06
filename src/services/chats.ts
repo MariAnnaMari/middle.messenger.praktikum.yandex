@@ -1,4 +1,4 @@
-import type { Dispatch } from 'core';
+import type { Dispatch } from 'core/Store';
 import { chatsAPI } from 'api/chats';
 import { transformUser } from 'helpers/apiTransformers';
 import { APIError, UserDTO } from 'api/types';

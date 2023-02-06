@@ -1,5 +1,5 @@
 import { authAPI } from 'api/auth';
-import type { Dispatch } from 'core';
+import type { Dispatch } from 'core/Store';
 import { transformUser } from 'helpers/apiTransformers';
 import { APIError, AvatarItem, ProfileRequestData, UserDTO } from 'api/types';
 

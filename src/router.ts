@@ -1,7 +1,6 @@
 import { renderDOM, Store, PathRouter } from 'core';
 import { getScreenComponent, Screens } from 'helpers';
-import { Params } from 'core/router/PathRouter';
-
+import type { Params } from 'core/router/PathRouter';
 const routes = [
   {
     path: '/login',

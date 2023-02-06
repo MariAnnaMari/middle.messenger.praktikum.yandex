@@ -4,7 +4,6 @@ const METHODS = {
   PUT: 'PUT',
   DELETE: 'DELETE',
 };
-
 const BASE_API = process.env.API_ENDPOINT;
 
 interface HttpTransportOptions {
