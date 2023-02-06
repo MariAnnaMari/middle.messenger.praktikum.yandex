@@ -105,7 +105,8 @@ export class Chatting extends Block<ChattingProps> {
                             <span>${item?.displayName}</span>
                           </span>
                           `;
-                        })}
+                        })
+                        .join('')}
                   </div>
                   <div class="input-btn-block">
                       {{{Input ref="userLogin" className="input-search" onInput=onInput type="search" placeholder="Type login..." }}}
@@ -113,17 +114,19 @@ export class Chatting extends Block<ChattingProps> {
                   </div>
               </div>
               <div class='msg-list'>
-                  ${messages?.map((item: TMsg) => {
-                    const time = getTimeDateFormat(item?.time);
-                    const isMe =
-                      me.id === item.user_id ? 'msg-item me' : 'msg-item';
-                    return `                      
+                  ${messages
+                    ?.map((item: TMsg) => {
+                      const time = getTimeDateFormat(item?.time);
+                      const isMe =
+                        me.id === item.user_id ? 'msg-item me' : 'msg-item';
+                      return `                      
                           <div class="${isMe}">    
                               <span class="time">${time}</span>                                                   
                               <div class="content">${item.content}</div>
                           </div>
                           `;
-                  })}
+                    })
+                    .join('')}
               </div>
               <div class='msg-input'>
                   <i class='fa fa-paperclip size-24' aria-hidden='true'></i>      

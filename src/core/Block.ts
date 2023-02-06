@@ -2,7 +2,7 @@ import EventBus from './EventBus';
 import {v4 as uuidv4} from 'uuid';
 import Handlebars from 'handlebars';
 
-type Events = Values<typeof Block.EVENTS>;
+export type Events = Values<typeof Block.EVENTS>;
 export type PropsType = Partial<{ [key: string]: any }> | object | null;
 
 export type StateType = { [key: string]: any } | object;

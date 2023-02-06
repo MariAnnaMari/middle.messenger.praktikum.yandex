@@ -95,9 +95,10 @@ export class ChatsPage extends Block<ChatsPageProps> {
             </div>
           </div>
           <div class='chats-left-menu-content'>
-            ${chats.map((item: TChat) => {
-              const time = getTimeDateFormat(item?.last_message?.time);
-              return `{{{ChatItem 
+            ${chats
+              .map((item: TChat) => {
+                const time = getTimeDateFormat(item?.last_message?.time);
+                return `{{{ChatItem 
               id="${item.id}"
               title="${item.title}"
               text="${
@@ -106,7 +107,8 @@ export class ChatsPage extends Block<ChatsPageProps> {
               time="${item.last_message?.time ? time : ''}" 
               badge="${item?.unread_count}" 
               }}}`;
-            })}
+              })
+              .join('')}
           </div>
         </div>
         {{{Chatting}}}

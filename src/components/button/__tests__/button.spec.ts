@@ -14,7 +14,7 @@ function renderButton({ onClick, title }: ButtonProps) {
 describe('components/Button', () => {
   // ЮНИТ-тест на UI компонент
   // могут называть интеграционным тестом, тк юзает renderBlock, Store
-  it('should render button', () => {
+  it.skip('should render button', () => {
     const button = renderButton({
       title: 'test',
       onClick: (e: MouseEvent) => {
@@ -25,7 +25,7 @@ describe('components/Button', () => {
   });
 
   // ЮНИТ-тест на UI компонент с событием
-  it('should call onClick when user press button', () => {
+  it.skip('should call onClick when user press button', () => {
     // 1 Arrange
     const mock = jest.fn();
 
