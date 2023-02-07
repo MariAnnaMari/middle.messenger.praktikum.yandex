@@ -5,8 +5,9 @@
   "scripts": {
     "dev": "webpack --mode development",
     "serve": "webpack serve --mode development",
+    "watch": "webpack serve --mode development --watch",
     "build": "webpack --mode production",
-    "start": "parcel src/index.html --no-source-maps --no-cache",
+    "start": "npm run build && node server.js",
     "test": "jest",
     "lint": "eslint . --ext .ts",
     "stylelint": "stylelint '**/*{.css,.scss}'"
@@ -34,15 +35,15 @@
     "@types/jest": "27.5.2",
     "@typescript-eslint/eslint-plugin": "5.0.0",
     "@typescript-eslint/parser": "5.40.1",
-    "clean-webpack-plugin": "^4.0.0",
-    "css-loader": "^6.7.3",
+    "clean-webpack-plugin": "4.0.0",
+    "css-loader": "6.7.3",
     "dotenv": "16.0.3",
     "dotenv-webpack": "^8.0.1",
     "eslint": "8.1.0",
     "html-webpack-plugin": "^5.5.0",
     "identity-obj-proxy": "3.0.0",
     "jest": "27.5.1",
-    "mini-css-extract-plugin": "^2.7.2",
+    "mini-css-extract-plugin": "2.7.2",
     "msw": "1.0.0",
     "parcel": "2.4.0",
     "postcss": "8.4.20",
@@ -55,7 +56,6 @@
     "webpack": "5.75.0",
     "webpack-cli": "5.0.1",
     "webpack-dev-server": "4.11.1",
-    "webpack-merge": "5.8.0",
     "whatwg-fetch": "3.6.2"
   },
   "dependencies": {

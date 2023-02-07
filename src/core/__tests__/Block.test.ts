@@ -2,10 +2,14 @@ import Block, { Events } from 'core/Block';
 import EventBus from '../EventBus';
 
 describe('core/Block', () => {
+  class testBlock extends Block<{ title: string }> {
+    render() {
+      return '<span></span>';
+    }
+  }
   // ЮНИТ-ТЕСТ на модуль
-  it.skip('check set props', () => {
-    const block = new Block({ title: 'test' });
-    block._createResources();
+  it('check set props', () => {
+    const block = new testBlock({ title: 'test' });
     block.setProps({ title: 'new title' });
     expect(block?.props?.title).toEqual('new title');
   });
@@ -19,8 +23,7 @@ describe('core/Block', () => {
       FLOW_RENDER: 'flow:render',
     };
     // 1 Arrange
-    const block = new Block({ title: 'test' });
-    block._createResources();
+    const block = new testBlock({ title: 'test' });
     const eventBus = new EventBus<Events>();
     block._registerEvents(eventBus);
     const mock = jest.fn();
@@ -32,6 +35,17 @@ describe('core/Block', () => {
     // 3 Assert
     expect(mock).toHaveBeenCalled();
     expect(mock).toHaveBeenCalledTimes(1);
-    expect(mock).toHaveBeenCalledWith({ title: 'test' }, { title: 'new title' });
+    expect(mock).toHaveBeenCalledWith(
+      { title: 'test' },
+      { title: 'new title' }
+    );
+  });
+  // ЮНИТ-ТЕСТ DOM
+  it('hide and show content', () => {
+    const block = new testBlock({ title: 'test' });
+    block.hide();
+    expect(block.getContent().style.display).toStrictEqual('none');
+    block.show();
+    expect(block.getContent().style.display).toStrictEqual('block');
   });
 });

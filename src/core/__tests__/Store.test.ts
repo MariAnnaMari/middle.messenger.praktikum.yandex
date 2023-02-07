@@ -2,7 +2,7 @@ import { Store } from '../Store';
 
 describe('core/Store', () => {
   // ЮНИТ-ТЕСТ на модуль
-  test.skip('should set state', () => {
+  test('should set state', () => {
     const store = new Store({});
 
     store.set({ userId: 123 });
@@ -11,7 +11,7 @@ describe('core/Store', () => {
   });
 
   // ЮНИТ-ТЕСТ на тестирования события
-  it.skip('should emit event after store was update', () => {
+  it('should emit event after store was update', () => {
 
     // 1 Arrange
     const store = new Store({ userId: -1 });
@@ -28,7 +28,7 @@ describe('core/Store', () => {
   });
 
   // ЮНИТ-ТЕСТ на тестирования вызова функции
-  it.skip ('should call callback with store and dispatch when it is function', () => {
+  it ('should call callback with store and dispatch when it is function', () => {
     const store = new Store({ userId: -1 });
     const mock = jest.fn();
 

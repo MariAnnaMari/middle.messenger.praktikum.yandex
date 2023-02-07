@@ -12,6 +12,7 @@ export interface InputProps {
   name?: string;
   className?: string;
   events?: { focus?: () => void; input?: () => void; blur?: () => void };
+  dataTestId?: string;
 }
 
 export class Input extends Block<InputProps> {
@@ -30,7 +31,7 @@ export class Input extends Block<InputProps> {
   protected render(): string {
     // language=hbs
     return `
-        <input class="{{className}}" name="{{name}}" value="{{value}}" type={{type}} placeholder="{{placeholder}}" />
+        <input {{#if dataTestId}}data-testid="{{dataTestId}}"{{/if}} class="{{className}}" name="{{name}}" value="{{value}}" type={{type}} placeholder="{{placeholder}}" />
     `;
   }
 }
