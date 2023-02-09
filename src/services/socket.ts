@@ -1,4 +1,4 @@
-import { Dispatch } from 'core';
+import type { Dispatch } from 'core/Store';
 import { chatsAPI } from 'api/chats';
 import { getChats } from './chats';
 import { APIError } from 'api/types';
@@ -9,7 +9,8 @@ function checkConnect(socket: WebSocket) {
 }
 
 const SOCKET_ENDPOINT = process.env.SOCKET_ENDPOINT;
-console.log('SOCKET_ENDPOINT', SOCKET_ENDPOINT)
+
+console.log('SOCKET_ENDPOINT', SOCKET_ENDPOINT);
 export const createWebSocket = async (
   dispatch: Dispatch<AppState>,
   state: AppState,

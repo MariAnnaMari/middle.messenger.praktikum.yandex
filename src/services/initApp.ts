@@ -1,8 +1,7 @@
-import type { Dispatch } from 'core';
+import type { Dispatch } from 'core/Store';
 import { authAPI } from 'api/auth';
 import { transformUser } from 'helpers/apiTransformers';
-import { APIError, UserDTO } from 'api/types';
-
+import type { APIError, UserDTO } from 'api/types';
 export async function initApp(dispatch: Dispatch<AppState>) {
   try {
     const { response } = await authAPI.me();

@@ -1,7 +1,6 @@
 import { apiRequest } from './HttpTransport';
-import { LoginRequestData, ProfileRequestData } from './types';
-import { PasswordPayload } from 'services/auth';
-
+import type { LoginRequestData, ProfileRequestData } from './types';
+import type { PasswordPayload } from 'services/auth';
 export const authAPI = {
   login: (data: LoginRequestData) => {
     return apiRequest.post('auth/signin', { data: data });

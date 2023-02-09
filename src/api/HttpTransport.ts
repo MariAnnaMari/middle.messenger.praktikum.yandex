@@ -4,9 +4,8 @@ const METHODS = {
   PUT: 'PUT',
   DELETE: 'DELETE',
 };
-
 const BASE_API = process.env.API_ENDPOINT;
-console.log('process.env.API_ENDPOINT', process.env.API_ENDPOINT);
+
 interface HttpTransportOptions {
   method?: string;
   data?: any;

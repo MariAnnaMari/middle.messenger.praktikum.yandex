@@ -1,16 +1,16 @@
-import { PropsType } from 'core/Block';
-import { registerComponent, Block, PathRouter, Store } from 'core';
-
+import { registerComponent, Block, PathRouter } from 'core';
+import { Store } from 'core/Store';
 import './styles/app.css';
 import { defaultState } from './store';
+import type { PropsType } from 'core/Block';
+import { initApp } from 'services/initApp';
 import { initRouter } from './router';
-import { initApp } from 'services';
 
 import * as components from './components';
-
 Object.values(components).forEach((Component: Block<PropsType>) => {
   registerComponent(Component);
 });
+
 
 document.addEventListener('DOMContentLoaded', () => {
   const store = new Store<AppState>(defaultState);
