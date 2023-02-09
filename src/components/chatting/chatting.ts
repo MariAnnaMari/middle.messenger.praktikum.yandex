@@ -6,7 +6,6 @@ import { TMsg, TUser } from 'api/types';
 import { getTimeDateFormat } from 'helpers/dateFormat';
 
 interface ChattingProps {
-  // msgList: TMsg[];
   onClick?: () => void;
   onInput?: () => void;
   addUserToChat?: () => void;
@@ -17,7 +16,6 @@ export class Chatting extends Block<ChattingProps> {
   static componentName = 'Chatting';
   constructor(props: ChattingProps) {
     super(props);
-    // this.state = { isSendBtnDisable: true };
     this.setProps({
       ...this.props,
       onInput: () => this.onInput(),
