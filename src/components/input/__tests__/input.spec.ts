@@ -15,7 +15,6 @@ describe('components/Input', () => {
       },
     });
     const input = getByTestId(document.body, 'test-input');
-    console.log(prettyDOM(input));
     expect(input).toBeInTheDocument();
   });
 
