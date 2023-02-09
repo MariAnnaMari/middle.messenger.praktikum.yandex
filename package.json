@@ -10,7 +10,8 @@
     "start": "npm run build && node server.js",
     "test": "jest",
     "lint": "eslint . --ext .ts",
-    "stylelint": "stylelint '**/*{.css,.scss}'"
+    "stylelint": "stylelint '**/*{.css,.scss}'",
+    "prepare": "husky install"
   },
   "alias": {
     "core": "./src/core",
@@ -88,11 +89,6 @@
       "^store(.*)$": "<rootDir>/src/store$1",
       "^pages(.*)$": "<rootDir>/src/pages$1",
       "^tests(.*)$": "<rootDir>/src/tests$1"
-    }
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "npm test && npm run lint"
     }
   }
 }
